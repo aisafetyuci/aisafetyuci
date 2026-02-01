@@ -19,8 +19,6 @@ export default function Contact() {
 
       <div className="container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
-          <h1 className="text-5xl font-bold text-gray-900 mb-8">Contact Us</h1>
-
           <div className="bg-white rounded-lg shadow-lg p-8 mb-6">
             <h2 className="text-2xl font-semibold text-gray-900 mb-4">Get in Touch</h2>
             <p className="text-gray-700 leading-relaxed mb-6">

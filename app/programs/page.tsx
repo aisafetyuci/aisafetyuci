@@ -26,7 +26,7 @@ export default function Programs() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow">
+            <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 Intro Fellowship
               </h3>
@@ -38,14 +38,14 @@ export default function Programs() {
                 <li>Introduction to alignment research</li>
 
               </ul>
-              <div className="mt-6">
+              <div className="mt-auto pt-6">
                 <Link href="https://forms.gle/TcVH7DSY38p1zrLw6" className="inline-block bg-[#00386c] text-white font-semibold px-6 py-2 rounded hover:bg-[#002b52] transition">
                   Apply Now
                 </Link>
               </div>
             </div>
 
-            <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow">
+            <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 Alignment Research Incubator
               </h3>
@@ -57,7 +57,7 @@ export default function Programs() {
                 <li>AI Demos for Policy Makers</li>
                 <li>Independent Research (compute funding available.)</li>
               </ul>
-              <div className="mt-6">
+              <div className="mt-auto pt-6">
                 <Link href="https://forms.gle/6szuUD4Ti8q1hHrp7" className="inline-block bg-[#00386c] text-white font-semibold px-6 py-2 rounded hover:bg-[#002b52] transition">
                   Apply Now
                 </Link>

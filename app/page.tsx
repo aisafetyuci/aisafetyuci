@@ -53,7 +53,7 @@ export default function Home() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422A12.083 12.083 0 0118 19.666V20l-6 3-6-3v-.334a12.083 12.083 0 01-.16-8.088L12 14z" />
                 </svg>
                 <h3 className="text-2xl font-bold text-gray-900 mb-2">Programs</h3>
-                <p className="text-gray-700">Explore our Intro & Advanced Fellowships and other programs.</p>
+                <p className="text-gray-700">Explore our Intro & Advanced Fellowship.</p>
               </Link>
 
               <Link href="/resources" className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow text-center" aria-label="Events">

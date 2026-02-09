@@ -12,7 +12,7 @@ export default function Resources() {
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl font-bold text-white mb-0">Resources</h1>
-            <p className="text-xl text-indigo-100 mb-8 pt-8">Nail down fundamentals and stay up-to-date with the latest research.</p>
+            <p className="text-xl text-indigo-100 mb-8 pt-8">Nail down fundamentals and explore the community.</p>
           </div>
         </div>
       </div>
@@ -144,6 +144,21 @@ export default function Resources() {
                     <h3 className="text-xl font-semibold text-gray-900 mb-1">Goal Misgeneralization</h3>
                     <p className="text-sm text-gray-600 mb-3">DeepMind · 2022 · Paper</p>
                     <p className="text-gray-700">Analysis of how AI systems can retain capabilities while pursuing unintended objectives.</p>
+                  </div>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="text-3xl text-[#00386c] font-semibold text-gray-900 mb-6 text-center">Training</h2>
+            <div className="grid gap-8 md:grid-cols-3">
+              <a href="https://www.aisafety.com/events-and-training" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow no-underline focus:outline-none focus:ring-2 focus:ring-indigo-500" aria-label="AI Safety Events and Training">
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-xl font-semibold text-gray-900 mb-1">Events and Training</h3>
+                    <p className="text-sm text-gray-600 mb-3">AI Safety · Programs</p>
+                    <p className="text-gray-700">Discover upcoming AI safety events, workshops, and training programs to develop your skills.</p>
                   </div>
                 </div>
               </a>

@@ -35,12 +35,17 @@ export default function Contact() {
           </div>
 
           <div className="bg-[#00386c] rounded-lg shadow-lg p-8 text-center">
-            <p className="text-xl text-white font-semibold">
-              Curious about AI safety?{' '}
-              <a href="https://calendly.com/helenatran9305" target="_blank" rel="noopener noreferrer" className="underline text-indigo-200 hover:text-white">
-                Let us buy you coffee!
-              </a>
+            <p className="text-xl text-white font-semibold mb-6">
+              Curious about AI safety? Let us buy you coffee!
             </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a href="https://calendly.com/helenatran9305" target="_blank" rel="noopener noreferrer" className="bg-indigo-100 text-[#00386c] font-semibold px-6 py-3 rounded-full hover:bg-white transition-colors">
+                Coffee with Helena
+              </a>
+              <a href="https://calendar.app.google/mdAMY9qTR4kBcqb88" target="_blank" rel="noopener noreferrer" className="bg-indigo-100 text-[#00386c] font-semibold px-6 py-3 rounded-full hover:bg-white transition-colors">
+                Coffee with Harry
+              </a>
+            </div>
           </div>
         </div>
       </div>

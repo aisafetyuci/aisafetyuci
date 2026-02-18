@@ -12,7 +12,7 @@ const lusitana = Lusitana({
 
 export const metadata: Metadata = {
   title: {
-    default: 'AI Safety at UCI | UC Irvine AI Alignment & Safety',
+    default: 'AI Safety at UCI',
     template: '%s | AI Safety at UCI',
   },
   description: 'A community dedicated to reducing risk from advanced AI. Join our fellowships, reading groups, and research programs at UC Irvine focused on AI alignment and safety.',

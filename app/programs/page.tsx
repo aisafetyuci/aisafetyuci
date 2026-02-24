@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import ComingSoonButton from './ComingSoonButton';
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -38,10 +39,13 @@ export default function Programs() {
                 <li>Introduction to alignment research</li>
 
               </ul>
-              <div className="mt-auto pt-6">
+              <div className="mt-auto pt-6 flex gap-3">
                 <Link href="https://forms.gle/TcVH7DSY38p1zrLw6" className="inline-block bg-[#00386c] text-white font-semibold px-6 py-2 rounded hover:bg-[#002b52] transition">
                   Apply Now
                 </Link>
+                <a href="https://thundering-toy-eb7.notion.site/AI-Safety-Technical-Fundamentals-Syllabus-176d3a55aae78088928ed3094ba9d1a3" target="_blank" rel="noopener noreferrer" className="inline-block border border-[#00386c] text-[#00386c] font-semibold px-6 py-2 rounded hover:bg-[#00386c] hover:text-white transition">
+                  Syllabus
+                </a>
               </div>
             </div>
 
@@ -56,10 +60,11 @@ export default function Programs() {
                 <li>Meet 1x/week to discuss papers and recent AI safety research</li>
                 <li>Open to Intro Fellowship graduates</li>
               </ul>
-              <div className="mt-auto pt-6">
+              <div className="mt-auto pt-6 flex gap-3">
                 <Link href="https://forms.gle/6szuUD4Ti8q1hHrp7" className="inline-block bg-[#00386c] text-white font-semibold px-6 py-2 rounded hover:bg-[#002b52] transition">
                   Apply Now
                 </Link>
+                <ComingSoonButton />
               </div>
             </div>
           </div>

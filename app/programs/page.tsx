@@ -3,7 +3,7 @@ import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Programs',
-  description: 'Explore our Intro Fellowship and Advanced Fellowship programs. Join reading groups, research projects, and workshops in AI safety at UC Irvine.',
+  description: 'Explore our Intro Fellowship and Advanced Reading Group programs. Join AI safety reading groups and research at UC Irvine.',
 }
 
 export default function Programs() {
@@ -47,15 +47,14 @@ export default function Programs() {
 
             <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Alignment Research Incubator
+                Advanced Reading Group
               </h3>
               <p className="text-gray-700 leading-relaxed mb-4">
-                Hands-on technical AI alignment research for students who have completed the Intro Fellowship.
+                A weekly reading group for students who have completed the Intro Fellowship.
               </p>
               <ul className="list-disc list-inside text-gray-600 space-y-2">
-                <li><a href="https://arena-chapter0-fundamentals.streamlit.app/" target="_blank" rel="noopener noreferrer" className="text-[#00386c] font-semibold underline">ARENA</a> curriculum: Deep Learning/Mech Interp/Evals/RL</li>
-                <li>AI Demos for Policy Makers</li>
-                <li>Independent Research (compute funding available.)</li>
+                <li>Meet 1x/week to discuss papers and recent AI safety research</li>
+                <li>Open to Intro Fellowship graduates</li>
               </ul>
               <div className="mt-auto pt-6">
                 <Link href="https://forms.gle/6szuUD4Ti8q1hHrp7" className="inline-block bg-[#00386c] text-white font-semibold px-6 py-2 rounded hover:bg-[#002b52] transition">

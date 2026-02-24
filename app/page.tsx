@@ -88,8 +88,8 @@ export default function Home() {
                 <div className="border-l-4 border-indigo-600 pl-4 py-2">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">Alignment Research Incubator</h3>
-                      <p className="text-gray-600 mt-1">Hands-on technical AI alignment research for students who have completed the Intro Fellowship.</p>
+                      <h3 className="text-xl font-bold text-gray-900">Advanced Reading Group</h3>
+                      <p className="text-gray-600 mt-1">A weekly reading group for students who have completed the Intro Fellowship.</p>
                     </div>
                     <div className="text-right">
                       <p className="text-lg font-semibold text-[#00386c]">Mondays</p>

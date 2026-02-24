@@ -79,9 +79,14 @@ export default function GetInvolved() {
                 Membership admission is rolling, but the board tends to make decisions every month. If we are slow to respond, please don't hesitate to email us at <CopyEmail email="aisafetyatuci@gmail.com" />.
               </p>
               <div className="mt-auto pt-6 flex gap-3">
-                <a href="https://airtable.com/appKZNlVqsXmdMztH/pagMczb6lf65AJyB8/form" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#00386c] text-white font-semibold px-6 py-2 rounded hover:bg-[#002b52] transition">
-                  Apply Now
-                </a>
+                <div className="relative group inline-block">
+                  <button disabled className="inline-block bg-gray-400 text-white font-semibold px-6 py-2 rounded cursor-not-allowed">
+                    Coming Soon
+                  </button>
+                  <span className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1 text-sm text-white bg-gray-800 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+                    Membership applications open soon
+                  </span>
+                </div>
               </div>
             </div>
           </div>

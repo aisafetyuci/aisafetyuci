@@ -47,12 +47,12 @@ export default function Home() {
               Get Involved
             </h2>
             <div className="grid grid-cols-2 gap-8">
-              <Link href="/programs" className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow text-center" aria-label="Programs">
+              <Link href="/get-involved" className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow text-center" aria-label="Programs">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-16 h-16 text-indigo-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422A12.083 12.083 0 0118 19.666V20l-6 3-6-3v-.334a12.083 12.083 0 01-.16-8.088L12 14z" />
                 </svg>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Programs</h3>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">Get Involved</h3>
                 <p className="text-gray-700">Intro fellowships and reading groups.</p>
               </Link>
 
@@ -88,7 +88,7 @@ export default function Home() {
                 <div className="border-l-4 border-indigo-600 pl-4 py-2">
                   <div className="flex justify-between items-start">
                     <div>
-                      <h3 className="text-xl font-bold text-gray-900">Advanced Reading Group</h3>
+                      <h3 className="text-xl font-bold text-gray-900">Membership</h3>
                       <p className="text-gray-600 mt-1">A weekly reading group for students who have completed the Intro Fellowship.</p>
                     </div>
                     <div className="text-right">

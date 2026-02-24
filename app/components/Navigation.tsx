@@ -16,8 +16,8 @@ export default function Navigation() {
 
           {/* Desktop nav */}
           <div className="hidden md:flex space-x-8">
-            <Link href="/programs" className="text-indigo-100 hover:text-indigo-200 transition-colors font-medium">
-              Programs
+            <Link href="/get-involved" className="text-indigo-100 hover:text-indigo-200 transition-colors font-medium">
+              Get Involved
             </Link>
             <Link href="/resources" className="text-indigo-100 hover:text-indigo-200 transition-colors font-medium">
               Resources
@@ -48,11 +48,11 @@ export default function Navigation() {
           <div className="md:hidden pb-4">
             <div className="flex flex-col space-y-3">
               <Link
-                href="/programs"
+                href="/get-involved"
                 className="text-indigo-100 hover:text-indigo-200 transition-colors font-medium"
                 onClick={() => setIsOpen(false)}
               >
-                Programs
+                Get Involved
               </Link>
               <Link
                 href="/resources"

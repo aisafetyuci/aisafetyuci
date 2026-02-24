@@ -33,8 +33,17 @@ export default function Home() {
         </div>
       </div>
 
+      <div className="w-full bg-black">
+        <div className="container mx-auto px-4 py-10 text-center">
+          <span className="text-4xl font-extrabold text-white tracking-tight">Intro Fellowship Spring Applications are Open!  </span>
+          <a href="https://airtable.com/appKZNlVqsXmdMztH/pag0nLg78TDhj7Uvf/form" target="_blank" rel="noopener noreferrer" className="text-4xl font-extrabold text-white underline underline-offset-4 hover:text-gray-300 transition-colors">
+            Apply Now →
+          </a>
+        </div>
+      </div>
+
       <div className="w-full bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-16">
+        <div className="container mx-auto px-4 py-2">
           <div className="max-w-4xl mx-auto text-center">
             <h2 className="text-3xl text-[#00386c] font-semibold text-gray-900 mb-4 mt-16">Our Mission</h2>
             <p className="text-lg text-gray-600 text-left leading-relaxed mb-8">

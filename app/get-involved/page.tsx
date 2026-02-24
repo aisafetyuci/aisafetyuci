@@ -24,7 +24,7 @@ export default function GetInvolved() {
 <div className="flex flex-col gap-8">
             <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Intro Fellowship
+                Technical Intro Fellowship
               </h3>
               <p className="text-gray-700 leading-relaxed mb-4">
                 The Technical Intro Fellowship (TIF) is an 8-week reading group on technical AI safety. Participants meet weekly in small sections on Thursdays from 6–8pm in Donald Bren Hall, with dinner provided. No work is expected outside of weekly meetings.
@@ -34,15 +34,12 @@ export default function GetInvolved() {
               </p>
               <ul className="list-disc list-inside text-gray-600 space-y-2 mb-4">
                 <li>AI risk and the current trajectory of AI development</li>
-                <li>Misalignment and specification gaming</li>
-                <li>Reinforcement learning from human feedback (RLHF)</li>
                 <li>Scalable oversight</li>
                 <li>Mechanistic interpretability</li>
                 <li>Robustness and unlearning</li>
-                <li>Model organisms of misalignment and AI control</li>
               </ul>
               <p className="text-gray-700 leading-relaxed mb-4">
-                The program is open to undergraduate and graduate students. Prior experience with deep learning fundamentals is expected — if you're unsure whether you're prepared, the syllabus includes optional prereading. Participants receive a completion certificate and early access to membership opportunities.
+                The program is open to undergraduate and graduate students. Participants receive a completion certificate and early access to membership opportunities.
               </p>
               <p className="text-gray-600 text-sm">
                 We run TIF every quarter.

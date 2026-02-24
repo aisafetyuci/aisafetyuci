@@ -19,7 +19,7 @@ export default function GetInvolved() {
         </div>
       </div>
       <div className="container mx-auto px-4 py-16">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-3xl mx-auto">
 
 <div className="flex flex-col gap-8">
             <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
@@ -27,17 +27,30 @@ export default function GetInvolved() {
                 Intro Fellowship
               </h3>
               <p className="text-gray-700 leading-relaxed mb-4">
-                An eight week fellowship covering hallmark papers and key AI Safety concepts.
+                The Technical Intro Fellowship (TIF) is an 8-week reading group on technical AI safety. Participants meet weekly in small sections on Thursdays from 6–8pm in Donald Bren Hall, with dinner provided. No work is expected outside of weekly meetings.
               </p>
-              <ul className="list-disc list-inside text-gray-600 space-y-2">
-                <li>Meet 1x/week for 2 hours for 8 weeks</li>
-                <li>Introduction to alignment research</li>
-
+              <p className="text-gray-700 leading-relaxed mb-4">
+                Topics include:
+              </p>
+              <ul className="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                <li>AI risk and the current trajectory of AI development</li>
+                <li>Misalignment and specification gaming</li>
+                <li>Reinforcement learning from human feedback (RLHF)</li>
+                <li>Scalable oversight</li>
+                <li>Mechanistic interpretability</li>
+                <li>Robustness and unlearning</li>
+                <li>Model organisms of misalignment and AI control</li>
               </ul>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                The program is open to undergraduate and graduate students. Prior experience with deep learning fundamentals is expected — if you're unsure whether you're prepared, the syllabus includes optional prereading. Participants receive a completion certificate and early access to membership opportunities.
+              </p>
+              <p className="text-gray-600 text-sm">
+                We run TIF every quarter.
+              </p>
               <div className="mt-auto pt-6 flex gap-3">
-                <Link href="https://forms.gle/TcVH7DSY38p1zrLw6" className="inline-block bg-[#00386c] text-white font-semibold px-6 py-2 rounded hover:bg-[#002b52] transition">
+                <a href="https://airtable.com/appKZNlVqsXmdMztH/pag0nLg78TDhj7Uvf/form" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#00386c] text-white font-semibold px-6 py-2 rounded hover:bg-[#002b52] transition">
                   Apply Now
-                </Link>
+                </a>
                 <a href="https://thundering-toy-eb7.notion.site/AI-Safety-Technical-Fundamentals-Syllabus-176d3a55aae78088928ed3094ba9d1a3" target="_blank" rel="noopener noreferrer" className="inline-block border border-[#00386c] text-[#00386c] font-semibold px-6 py-2 rounded hover:bg-[#00386c] hover:text-white transition">
                   Syllabus
                 </a>

@@ -62,6 +62,7 @@ export default function GetInvolved() {
                 Being a member of the AISUCI community has both a number of opportunities and a number of responsibilities. Membership entails:
               </p>
               <ul className="list-disc list-inside text-gray-600 space-y-2 mb-4">
+                <li>Free Claude Pro / Claude Code subscription</li>
                 <li>Compute and research tools</li>
                 <li>Weekly member meetings to read and discuss alignment research</li>
                 <li>Small group discussions with alignment researchers and professors</li>

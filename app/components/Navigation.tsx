@@ -7,29 +7,29 @@ export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <nav className="bg-[#00386c] shadow-md">
+    <nav className="bg-white shadow-md">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="text-xl font-bold text-white hover:text-indigo-200 transition-colors">
+          <Link href="/" className="text-xl font-bold text-gray-900 hover:text-gray-700 transition-colors">
             AI Safety at UCI
           </Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex space-x-8">
-            <Link href="/get-involved" className="text-indigo-100 hover:text-indigo-200 transition-colors font-medium">
+            <Link href="/get-involved" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
               Get Involved
             </Link>
-            <Link href="/resources" className="text-indigo-100 hover:text-indigo-200 transition-colors font-medium">
+            <Link href="/resources" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
               Resources
             </Link>
-            <Link href="/contact" className="text-indigo-100 hover:text-indigo-200 transition-colors font-medium">
+            <Link href="/contact" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">
               Contact
             </Link>
           </div>
 
           {/* Hamburger button */}
           <button
-            className="md:hidden text-white p-2"
+            className="md:hidden text-gray-700 p-2"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
@@ -49,21 +49,21 @@ export default function Navigation() {
             <div className="flex flex-col space-y-3">
               <Link
                 href="/get-involved"
-                className="text-indigo-100 hover:text-indigo-200 transition-colors font-medium"
+                className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
                 onClick={() => setIsOpen(false)}
               >
                 Get Involved
               </Link>
               <Link
                 href="/resources"
-                className="text-indigo-100 hover:text-indigo-200 transition-colors font-medium"
+                className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
                 onClick={() => setIsOpen(false)}
               >
                 Resources
               </Link>
               <Link
                 href="/contact"
-                className="text-indigo-100 hover:text-indigo-200 transition-colors font-medium"
+                className="text-gray-600 hover:text-gray-900 transition-colors font-medium"
                 onClick={() => setIsOpen(false)}
               >
                 Contact

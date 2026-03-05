@@ -1,32 +1,57 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
       <div className="w-full">
-        <div className="bg-[#00386c] shadow-sm">
+        {/* Hero */}
+        <div
+          className="bg-gray-50"
+          style={{
+            backgroundImage:
+              'linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)',
+            backgroundSize: '60px 60px',
+          }}
+        >
           <div className="container mx-auto px-4 py-24">
-            <div className="max-w-4xl mx-auto text-center">
-              <h1 className="text-5xl font-bold text-white mb-6">AI Safety at UCI</h1>
-              <p className="text-xl text-indigo-100 mb-8">A community dedicated to reducing risk from advanced AI.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              {/* Left column */}
+              <div>
+                <span className="inline-block border border-gray-400 text-gray-500 text-sm px-3 py-1 rounded mb-6">
+                  Student-Led Initiative
+                </span>
+                <h1 className="text-5xl font-bold text-gray-900 mb-6">AI Safety at UCI</h1>
+                <p className="text-xl text-gray-600 mb-8">A community dedicated to reducing risk from advanced AI.</p>
+                <div className="flex gap-4 flex-wrap">
+                  <a
+                    href="https://discord.gg/uENtNdDPPb"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-md shadow transition-colors"
+                    aria-label="Join our Discord"
+                  >
+                    Join Discord
+                  </a>
+                  <Link
+                    href="/contact"
+                    className="inline-block border border-gray-300 hover:border-gray-500 text-gray-700 font-semibold py-3 px-6 rounded-md transition-colors"
+                    aria-label="Get Coffee"
+                  >
+                    Get Coffee
+                  </Link>
+                </div>
+              </div>
 
-              <div className="mt-6 flex justify-center gap-4">
-                <a
-                  href="https://discord.gg/uENtNdDPPb"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block bg-indigo-100 hover:bg-white text-[#00386c] font-semibold py-3 px-6 rounded-md shadow transition-colors"
-                  aria-label="Join our Discord"
-                >
-                  Join Discord
-                </a>
-                <Link
-                  href="/contact"
-                  className="inline-block bg-indigo-100 hover:bg-white text-[#00386c] font-semibold py-3 px-6 rounded-md shadow transition-colors"
-                  aria-label="Get Coffee"
-                >
-                  Get Coffee
-                </Link>
+              {/* Right column */}
+              <div className="flex justify-center">
+                <Image
+                  src="/images/asinglenet.png"
+                  alt="Neural network illustration"
+                  width={500}
+                  height={400}
+                  className="rounded-xl w-full h-auto object-cover"
+                />
               </div>
             </div>
           </div>

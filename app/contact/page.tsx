@@ -42,11 +42,6 @@ export default function Contact() {
             <div className="space-y-4">
 
               <div>
-                <h3 className="font-semibold text-gray-900 mb-2">Social Media</h3>
-                <p className="text-gray-700">Follow us on <a href="https://www.instagram.com/aisafetyatuci/" target="_blank" rel="noopener noreferrer" className="text-[#18234e] font-semibold underline">Instagram</a></p>
-              </div>
-
-              <div>
                 <h3 className="font-semibold text-gray-900 mb-2">All Links</h3>
                 <a href="https://linktr.ee/aisafetyatuci" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#111a3b] transition-colors">
                   linktr.ee/aisafetyatuci

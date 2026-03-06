@@ -14,14 +14,11 @@ export default function Home() {
             backgroundSize: '60px 60px',
           }}
         >
-          <div className="container mx-auto px-4 py-24">
+          <div className="container mx-auto px-4 py-10 md:py-24">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               {/* Left column */}
               <div>
-                <span className="inline-block border border-gray-400 text-gray-500 text-sm px-3 py-1 rounded mb-6">
-                  Student-Led Initiative
-                </span>
-                <h1 className="text-5xl font-bold text-gray-900 mb-6">A community dedicated to reducing risk from advanced AI.</h1>
+<h1 className="text-5xl font-bold text-gray-900 mb-6">A community dedicated to reducing risk from advanced AI.</h1>
                 <p className="text-xl text-gray-600 mb-8"></p>
                 <div className="flex gap-4 flex-wrap">
                   <a

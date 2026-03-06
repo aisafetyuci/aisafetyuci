@@ -108,6 +108,27 @@ export default function GetInvolved() {
               </div>
             </div>
 
+            <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Join the Board</h2>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                We're always looking for motivated people to help run AISUCI. Board members organize fellowships, events, workshops, and outreach, as well as steer the direction of the group.
+              </p>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                We value people who are genuinely excited about AI safety. There's no single mold, but we look for responsible, agentic, and high-context individuals who have demonstrated commitment to our mission.
+              </p>
+              <p className="text-gray-600 text-sm mb-6">
+                The best first step is a conversation. Book a coffee chat and tell us what you're interested in.
+              </p>
+              <div className="mt-auto flex gap-3">
+                <a href="https://calendly.com/helenatran9305" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
+                  Coffee with Helena
+                </a>
+                <a href="https://calendar.app.google/mdAMY9qTR4kBcqb88" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
+                  Coffee with Harry
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>

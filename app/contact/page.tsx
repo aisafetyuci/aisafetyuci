@@ -9,7 +9,7 @@ export default function Contact() {
   return (
     <main className="min-h-screen bg-white">
       <div className="container mx-auto px-4 pt-12 pb-2">
-        <div className="max-w-4xl mx-auto border-b border-gray-200 pb-8">
+        <div className="border-b border-gray-200 pb-8">
           <h1 className="text-5xl font-bold text-[#18234e] mb-3">Contact Us</h1>
           <p className="text-xl text-gray-600">Questions, concerns, requests? Get in touch with AISUCI.</p>
         </div>

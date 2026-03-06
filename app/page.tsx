@@ -4,169 +4,179 @@ import Image from 'next/image'
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
-      <div className="w-full">
-        {/* Hero */}
-        <div
-          className="bg-gray-50"
-          style={{
-            backgroundImage:
-              'linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)',
-            backgroundSize: '60px 60px',
-          }}
-        >
-          <div className="container mx-auto px-4 py-10 md:py-24">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-              {/* Left column */}
-              <div>
-<h1 className="text-5xl font-bold text-gray-900 mb-6">A community dedicated to reducing risk from advanced AI.</h1>
-                <p className="text-xl text-gray-600 mb-8"></p>
-                <div className="flex gap-4 flex-wrap">
-                  <a
-                    href="https://discord.gg/uENtNdDPPb"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block bg-[#18234e] hover:bg-[#111a3b] text-white font-semibold py-3 px-6 rounded-md shadow transition-colors"
-                    aria-label="Join our Discord"
-                  >
-                    Join Discord
-                  </a>
-                  <Link
-                    href="/contact"
-                    className="inline-block border border-gray-300 hover:border-gray-500 text-gray-700 font-semibold py-3 px-6 rounded-md transition-colors"
-                    aria-label="Get Coffee"
-                  >
-                    Get Coffee
-                  </Link>
-                </div>
+      {/* Hero */}
+      <div
+        className="bg-gray-50"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)',
+          backgroundSize: '60px 60px',
+        }}
+      >
+        <div className="container mx-auto px-4 py-10 md:py-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h1 className="text-5xl font-bold text-gray-900 mb-6">A community dedicated to reducing risk from advanced AI.</h1>
+              <p className="text-xl text-gray-600 mb-8"></p>
+              <div className="flex gap-4 flex-wrap">
+                <a
+                  href="https://discord.gg/uENtNdDPPb"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-[#18234e] hover:bg-[#111a3b] text-white font-semibold py-3 px-6 rounded-md shadow transition-colors"
+                  aria-label="Join our Discord"
+                >
+                  Join Discord
+                </a>
+                <Link
+                  href="/contact"
+                  className="inline-block border border-gray-300 hover:border-gray-500 text-gray-700 font-semibold py-3 px-6 rounded-md transition-colors"
+                  aria-label="Get Coffee"
+                >
+                  Get Coffee
+                </Link>
               </div>
+            </div>
 
-              {/* Right column */}
-              <div className="flex justify-center">
-                <Image
-                  src="/images/asinglenet.png"
-                  alt="Neural network illustration"
-                  width={500}
-                  height={400}
-                  className="rounded-xl w-full h-auto object-cover"
-                />
-              </div>
+            <div className="flex justify-center">
+              <Image
+                src="/images/asinglenet.png"
+                alt="Neural network illustration"
+                width={500}
+                height={400}
+                className="rounded-xl w-full h-auto object-cover"
+              />
             </div>
           </div>
         </div>
       </div>
 
+      {/* Fellowship Announcement Banner */}
       <div className="w-full bg-[#18234e]">
-        <div className="container mx-auto px-4 py-10 text-center">
-          <span className="text-4xl font-extrabold text-white tracking-tight">Intro Fellowship Spring Applications are Open!  </span>
-          <a href="https://airtable.com/appKZNlVqsXmdMztH/pag0nLg78TDhj7Uvf/form" target="_blank" rel="noopener noreferrer" className="text-4xl font-extrabold text-white underline underline-offset-4 hover:text-gray-300 transition-colors">
+        <div className="container mx-auto px-4 py-12 text-center">
+          <span className="inline-block bg-white/15 text-white text-xs font-bold px-3 py-1 rounded-full mb-4 tracking-widest uppercase">
+            Spring 2026
+          </span>
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
+            Intro Fellowship Applications Are Open
+          </h2>
+          <p className="text-white/70 text-lg mb-7 max-w-xl mx-auto">
+            An 8-week program covering hallmark AI safety papers and key concepts. Open to all UCI students.
+          </p>
+          <a
+            href="https://airtable.com/appKZNlVqsXmdMztH/pag0nLg78TDhj7Uvf/form"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block bg-white text-[#18234e] font-bold py-3 px-8 rounded-md hover:bg-gray-100 transition-colors shadow"
+          >
             Apply Now →
           </a>
         </div>
       </div>
 
-      <div className="w-full bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-2">
-          <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-3xl text-[#18234e] font-semibold text-gray-900 mb-4 mt-16">Our Mission</h2>
-            <p className="text-lg text-gray-600 text-left leading-relaxed mb-8">
-              We seek to advance the understanding and development of interpretable and aligned artificial intelligence systems. We are dedicated to addressing the long-term risks and potential harms associated with AI, as we approach the possibility of artificial general intelligence (AGI). Recognizing the profound uniqueness of human intelligence and the existential risks posed by unchecked AI advancement, we commit ourselves to ensuring that AI technologies align with human values and contribute positively to society.
+      {/* Mission Section */}
+      <div className="w-full bg-white">
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl font-semibold text-[#18234e] mb-6">Our Mission</h2>
+            <p className="text-lg text-gray-600 leading-relaxed">
+              <strong>Reducing risks from advanced artificial intelligence may be one of the most important challenges of our time.</strong> We seek to advance the understanding and development of interpretable and aligned artificial intelligence systems. We are dedicated to addressing the long-term risks and potential harms associated with AI, as we approach the possibility of artificial general intelligence (AGI). Recognizing the profound uniqueness of human intelligence and the existential risks posed by unchecked AI advancement, we commit ourselves to ensuring that AI technologies align with human values and contribute positively to society.
             </p>
           </div>
+        </div>
+      </div>
 
-          <div className="mb-12 max-w-6xl mx-auto">
-            <h2 className="text-3xl text-[#18234e] font-semibold text-gray-900 mb-8 text-center mt-16">
-              Get Involved
-            </h2>
-            <div className="grid grid-cols-2 gap-8">
-              <Link href="/get-involved" className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow text-center" aria-label="Programs">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-16 h-16 text-[#18234e] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422A12.083 12.083 0 0118 19.666V20l-6 3-6-3v-.334a12.083 12.083 0 01-.16-8.088L12 14z" />
-                </svg>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Get Involved</h3>
-                <p className="text-gray-700">Intro fellowships and membership.</p>
+      {/* Get Involved Section */}
+      <div className="w-full bg-gray-50">
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-semibold text-[#18234e] mb-2 text-center">Get Involved</h2>
+            <p className="text-gray-500 text-center mb-10">Two ways to engage with AI safety at UCI.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Link
+                href="/get-involved"
+                className="group flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 p-8 hover:shadow-md hover:border-[#18234e]/30 transition-all text-center"
+                aria-label="Programs"
+              >
+                <div className="w-14 h-14 rounded-lg bg-[#18234e]/10 flex items-center justify-center mx-auto mb-5 group-hover:bg-[#18234e]/20 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-[#18234e]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l6.16-3.422A12.083 12.083 0 0118 19.666V20l-6 3-6-3v-.334a12.083 12.083 0 01-.16-8.088L12 14z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Fellowship & Membership</h3>
+                <p className="text-gray-500 text-sm leading-relaxed flex-1">Join our 8-week Intro Fellowship or continue as a full member in our weekly reading group.</p>
+                <span className="mt-5 text-[#18234e] text-sm font-semibold group-hover:underline">Apply now →</span>
               </Link>
 
-              <Link href="/resources" className="flex flex-col items-center justify-center bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow text-center" aria-label="Events">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-16 h-16 text-[#18234e] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3M3 11h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Learn</h3>
-                <p className="text-gray-700">Self-study with curated resources.</p>
+              <Link
+                href="/resources"
+                className="group flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 p-8 hover:shadow-md hover:border-[#18234e]/30 transition-all text-center"
+                aria-label="Resources"
+              >
+                <div className="w-14 h-14 rounded-lg bg-[#18234e]/10 flex items-center justify-center mx-auto mb-5 group-hover:bg-[#18234e]/20 transition-colors">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-7 h-7 text-[#18234e]" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Learn</h3>
+                <p className="text-gray-500 text-sm leading-relaxed flex-1">Self-study AI safety with our curated reading lists, lecture series, and research resources.</p>
+                <span className="mt-5 text-[#18234e] text-sm font-semibold group-hover:underline">Browse resources →</span>
               </Link>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div className="mb-12 max-w-6xl mx-auto">
-            <h2 className="text-3xl text-[#18234e] font-semibold text-gray-900 mb-8 text-center mt-16">
-              Upcoming Events
-            </h2>
-            <div className="bg-white rounded-lg shadow-lg p-8">
-              <div className="space-y-6">
-                <div className="border-l-4 border-[#18234e] pl-4 py-2">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900">Intro Fellowship</h3>
-                      <p className="text-gray-600 mt-1">An eight week fellowship covering hallmark papers and key AI Safety concepts.</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-lg font-semibold text-[#18234e]">Thursdays</p>
-                      <p className="text-sm text-gray-500">6:00 PM - 8:30 PM</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-l-4 border-[#18234e] pl-4 py-2">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900">Membership</h3>
-                      <p className="text-gray-600 mt-1">A weekly reading group for students who have completed the Intro Fellowship.</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-lg font-semibold text-[#18234e]">Mondays</p>
-                      <p className="text-sm text-gray-500">5:00 PM - 6:30 PM</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-l-4 border-[#18234e] pl-4 py-2">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900">General Meeting</h3>
-                      <p className="text-gray-600 mt-1">Our general meeting for all members, 1st and 3rd Tuesdays of the month.</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-lg font-semibold text-[#18234e]">Tuesdays</p>
-                      <p className="text-sm text-gray-500">5:00 PM - 7:00 PM</p>
-                    </div>
-                  </div>
-                </div>
-
-
-                <div className="border-l-4 border-[#18234e] pl-4 py-2">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900">Coworking Sessions</h3>
-                      <p className="text-gray-600 mt-1">Collaborative work on AI safety projects, 2nd and 4th Tuesdays of the month</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-lg font-semibold text-[#18234e]">Tuesdays</p>
-                      <p className="text-sm text-gray-500">5:00 PM - 7:00 PM</p>
-                    </div>
-                  </div>
-                </div>
+      {/* Weekly Schedule */}
+      <div className="w-full bg-white">
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-3xl font-semibold text-[#18234e] mb-2 text-center">Weekly Schedule</h2>
+            <p className="text-gray-500 text-center mb-10">Our recurring programs.</p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="rounded-xl border border-gray-100 bg-gray-50 p-6">
+                <span className="inline-block text-xs font-bold uppercase tracking-wider text-white bg-[#18234e] px-2.5 py-1 rounded-full mb-3">
+                  Spring TBD
+                </span>
+                <h3 className="text-lg font-bold text-gray-900 mb-1">Intro Fellowship</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">An 8-week program covering hallmark papers and key AI safety concepts. Open to all UCI students each term.</p>
               </div>
 
-              <div className="mt-8 text-center">
-                <a
-                  href="https://docs.google.com/spreadsheets/d/1Xun0Q1a25BVLKvJEjkixesrgcR30k7nqQQX1CB94tlU/edit?usp=sharing"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block text-[#18234e] hover:text-[#111a3b] font-semibold"
-                >
-                  View Full Calendar →
-                </a>
+              <div className="rounded-xl border border-gray-100 bg-gray-50 p-6">
+                <span className="inline-block text-xs font-bold uppercase tracking-wider text-white bg-[#18234e] px-2.5 py-1 rounded-full mb-3">
+                  Spring TBD
+                </span>
+                <h3 className="text-lg font-bold text-gray-900 mb-1">Member Reading Group</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">A weekly deep-dive for students who have completed the Intro Fellowship. Advanced papers and research discussion.</p>
               </div>
+
+              <div className="rounded-xl border border-gray-100 bg-gray-50 p-6">
+                <span className="inline-block text-xs font-bold uppercase tracking-wider text-white bg-[#18234e] px-2.5 py-1 rounded-full mb-3">
+                  Spring TBD
+                </span>
+                <h3 className="text-lg font-bold text-gray-900 mb-1">General Meeting</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">All-hands meeting for announcements, guest speakers, and club-wide discussions. Open to all members.</p>
+              </div>
+
+              <div className="rounded-xl border border-gray-100 bg-gray-50 p-6">
+                <span className="inline-block text-xs font-bold uppercase tracking-wider text-white bg-[#18234e] px-2.5 py-1 rounded-full mb-3">
+                  Spring TBD
+                </span>
+                <h3 className="text-lg font-bold text-gray-900 mb-1">Coworking Sessions</h3>
+                <p className="text-gray-500 text-sm leading-relaxed">Collaborative work sessions for ongoing AI safety research projects and independent study. Open to members and non-members.</p>
+              </div>
+            </div>
+
+            <div className="mt-8 text-center">
+              <a
+                href="https://docs.google.com/spreadsheets/d/1Xun0Q1a25BVLKvJEjkixesrgcR30k7nqQQX1CB94tlU/edit?usp=sharing"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block border border-[#18234e] text-[#18234e] hover:bg-[#18234e] hover:text-white font-semibold py-2.5 px-6 rounded-md transition-colors text-sm"
+              >
+                View Full Calendar →
+              </a>
             </div>
           </div>
         </div>

@@ -10,11 +10,11 @@ export const metadata: Metadata = {
 export default function GetInvolved() {
   return (
     <main className="min-h-screen bg-white">
-      <div className="w-full bg-[#00386c]">
+      <div className="w-full bg-[#18234e]">
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl font-bold text-white mb-0">Get Involved</h1>
-            <p className="text-xl text-indigo-100 mb-8 pt-8">Join the AISUCI community and make an impact.</p>
+            <p className="text-xl text-[#f2f3f7] mb-8 pt-8">Join the AISUCI community and make an impact.</p>
           </div>
         </div>
       </div>
@@ -45,10 +45,10 @@ export default function GetInvolved() {
                 We run TIF every quarter.
               </p>
               <div className="mt-auto pt-6 flex gap-3">
-                <a href="https://airtable.com/appKZNlVqsXmdMztH/pag0nLg78TDhj7Uvf/form" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#00386c] text-white font-semibold px-6 py-2 rounded hover:bg-[#002b52] transition">
+                <a href="https://airtable.com/appKZNlVqsXmdMztH/pag0nLg78TDhj7Uvf/form" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
                   Apply Now
                 </a>
-                <a href="https://thundering-toy-eb7.notion.site/AI-Safety-Technical-Fundamentals-Syllabus-176d3a55aae78088928ed3094ba9d1a3" target="_blank" rel="noopener noreferrer" className="inline-block border border-[#00386c] text-[#00386c] font-semibold px-6 py-2 rounded hover:bg-[#00386c] hover:text-white transition">
+                <a href="https://thundering-toy-eb7.notion.site/AI-Safety-Technical-Fundamentals-Syllabus-176d3a55aae78088928ed3094ba9d1a3" target="_blank" rel="noopener noreferrer" className="inline-block border border-[#18234e] text-[#18234e] font-semibold px-6 py-2 rounded hover:bg-[#18234e] hover:text-white transition">
                   Syllabus
                 </a>
               </div>
@@ -80,7 +80,7 @@ export default function GetInvolved() {
                 Membership admission is rolling, but the board tends to make decisions every month. If we are slow to respond, please don't hesitate to email us at <CopyEmail email="aisafetyatuci@gmail.com" />.
               </p>
               <div className="mt-auto pt-6 flex gap-3">
-                <a href="https://airtable.com/appKZNlVqsXmdMztH/pagMczb6lf65AJyB8/form" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#00386c] text-white font-semibold px-6 py-2 rounded hover:bg-[#002b52] transition">
+                <a href="https://airtable.com/appKZNlVqsXmdMztH/pagMczb6lf65AJyB8/form" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
                   Apply Now
                 </a>
               </div>

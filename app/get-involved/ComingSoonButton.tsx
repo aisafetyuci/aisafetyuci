@@ -11,7 +11,7 @@ export default function ComingSoonButton() {
         type="button"
         onClick={() => setShow(true)}
         onBlur={() => setShow(false)}
-        className="border border-[#00386c] text-[#00386c] font-semibold px-6 py-2 rounded hover:bg-[#00386c] hover:text-white transition"
+        className="border border-[#18234e] text-[#18234e] font-semibold px-6 py-2 rounded hover:bg-[#18234e] hover:text-white transition"
       >
         Syllabus
       </button>

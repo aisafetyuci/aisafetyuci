@@ -8,11 +8,11 @@ export const metadata: Metadata = {
 export default function About() {
   return (
     <main className="min-h-screen bg-white">
-      <div className="w-full bg-[#00386c]">
+      <div className="w-full bg-[#18234e]">
         <div className="container mx-auto px-4 py-12">
           <div className="max-w-4xl mx-auto text-center">
             <h1 className="text-5xl font-bold text-white mb-0">About Us</h1>
-            <p className="text-xl text-indigo-100 mb-8 pt-8">The people behind AISUCI.</p>
+            <p className="text-xl text-[#f2f3f7] mb-8 pt-8">The people behind AISUCI.</p>
           </div>
         </div>
       </div>

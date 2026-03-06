@@ -1,12 +1,11 @@
 import type { Metadata } from 'next'
-import { Lusitana } from 'next/font/google'
+import { DM_Sans } from 'next/font/google'
 import './globals.css'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
 import StructuredData from './components/StructuredData'
 
-const lusitana = Lusitana({
-  weight: ['400', '700'],
+const dmSans = DM_Sans({
   subsets: ['latin'],
 })
 
@@ -75,7 +74,7 @@ export default function RootLayout({
       <head>
         <StructuredData />
       </head>
-      <body className={lusitana.className}>
+      <body className={dmSans.className}>
         <Navigation />
         {children}
         <Footer />

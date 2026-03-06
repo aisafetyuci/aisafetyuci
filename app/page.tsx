@@ -22,7 +22,7 @@ export default function Home() {
                   Student-Led Initiative
                 </span>
                 <h1 className="text-5xl font-bold text-gray-900 mb-6">A community dedicated to reducing risk from advanced AI.</h1>
-                <p className="text-xl text-gray-600 mb-8">SOmething something something lorem ipsumSOmething something something lorem ipsumSOmething something something lorem ipsum</p>
+                <p className="text-xl text-gray-600 mb-8"></p>
                 <div className="flex gap-4 flex-wrap">
                   <a
                     href="https://discord.gg/uENtNdDPPb"

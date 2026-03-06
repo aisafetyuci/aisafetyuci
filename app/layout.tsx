@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     url: 'https://aisafetyuci.org',
     siteName: 'AI Safety at UCI',
     title: 'AI Safety at UCI | UC Irvine AI Alignment & Safety',
-    description: 'A community dedicated to reducing risk from advanced AI. Join our fellowships, reading groups, and research programs at UC Irvine.',
+    description: 'A community dedicated to reducing risk from advanced AI.',
     images: [
       {
         url: '/og-image.png',

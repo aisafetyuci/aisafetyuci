@@ -122,14 +122,14 @@ export default function Resources() {
                 <p className="text-gray-700">Beginner's guide to mechanistic interpretability with concrete steps.</p>
               </a>
 
-              <a href="https://github.com/neelnanda-io/TransformerLens" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow no-underline focus:outline-none focus:ring-2 focus:ring-[#18234e]" aria-label="TransformerLens Library">
+              <a href="https://alignment.anthropic.com/2026/psm/" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow no-underline focus:outline-none focus:ring-2 focus:ring-[#18234e]" aria-label="The Persona Selection Model">
                 <div className="flex items-start justify-between mb-3">
-                  <Badge label="Library" color="bg-slate-100 text-slate-700" />
+                  <Badge label="Paper" color="bg-[#18234e]/10 text-[#18234e]" />
                   <ExternalIcon />
                 </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-1">TransformerLens</h3>
-                <p className="text-sm text-gray-600 mb-3">Neel Nanda</p>
-                <p className="text-gray-700">Python library for doing mechanistic interpretability on GPT-2-style language models.</p>
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">The Persona Selection Model</h3>
+                <p className="text-sm text-gray-600 mb-3">Marks, Lindsey, Olah · Anthropic 2026</p>
+                <p className="text-gray-700">LLMs learn to simulate diverse characters during pre-training; post-training elicits a particular Assistant persona — with implications for AI psychology and development.</p>
               </a>
 
               <a href="https://arxiv.org/abs/2212.08073" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow no-underline focus:outline-none focus:ring-2 focus:ring-[#18234e]" aria-label="Constitutional AI Paper">
@@ -165,8 +165,8 @@ export default function Resources() {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-3xl text-[#18234e] font-semibold mb-6 text-center">Training</h2>
-            <div className="max-w-sm">
+            <h2 className="text-3xl text-[#18234e] font-semibold mb-6 text-center">Training + Continued Engagement</h2>
+            <div className="grid gap-8 md:grid-cols-3">
               <a href="https://www.aisafety.com/events-and-training" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow no-underline focus:outline-none focus:ring-2 focus:ring-[#18234e]" aria-label="AI Safety Events and Training">
                 <div className="flex items-start justify-between mb-3">
                   <Badge label="Programs" color="bg-orange-100 text-orange-700" />
@@ -175,6 +175,16 @@ export default function Resources() {
                 <h3 className="text-xl font-semibold text-gray-900 mb-1">Events and Training</h3>
                 <p className="text-sm text-gray-600 mb-3">AI Safety</p>
                 <p className="text-gray-700">Discover upcoming AI safety events, workshops, and training programs to develop your skills.</p>
+              </a>
+
+              <a href="https://docs.google.com/document/d/1HDslg5FyVXqROnmUDDVVnOBolo-ktkO4LfSrYlEGDOc/edit?tab=t.0" target="_blank" rel="noopener noreferrer" className="block bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow no-underline focus:outline-none focus:ring-2 focus:ring-[#18234e]" aria-label="Continued Engagement Resources">
+                <div className="flex items-start justify-between mb-3">
+                  <Badge label="Guide" color="bg-teal-100 text-teal-700" />
+                  <ExternalIcon />
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-1">Continued Engagement Resources</h3>
+                <p className="text-sm text-gray-600 mb-3">AISUCI</p>
+                <p className="text-gray-700">Reading sources, Twitter lists, fellowship opportunities, technical upskilling programs, and job boards to stay engaged with AI safety.</p>
               </a>
             </div>
           </section>

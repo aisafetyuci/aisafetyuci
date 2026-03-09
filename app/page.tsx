@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import MailingListForm from './components/MailingListForm'
 
 export default function Home() {
   return (
@@ -92,7 +93,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-semibold text-[#18234e] mb-2 text-center">Get Involved</h2>
             <p className="text-gray-500 text-center mb-10">Two ways to engage with AI safety at UCI.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
               <Link
                 href="/get-involved"
                 className="group flex flex-col bg-white rounded-xl shadow-sm border border-gray-100 p-8 hover:shadow-md hover:border-[#18234e]/30 transition-all text-center"
@@ -123,6 +124,12 @@ export default function Home() {
                 <p className="text-gray-500 text-sm leading-relaxed flex-1">Self-study AI safety with our curated reading lists, lecture series, and research resources.</p>
                 <span className="mt-5 text-[#18234e] text-sm font-semibold group-hover:underline">Browse resources →</span>
               </Link>
+            </div>
+            <div className="text-center">
+              <p className="text-sm text-gray-500 mb-3">Get occasional updates from AISUCI:</p>
+              <div className="flex justify-center">
+                <MailingListForm />
+              </div>
             </div>
           </div>
         </div>

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import MailingListForm from '../components/MailingListForm'
 
 export const metadata: Metadata = {
   title: 'Contact Us',
@@ -81,6 +82,12 @@ export default function Contact() {
                 Linktree
               </a>
             </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-lg p-8">
+            <h2 className="text-2xl font-semibold text-gray-900 mb-2">Stay in the loop</h2>
+            <p className="text-gray-600 mb-6">Get occasional updates about events, fellowships, and AI safety news from AISUCI.</p>
+            <MailingListForm />
           </div>
 
         </div>

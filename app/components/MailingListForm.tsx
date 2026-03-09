@@ -1,0 +1,61 @@
+'use client'
+
+import { useState } from 'react'
+
+// Replace this with your deployed Google Apps Script web app URL
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzAFmqxXln5VFpe2xYARsKJp_bbzy1c8iQTtLAQpqLsh0CUnDnYO78gHAZxJGmJhRkB/exec'
+
+export default function MailingListForm() {
+  const [email, setEmail] = useState('')
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!email) return
+    setStatus('loading')
+
+    try {
+      await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      })
+      setStatus('success')
+      setEmail('')
+    } catch {
+      setStatus('error')
+    }
+  }
+
+  if (status === 'success') {
+    return (
+      <p className="text-sm text-green-700 font-medium">
+        You&apos;re on the list! We&apos;ll be in touch.
+      </p>
+    )
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="flex gap-2 flex-wrap">
+      <input
+        type="email"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder="your@email.com"
+        className="border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#18234e] min-w-48"
+      />
+      <button
+        type="submit"
+        disabled={status === 'loading'}
+        className="bg-[#18234e] text-white font-semibold px-4 py-2 rounded-md text-sm hover:bg-[#111a3b] transition-colors disabled:opacity-60"
+      >
+        {status === 'loading' ? 'Joining…' : 'Join Mailing List'}
+      </button>
+      {status === 'error' && (
+        <p className="w-full text-sm text-red-600">Something went wrong. Try emailing us directly.</p>
+      )}
+    </form>
+  )
+}

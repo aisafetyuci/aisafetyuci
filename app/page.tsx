@@ -30,7 +30,7 @@ export default function Home() {
                 </a>
                 <Link
                   href="/contact"
-                  className="inline-block border border-gray-300 hover:border-gray-500 text-gray-700 font-semibold py-3 px-6 rounded-md transition-colors"
+                  className="inline-block border border-gray-400 hover:border-gray-600 bg-gray-100 hover:bg-gray-200 text-gray-800 font-semibold py-3 px-6 rounded-md transition-colors"
                   aria-label="Get Coffee"
                 >
                   Get Coffee

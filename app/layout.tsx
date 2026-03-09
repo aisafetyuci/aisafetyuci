@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     description: 'A community dedicated to reducing risk from advanced AI.',
     images: [
       {
-        url: '/images/asinglenet.png',
+        url: 'https://aisafetyuci.org/images/asinglenet.png',
         width: 1200,
         height: 630,
         alt: 'AI Safety at UCI',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'AI Safety at UCI',
     description: 'A community dedicated to reducing risk from advanced AI. Join our fellowships and research programs.',
-    images: ['/images/asinglenet.png'],
+    images: ['https://aisafetyuci.org/images/asinglenet.png'],
   },
   robots: {
     index: true,

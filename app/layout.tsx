@@ -24,11 +24,11 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://aisafetyuci.org',
     siteName: 'AI Safety at UCI',
-    title: 'AI Safety at UCI | UC Irvine AI Alignment & Safety',
+    title: 'AI Safety at UCI',
     description: 'A community dedicated to reducing risk from advanced AI.',
     images: [
       {
-        url: '/og-image.png',
+        url: '/images/asinglenet.png',
         width: 1200,
         height: 630,
         alt: 'AI Safety at UCI',
@@ -37,9 +37,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AI Safety at UCI | UC Irvine AI Alignment & Safety',
+    title: 'AI Safety at UCI',
     description: 'A community dedicated to reducing risk from advanced AI. Join our fellowships and research programs.',
-    images: ['/og-image.png'],
+    images: ['/images/asinglenet.png'],
   },
   robots: {
     index: true,

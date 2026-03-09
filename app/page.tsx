@@ -139,51 +139,19 @@ export default function Home() {
       <div className="w-full bg-white">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-semibold text-[#18234e] mb-2 text-center">Weekly Schedule</h2>
-            <p className="text-gray-500 text-center mb-10">Our recurring programs.</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div className="rounded-xl border border-gray-100 bg-gray-50 p-6">
-                <span className="inline-block text-xs font-bold uppercase tracking-wider text-white bg-[#18234e] px-2.5 py-1 rounded-full mb-3">
-                  Spring TBD
-                </span>
-                <h3 className="text-lg font-bold text-gray-900 mb-1">Intro Fellowship</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">An 8-week program covering hallmark papers and key AI safety concepts. Open to all UCI students each term.</p>
+            <h2 className="text-3xl font-semibold text-[#18234e] mb-2 text-center">Our Events</h2>
+            <p className="text-gray-500 text-center mb-10">Click any event for details, or use the + Google Calendar button to subscribe and get updates automatically.</p>
+            <div>
+              <div className="w-full rounded-xl overflow-hidden border border-gray-100 shadow-sm">
+                <iframe
+                  src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&showTitle=0&showCalendars=0&src=NDg2OTI3NzUyZWFlYzI3OWNlNDk3MzRjYjVhMzVkZGE4MDMxNDBlMjVhYjBhZWJkM2EyMTRlZTJiZmFiMTU4ZUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%23616161"
+                  style={{ border: 0 }}
+                  width="100%"
+                  height="600"
+                  title="AISUCI Calendar"
+                />
               </div>
 
-              <div className="rounded-xl border border-gray-100 bg-gray-50 p-6">
-                <span className="inline-block text-xs font-bold uppercase tracking-wider text-white bg-[#18234e] px-2.5 py-1 rounded-full mb-3">
-                  Spring TBD
-                </span>
-                <h3 className="text-lg font-bold text-gray-900 mb-1">Member Reading Group</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">A weekly deep-dive for students who have completed the Intro Fellowship. Advanced papers and research discussion.</p>
-              </div>
-
-              <div className="rounded-xl border border-gray-100 bg-gray-50 p-6">
-                <span className="inline-block text-xs font-bold uppercase tracking-wider text-white bg-[#18234e] px-2.5 py-1 rounded-full mb-3">
-                  Spring TBD
-                </span>
-                <h3 className="text-lg font-bold text-gray-900 mb-1">General Meeting</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">All-hands meeting for announcements, guest speakers, and club-wide discussions. Open to all members.</p>
-              </div>
-
-              <div className="rounded-xl border border-gray-100 bg-gray-50 p-6">
-                <span className="inline-block text-xs font-bold uppercase tracking-wider text-white bg-[#18234e] px-2.5 py-1 rounded-full mb-3">
-                  Spring TBD
-                </span>
-                <h3 className="text-lg font-bold text-gray-900 mb-1">Coworking Sessions</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">Collaborative work sessions for ongoing AI safety research projects and independent study. Open to members and non-members.</p>
-              </div>
-            </div>
-
-            <div className="mt-8 text-center">
-              <a
-                href="https://docs.google.com/spreadsheets/d/1Xun0Q1a25BVLKvJEjkixesrgcR30k7nqQQX1CB94tlU/edit?usp=sharing"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block border border-[#18234e] text-[#18234e] hover:bg-[#18234e] hover:text-white font-semibold py-2.5 px-6 rounded-md transition-colors text-sm"
-              >
-                View Full Calendar →
-              </a>
             </div>
           </div>
         </div>

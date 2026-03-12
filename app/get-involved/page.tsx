@@ -42,7 +42,7 @@ export default function GetInvolved() {
                 </span>
               </div>
               <p className="text-gray-700 leading-relaxed mb-4">
-                An 8-week reading group on technical AI safety. Participants meet weekly in small sections on Thursdays from 6–8pm in Donald Bren Hall, with dinner provided. No work is expected outside of weekly meetings.
+                An 8-week reading group on technical AI safety. Participants meet weekly in small sections on Thursdays from 5–7pm in HH 156, with dinner provided. No work is expected outside of weekly meetings.
               </p>
               <p className="text-gray-700 leading-relaxed mb-4">
                 Topics include:

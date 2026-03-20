@@ -5,7 +5,6 @@ import MailingListForm from './components/MailingListForm'
 export default function Home() {
   return (
     <main className="min-h-screen bg-white">
-      {/* Hero */}
       <div
         className="bg-gray-50"
         style={{
@@ -52,7 +51,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Fellowship Announcement Banner */}
       <div className="w-full bg-[#18234e]">
         <div className="container mx-auto px-4 py-12 text-center">
           <span className="inline-block bg-white/15 text-white text-xs font-bold px-3 py-1 rounded-full mb-4 tracking-widest uppercase">
@@ -75,7 +73,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Mission Section */}
       <div className="w-full bg-white">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto">
@@ -92,7 +89,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Get Involved Section */}
       <div className="w-full bg-gray-50">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto">
@@ -140,7 +136,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Weekly Schedule */}
       <div className="w-full bg-white">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto">

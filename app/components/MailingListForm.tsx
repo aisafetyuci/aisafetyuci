@@ -1,8 +1,6 @@
 'use client'
 
 import { useState } from 'react'
-
-// Replace this with your deployed Google Apps Script web app URL
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyss0VBusCySUclViwlRu--X5EAaK_PtZkfkTITqv8zAAfKUT18Qj_9BOdF13QCWErL/exec'
 
 export default function MailingListForm() {

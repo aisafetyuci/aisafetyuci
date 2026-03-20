@@ -16,7 +16,6 @@ export default function Navigation() {
             AI Safety at UCI
           </Link>
 
-          {/* Desktop nav */}
           <div className="hidden md:flex space-x-8">
             <Link href="/get-involved" className="text-gray-900 hover:text-[#18234e] transition-colors font-medium">
               Get Involved
@@ -29,7 +28,6 @@ export default function Navigation() {
             </Link>
           </div>
 
-          {/* Hamburger button */}
           <button
             className="md:hidden text-gray-900 hover:text-[#18234e] transition-colors p-2"
             onClick={() => setIsOpen(!isOpen)}
@@ -45,7 +43,6 @@ export default function Navigation() {
           </button>
         </div>
 
-        {/* Mobile nav */}
         {isOpen && (
           <div className="md:hidden pb-4">
             <div className="flex flex-col space-y-3">

@@ -1,11 +1,3 @@
-// Google Apps Script — Airtable Mailing List Proxy
-// Paste this into your Apps Script editor (script.google.com)
-//
-// Setup:
-//   1. Open Script Editor → Project Settings → Script Properties
-//   2. Add property: AIRTABLE_TOKEN = your Personal Access Token
-//   3. Deploy as Web App (Execute as: Me, Access: Anyone)
-
 var BASE_ID = 'appKZNlVqsXmdMztH';
 var TABLE_NAME = 'Mailing List';
 
@@ -14,7 +6,6 @@ function doPost(e) {
     var body = JSON.parse(e.postData.contents);
     var email = (body.email || '').trim().toLowerCase();
 
-    // Validate email
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       return jsonResponse(400, 'Invalid email address');
     }
@@ -24,7 +15,6 @@ function doPost(e) {
       return jsonResponse(500, 'Server configuration error');
     }
 
-    // Check for duplicate
     var filterFormula = encodeURIComponent('{Email} = "' + email + '"');
     var searchUrl = 'https://api.airtable.com/v0/' + BASE_ID + '/' + encodeURIComponent(TABLE_NAME)
       + '?filterByFormula=' + filterFormula + '&maxRecords=1';
@@ -40,7 +30,6 @@ function doPost(e) {
       return jsonResponse(200, 'Already subscribed');
     }
 
-    // Create record
     var createUrl = 'https://api.airtable.com/v0/' + BASE_ID + '/' + encodeURIComponent(TABLE_NAME);
     var createResp = UrlFetchApp.fetch(createUrl, {
       method: 'post',

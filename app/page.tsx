@@ -93,7 +93,7 @@ export default function Home() {
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-semibold text-[#18234e] mb-2 text-center">Get Involved</h2>
-            <p className="text-gray-500 text-center mb-10">Two ways to engage with AI safety at UCI.</p>
+            <p className="text-gray-500 text-center mb-10">Two ways to engage with AI safety at Irvine.</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
               <Link
                 href="/get-involved"
@@ -127,7 +127,7 @@ export default function Home() {
               </Link>
             </div>
             <div className="text-center">
-              <p className="text-sm text-gray-500 mb-3">Get occasional updates from AISUCI:</p>
+              <p className="text-sm text-gray-500 mb-3">Get occasional updates from AISCI:</p>
               <div className="flex justify-center">
                 <MailingListForm />
               </div>
@@ -148,7 +148,7 @@ export default function Home() {
                   style={{ border: 0 }}
                   width="100%"
                   height="600"
-                  title="AISUCI Calendar"
+                  title="AISCI Calendar"
                 />
               </div>
 

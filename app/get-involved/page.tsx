@@ -23,7 +23,7 @@ export default function GetInvolved() {
       <div className="container mx-auto px-4 pt-12 pb-2">
         <div className="border-b border-gray-200 pb-8">
           <h1 className="text-5xl font-bold text-[#18234e] mb-3">Get Involved</h1>
-          <p className="text-xl text-gray-600">Join the AISUCI community and make an impact.</p>
+          <p className="text-xl text-gray-600">Join the AISCI community and make an impact.</p>
         </div>
       </div>
 
@@ -80,7 +80,7 @@ export default function GetInvolved() {
                 </span>
               </div>
               <p className="text-gray-700 leading-relaxed mb-6">
-                Being a member of the AISUCI community comes with both opportunities and responsibilities. Membership includes:
+                Being a member of the AISCI community comes with both opportunities and responsibilities. Membership includes:
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                 {membershipBenefits.map((benefit) => (
@@ -111,7 +111,7 @@ export default function GetInvolved() {
             <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Join the Board</h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                We're always looking for motivated people to help run AISUCI. Board members organize fellowships, events, workshops, and outreach, as well as steer the direction of the group.
+                We're always looking for motivated people to help run AISCI. Board members organize fellowships, events, workshops, and outreach, as well as steer the direction of the group.
               </p>
               <p className="text-gray-700 leading-relaxed mb-4">
                 We value people who are genuinely excited about AI safety. There's no single mold, but we look for responsible, agentic, and high-context individuals who have demonstrated commitment to our mission.

@@ -183,7 +183,7 @@ export default function Resources() {
                   <ExternalIcon />
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-1">Continued Engagement Resources</h3>
-                <p className="text-sm text-gray-600 mb-3">AISUCI</p>
+                <p className="text-sm text-gray-600 mb-3">AISCI</p>
                 <p className="text-gray-700">Reading sources, Twitter lists, fellowship opportunities, technical upskilling programs, and job boards to stay engaged with AI safety.</p>
               </a>
             </div>

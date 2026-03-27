@@ -3,7 +3,7 @@ import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Meet the team behind AI Safety at UCI. Learn about our mission to advance AI alignment research and education at UC Irvine.',
+  description: 'Meet the team behind AISCI. Learn about our mission to advance AI alignment research and education at UC Irvine.',
 }
 
 export default function About() {
@@ -12,7 +12,7 @@ export default function About() {
       <div className="container mx-auto px-4 pt-12 pb-2">
         <div className="border-b border-gray-200 pb-8">
           <h1 className="text-5xl font-bold text-[#18234e] mb-3">About Us</h1>
-          <p className="text-xl text-gray-600">The people behind AISUCI.</p>
+          <p className="text-xl text-gray-600">The people behind AISCI.</p>
         </div>
       </div>
 

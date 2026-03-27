@@ -2,8 +2,8 @@ export default function StructuredData() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'AI Safety at UCI',
-    alternateName: 'AISUCI',
+    name: 'AI Safety Collective at Irvine',
+    alternateName: 'AISCI',
     url: 'https://aisafetyuci.com',
     logo: 'https://aisafetyuci.com/logo.png',
     description: 'A community dedicated to reducing risk from advanced AI through fellowships, reading groups, and research programs at UC Irvine.',

@@ -3,7 +3,7 @@ import MailingListForm from '../components/MailingListForm'
 
 export const metadata: Metadata = {
   title: 'Contact Us',
-  description: 'Get in touch with AI Safety at UCI. Join our Discord community, attend our events, or reach out with questions about our programs.',
+  description: 'Get in touch with AISCI. Join our Discord community, attend our events, or reach out with questions about our programs.',
 }
 
 export default function Contact() {
@@ -12,7 +12,7 @@ export default function Contact() {
       <div className="container mx-auto px-4 pt-12 pb-2">
         <div className="border-b border-gray-200 pb-8">
           <h1 className="text-5xl font-bold text-[#18234e] mb-3">Contact Us</h1>
-          <p className="text-xl text-gray-600">Questions, concerns, requests? Get in touch with AISUCI.</p>
+          <p className="text-xl text-gray-600">Questions, concerns, requests? Get in touch with AISCI.</p>
         </div>
       </div>
 
@@ -27,7 +27,7 @@ export default function Contact() {
               {[
                 'You want to learn what AI safety is actually about',
                 'You\'re figuring out your next steps in research or career',
-                'You\'re interested in joining or helping organize AISUCI',
+                'You\'re interested in joining or helping organize AISCI',
                 'You want to know if our fellowship or membership is right for you',
                 'You\'re a researcher or professional who wants to connect',
                 'You just have questions and want to talk to someone',
@@ -86,7 +86,7 @@ export default function Contact() {
 
           <div className="bg-white rounded-lg shadow-lg p-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-2">Stay in the loop</h2>
-            <p className="text-gray-600 mb-6">Get occasional updates about events, fellowships, and AI safety news from AISUCI.</p>
+            <p className="text-gray-600 mb-6">Get occasional updates about events, fellowships, and AI safety news from AISCI.</p>
             <MailingListForm />
           </div>
 

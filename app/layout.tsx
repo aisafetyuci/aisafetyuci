@@ -11,33 +11,33 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: {
-    default: 'AI Safety at UCI',
-    template: '%s | AI Safety at UCI',
+    default: 'AI Safety Collective at Irvine',
+    template: '%s | AI Safety Collective at Irvine',
   },
   description: 'A community dedicated to reducing risk from advanced AI. Join our fellowships, reading groups, and research programs at UC Irvine focused on AI alignment and safety.',
   keywords: ['AI Safety', 'AI Alignment', 'UC Irvine', 'UCI', 'Artificial Intelligence', 'AI Research', 'Machine Learning Safety', 'AI Risk', 'Fellowship'],
-  authors: [{ name: 'AI Safety at UCI' }],
-  creator: 'AI Safety at UCI',
-  publisher: 'AI Safety at UCI',
+  authors: [{ name: 'AI Safety Collective at Irvine' }],
+  creator: 'AI Safety Collective at Irvine',
+  publisher: 'AI Safety Collective at Irvine',
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://aisafetyuci.com',
-    siteName: 'AI Safety at UCI',
-    title: 'AI Safety at UCI',
+    siteName: 'AI Safety Collective at Irvine',
+    title: 'AI Safety Collective at Irvine',
     description: 'A community dedicated to reducing risk from advanced AI.',
     images: [
       {
         url: 'https://aisafetyuci.com/images/asinglenet-og.png',
         width: 1200,
         height: 630,
-        alt: 'AI Safety at UCI',
+        alt: 'AI Safety Collective at Irvine',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AI Safety at UCI',
+    title: 'AI Safety Collective at Irvine',
     description: 'A community dedicated to reducing risk from advanced AI. Join our fellowships and research programs.',
     images: ['https://aisafetyuci.com/images/asinglenet-og.png'],
   },

@@ -4,8 +4,8 @@ export default function StructuredData() {
     '@type': 'Organization',
     name: 'AI Safety Collective at Irvine',
     alternateName: 'AISCI',
-    url: 'https://aisafetyuci.com',
-    logo: 'https://aisafetyuci.com/logo.png',
+    url: 'https://aisafetyuci.org',
+    logo: 'https://aisafetyuci.org/logo.png',
     description: 'A community dedicated to reducing risk from advanced AI through fellowships, reading groups, and research programs at UC Irvine.',
     foundingDate: '2023',
     address: {

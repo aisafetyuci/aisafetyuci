@@ -22,13 +22,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://aisafetyuci.com',
+    url: 'https://aisafetyuci.org',
     siteName: 'AI Safety Collective at Irvine',
     title: 'AI Safety Collective at Irvine',
     description: 'A community dedicated to reducing risk from advanced AI.',
     images: [
       {
-        url: 'https://aisafetyuci.com/images/asinglenet-og.png',
+        url: 'https://aisafetyuci.org/images/asinglenet-og.png',
         width: 1200,
         height: 630,
         alt: 'AI Safety Collective at Irvine',
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'AI Safety Collective at Irvine',
     description: 'A community dedicated to reducing risk from advanced AI. Join our fellowships and research programs.',
-    images: ['https://aisafetyuci.com/images/asinglenet-og.png'],
+    images: ['https://aisafetyuci.org/images/asinglenet-og.png'],
   },
   robots: {
     index: true,

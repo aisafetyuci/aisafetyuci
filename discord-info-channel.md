@@ -1,7 +1,7 @@
 # Welcome to the AI Safety Collective at Irvine Discord!
 Experts broadly expect rapid progress in AI to continue, potentially surpassing human intelligence. Already, AI advancement has outpaced our ability to explain its behavior, control its goals, and build robust safeguards. **Reducing risks from advanced AI may be one of the most important challenges of our time.** We are a community of students at UC Irvine dedicated to understanding AI behavior, ensuring it reflects human values, and building the technical and political foundations for safe AI development.
 ## To learn more about who we are:
-- Visit our [website](https://aisafetyuci.com)
+- Visit our [website](https://aisafetyuci.org)
 - Ask us anything in #general
 - Check out our [Linktree](https://linktr.ee/aisafetyatuci)
 ## We provide opportunities to upskill and contribute to AI safety:

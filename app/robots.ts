@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: [],
     },
-    sitemap: 'https://aisafetyuci.com/sitemap.xml',
+    sitemap: 'https://aisafetyuci.org/sitemap.xml',
   }
 }

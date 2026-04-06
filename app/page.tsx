@@ -136,7 +136,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="w-full bg-white">
+      <div id="events" className="w-full bg-white scroll-mt-16">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-semibold text-[#18234e] mb-2 text-center">Our Events</h2>

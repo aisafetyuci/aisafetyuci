@@ -57,19 +57,14 @@ export default function Home() {
             Spring 2026
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-            Intro Fellowship Applications Are Open
+            Intro Fellowship Applications Are Closed
           </h2>
           <p className="text-white/70 text-lg mb-7 max-w-xl mx-auto">
-            An 8-week program covering hallmark AI safety papers and key concepts. Open to all UCI students.
+            Applications for Spring 2026 are now closed. Join our mailing list to get notified when they reopen.
           </p>
-          <a
-            href="https://airtable.com/appKZNlVqsXmdMztH/pag0nLg78TDhj7Uvf/form"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block bg-white text-[#18234e] font-bold py-3 px-8 rounded-md hover:bg-gray-100 transition-colors shadow"
-          >
-            Apply Now →
-          </a>
+          <div className="flex justify-center">
+            <MailingListForm variant="dark" />
+          </div>
         </div>
       </div>
 
@@ -92,8 +87,7 @@ export default function Home() {
       <div className="w-full bg-gray-50">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto">
-            <h2 className="text-3xl font-semibold text-[#18234e] mb-2 text-center">Get Involved</h2>
-            <p className="text-gray-500 text-center mb-10">Two ways to engage with AI safety at Irvine.</p>
+            <h2 className="text-3xl font-semibold text-[#18234e] mb-10 text-center">Get Involved</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
               <Link
                 href="/get-involved"
@@ -108,7 +102,7 @@ export default function Home() {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Fellowship & Membership</h3>
                 <p className="text-gray-500 text-sm leading-relaxed flex-1">Join our 8-week Intro Fellowship or continue as a full member in our weekly reading group.</p>
-                <span className="mt-5 text-[#18234e] text-sm font-semibold group-hover:underline">Apply now →</span>
+                <span className="mt-5 text-[#18234e] text-sm font-semibold group-hover:underline">Learn more →</span>
               </Link>
 
               <Link

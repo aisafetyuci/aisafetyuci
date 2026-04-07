@@ -36,9 +36,9 @@ export default function GetInvolved() {
                 <h2 className="text-2xl font-bold text-gray-900">
                   Technical Intro Fellowship
                 </h2>
-                <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
-                  Spring 2026 · Open
+                <span className="inline-flex items-center gap-1.5 bg-gray-100 text-gray-500 text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block"></span>
+                  Spring 2026 · Closed
                 </span>
               </div>
               <p className="text-gray-700 leading-relaxed mb-4">
@@ -60,9 +60,9 @@ export default function GetInvolved() {
                 We run the fellowship every quarter.
               </p>
               <div className="mt-auto pt-6 flex gap-3">
-                <a href="https://airtable.com/appKZNlVqsXmdMztH/pag0nLg78TDhj7Uvf/form" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
-                  Apply Now
-                </a>
+                <span className="inline-block bg-gray-300 text-gray-500 font-semibold px-6 py-2 rounded cursor-not-allowed">
+                  Applications Closed
+                </span>
                 <a href="https://thundering-toy-eb7.notion.site/AI-Safety-Technical-Fundamentals-Syllabus-176d3a55aae78088928ed3094ba9d1a3" target="_blank" rel="noopener noreferrer" className="inline-block border border-[#18234e] text-[#18234e] font-semibold px-6 py-2 rounded hover:bg-[#18234e] hover:text-white transition">
                   Syllabus
                 </a>

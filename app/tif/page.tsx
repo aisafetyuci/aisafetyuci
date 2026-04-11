@@ -3,7 +3,7 @@ import WeekAccordion from './WeekAccordion'
 
 export const metadata: Metadata = {
   title: 'Technical Intro Fellowship',
-  description: 'An 8-week reading and discussion group on technical AI safety. Explore the current trajectory of AI, evidence for misalignment, threat models, and technical safety approaches.',
+  description: 'An introductory 8-week reading and discussion group on AI safety. Explore the current trajectory of AI, evidence for misalignment, threat models, and technical safety approaches.',
 }
 
 export default function TechnicalIntroFellowship() {
@@ -13,7 +13,7 @@ export default function TechnicalIntroFellowship() {
         <div className="border-b border-gray-200 pb-8">
           <h1 className="text-5xl font-bold text-[#18234e] mb-3">Technical Intro Fellowship</h1>
           <p className="text-xl text-gray-600">
-            An 8-week reading and discussion group on technical AI safety.
+            An introductory 8-week reading and discussion group on AI safety.
           </p>
         </div>
       </div>

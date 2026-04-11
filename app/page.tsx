@@ -60,7 +60,7 @@ export default function Home() {
             Intro Fellowship Applications Are Closed
           </h2>
           <p className="text-white/70 text-lg mb-7 max-w-xl mx-auto">
-            Applications for Spring 2026 are now closed. Join our mailing list to get notified when they reopen.
+            Applications for Spring 2026 are now closed. Join our mailing list to get notified when they reopen, or <Link href="/tif" className="text-white underline hover:text-white/80 transition">read along</Link> with the current cohort.
           </p>
           <div className="flex justify-center">
             <MailingListForm variant="dark" />

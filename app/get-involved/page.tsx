@@ -63,9 +63,9 @@ export default function GetInvolved() {
                 <span className="inline-block bg-gray-300 text-gray-500 font-semibold px-6 py-2 rounded cursor-not-allowed">
                   Applications Closed
                 </span>
-                <a href="https://thundering-toy-eb7.notion.site/AI-Safety-Technical-Fundamentals-Syllabus-176d3a55aae78088928ed3094ba9d1a3" target="_blank" rel="noopener noreferrer" className="inline-block border border-[#18234e] text-[#18234e] font-semibold px-6 py-2 rounded hover:bg-[#18234e] hover:text-white transition">
+                <Link href="/tif" className="inline-block border border-[#18234e] text-[#18234e] font-semibold px-6 py-2 rounded hover:bg-[#18234e] hover:text-white transition">
                   Syllabus
-                </a>
+                </Link>
               </div>
             </div>
 

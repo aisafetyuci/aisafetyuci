@@ -26,20 +26,11 @@ export const metadata: Metadata = {
     siteName: 'AI Safety Collective at Irvine',
     title: 'AI Safety Collective at Irvine',
     description: 'A community dedicated to reducing risk from advanced AI.',
-    images: [
-      {
-        url: 'https://aisafetyuci.org/images/asinglenet-og.png',
-        width: 1200,
-        height: 630,
-        alt: 'AI Safety Collective at Irvine',
-      },
-    ],
   },
   twitter: {
-    card: 'summary_large_image',
+    card: 'summary',
     title: 'AI Safety Collective at Irvine',
     description: 'A community dedicated to reducing risk from advanced AI. Join our fellowships and research programs.',
-    images: ['https://aisafetyuci.org/images/asinglenet-og.png'],
   },
   robots: {
     index: true,

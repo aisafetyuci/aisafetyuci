@@ -1,9 +1,23 @@
 import { Metadata } from 'next'
 import MailingListForm from '../components/MailingListForm'
 
+const pageTitle = 'Contact Us'
+const pageDescription = 'Get in touch with AISCI. Join our Discord community, attend our events, or reach out with questions about our programs.'
+
 export const metadata: Metadata = {
-  title: 'Contact Us',
-  description: 'Get in touch with AISCI. Join our Discord community, attend our events, or reach out with questions about our programs.',
+  title: pageTitle,
+  description: pageDescription,
+  openGraph: {
+    title: `${pageTitle} | AI Safety Collective at Irvine`,
+    description: pageDescription,
+    url: 'https://aisafetyuci.org/contact',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: `${pageTitle} | AI Safety Collective at Irvine`,
+    description: pageDescription,
+  },
 }
 
 export default function Contact() {

@@ -1,8 +1,22 @@
 import { Metadata } from 'next'
 
+const pageTitle = 'Resources'
+const pageDescription = 'Curated resources for learning AI safety and alignment. Access research papers, tutorials, and community links to advance your understanding.'
+
 export const metadata: Metadata = {
-  title: 'Resources',
-  description: 'Curated resources for learning AI safety and alignment. Access research papers, tutorials, and community links to advance your understanding.',
+  title: pageTitle,
+  description: pageDescription,
+  openGraph: {
+    title: `${pageTitle} | AI Safety Collective at Irvine`,
+    description: pageDescription,
+    url: 'https://aisafetyuci.org/resources',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: `${pageTitle} | AI Safety Collective at Irvine`,
+    description: pageDescription,
+  },
 }
 
 function Badge({ label, color }: { label: string; color: string }) {

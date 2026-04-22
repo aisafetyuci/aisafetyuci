@@ -2,9 +2,23 @@ import Link from 'next/link';
 import CopyEmail from './CopyEmail';
 import { Metadata } from 'next'
 
+const pageTitle = 'Get Involved'
+const pageDescription = 'Explore our Intro Fellowship and Membership programs. Join AI safety reading groups and research at UC Irvine.'
+
 export const metadata: Metadata = {
-  title: 'Get Involved',
-  description: 'Explore our Intro Fellowship and Membership programs. Join AI safety reading groups and research at UC Irvine.',
+  title: pageTitle,
+  description: pageDescription,
+  openGraph: {
+    title: `${pageTitle} | AI Safety Collective at Irvine`,
+    description: pageDescription,
+    url: 'https://aisafetyuci.org/get-involved',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: `${pageTitle} | AI Safety Collective at Irvine`,
+    description: pageDescription,
+  },
 }
 
 const membershipBenefits = [

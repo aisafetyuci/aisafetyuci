@@ -1,9 +1,23 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 
+const pageTitle = 'About Us'
+const pageDescription = 'Meet the team behind AISCI. Learn about our mission to advance AI alignment research and education at UC Irvine.'
+
 export const metadata: Metadata = {
-  title: 'About Us',
-  description: 'Meet the team behind AISCI. Learn about our mission to advance AI alignment research and education at UC Irvine.',
+  title: pageTitle,
+  description: pageDescription,
+  openGraph: {
+    title: `${pageTitle} | AI Safety Collective at Irvine`,
+    description: pageDescription,
+    url: 'https://aisafetyuci.org/about',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: `${pageTitle} | AI Safety Collective at Irvine`,
+    description: pageDescription,
+  },
 }
 
 export default function About() {

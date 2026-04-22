@@ -1,9 +1,23 @@
 import { Metadata } from 'next'
 import WeekAccordion from './WeekAccordion'
 
+const tifTitle = 'Technical Intro Fellowship'
+const tifDescription = 'An 8-week reading and discussion group on AI safety at UC Irvine. Thursdays 5–7 PM in Humanities Hall 112, dinner provided. Covers AI trajectory, misalignment evidence, threat models, and technical safety approaches.'
+
 export const metadata: Metadata = {
-  title: 'Technical Intro Fellowship',
-  description: 'An introductory 8-week reading and discussion group on AI safety. Explore the current trajectory of AI, evidence for misalignment, threat models, and technical safety approaches.',
+  title: tifTitle,
+  description: tifDescription,
+  openGraph: {
+    title: `${tifTitle} | AI Safety Collective at Irvine`,
+    description: tifDescription,
+    url: 'https://aisafetyuci.org/tif',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: `${tifTitle} | AI Safety Collective at Irvine`,
+    description: tifDescription,
+  },
 }
 
 export default function TechnicalIntroFellowship() {

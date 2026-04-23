@@ -9,28 +9,42 @@ const dmSans = DM_Sans({
   subsets: ['latin'],
 })
 
+const siteDescription = 'AI alignment and AI safety at UC Irvine (UCI). AISCI runs fellowships, reading groups, and research programs focused on reducing risk from advanced AI.'
+const ogImage = {
+  url: '/images/asinglenet-og.png',
+  width: 1200,
+  height: 630,
+  alt: 'AI Safety Collective at Irvine',
+}
+
 export const metadata: Metadata = {
+  metadataBase: new URL('https://aisafetyuci.org'),
   title: {
     default: 'AI Safety Collective at Irvine',
     template: '%s | AI Safety Collective at Irvine',
   },
-  description: 'A community dedicated to reducing risk from advanced AI. Join our fellowships, reading groups, and research programs at UC Irvine focused on AI alignment and safety.',
-  keywords: ['AI Safety', 'AI Alignment', 'UC Irvine', 'UCI', 'Artificial Intelligence', 'AI Research', 'Machine Learning Safety', 'AI Risk', 'Fellowship'],
+  description: siteDescription,
+  keywords: ['AI Safety', 'AI Alignment', 'AI Alignment Irvine', 'AI Safety UCI', 'UC Irvine', 'UCI', 'Artificial Intelligence', 'AI Research', 'Machine Learning Safety', 'AI Risk', 'Fellowship', 'AISCI'],
   authors: [{ name: 'AI Safety Collective at Irvine' }],
   creator: 'AI Safety Collective at Irvine',
   publisher: 'AI Safety Collective at Irvine',
+  alternates: {
+    canonical: '/',
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: 'https://aisafetyuci.org',
     siteName: 'AI Safety Collective at Irvine',
     title: 'AI Safety Collective at Irvine',
-    description: 'A community dedicated to reducing risk from advanced AI.',
+    description: siteDescription,
+    images: [ogImage],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'AI Safety Collective at Irvine',
-    description: 'A community dedicated to reducing risk from advanced AI. Join our fellowships and research programs.',
+    description: siteDescription,
+    images: [ogImage.url],
   },
   robots: {
     index: true,
@@ -42,9 +56,6 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
-  },
-  verification: {
-    google: 'your-google-verification-code',
   },
   icons: {
     icon: [

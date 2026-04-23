@@ -12,11 +12,13 @@ export const metadata: Metadata = {
     description: tifDescription,
     url: 'https://aisafetyuci.org/tif',
     type: 'website',
+    images: ['/images/asinglenet-og.png'],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: `${tifTitle} | AI Safety Collective at Irvine`,
     description: tifDescription,
+    images: ['/images/asinglenet-og.png'],
   },
 }
 

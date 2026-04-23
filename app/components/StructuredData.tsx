@@ -1,12 +1,14 @@
 export default function StructuredData() {
-  const jsonLd = {
+  const organization = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
     name: 'AI Safety Collective at Irvine',
-    alternateName: 'AISCI',
+    alternateName: ['AISCI', 'AI Safety at UCI', 'AI Safety at UC Irvine'],
     url: 'https://aisafetyuci.org',
     logo: 'https://aisafetyuci.org/logo.png',
-    description: 'A community dedicated to reducing risk from advanced AI through fellowships, reading groups, and research programs at UC Irvine.',
+    image: 'https://aisafetyuci.org/images/asinglenet-og.png',
+    description:
+      'AISCI is a UC Irvine student community for AI alignment and AI safety, running fellowships, reading groups, and research programs focused on reducing risk from advanced AI.',
     foundingDate: '2023',
     address: {
       '@type': 'PostalAddress',
@@ -15,19 +17,95 @@ export default function StructuredData() {
       postalCode: '92697',
       addressCountry: 'US',
     },
-    sameAs: [
-      'https://discord.gg/uENtNdDPPb',
-    ],
-    memberOf: {
-      '@type': 'EducationalOrganization',
+    areaServed: {
+      '@type': 'Place',
       name: 'University of California, Irvine',
+    },
+    knowsAbout: [
+      'AI alignment',
+      'AI safety',
+      'Machine learning safety',
+      'AI governance',
+      'Existential risk from AI',
+    ],
+    sameAs: ['https://discord.gg/uENtNdDPPb'],
+    parentOrganization: {
+      '@type': 'CollegeOrUniversity',
+      name: 'University of California, Irvine',
+      url: 'https://uci.edu',
     },
   }
 
+  const educationalOrganization = {
+    '@context': 'https://schema.org',
+    '@type': 'EducationalOrganization',
+    name: 'AI Safety Collective at Irvine',
+    alternateName: 'AISCI',
+    url: 'https://aisafetyuci.org',
+    parentOrganization: {
+      '@type': 'CollegeOrUniversity',
+      name: 'University of California, Irvine',
+      url: 'https://uci.edu',
+    },
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Irvine',
+      addressRegion: 'CA',
+      postalCode: '92697',
+      addressCountry: 'US',
+    },
+  }
+
+  const website = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'AI Safety Collective at Irvine',
+    alternateName: 'AISCI',
+    url: 'https://aisafetyuci.org',
+  }
+
+  const introFellowshipCourse = {
+    '@context': 'https://schema.org',
+    '@type': 'Course',
+    name: 'Technical Intro Fellowship',
+    description:
+      'An 8-week reading and discussion group on AI safety at UC Irvine. Covers the current trajectory of AI, evidence for misalignment, threat models, and technical safety approaches.',
+    provider: {
+      '@type': 'EducationalOrganization',
+      name: 'AI Safety Collective at Irvine',
+      url: 'https://aisafetyuci.org',
+    },
+    url: 'https://aisafetyuci.org/tif',
+    educationalLevel: 'Undergraduate',
+    inLanguage: 'en',
+    hasCourseInstance: {
+      '@type': 'CourseInstance',
+      courseMode: 'In-person',
+      location: {
+        '@type': 'Place',
+        name: 'Humanities Hall 112, University of California, Irvine',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Irvine',
+          addressRegion: 'CA',
+          postalCode: '92697',
+          addressCountry: 'US',
+        },
+      },
+    },
+  }
+
+  const graphs = [organization, educationalOrganization, website, introFellowshipCourse]
+
   return (
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-    />
+    <>
+      {graphs.map((data, i) => (
+        <script
+          key={i}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+        />
+      ))}
+    </>
   )
 }

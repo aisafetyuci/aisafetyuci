@@ -1,6 +1,29 @@
 import Link from 'next/link'
 import Image from 'next/image'
+import type { Metadata } from 'next'
 import MailingListForm from './components/MailingListForm'
+
+const homeTitle = 'AI Safety & Alignment at UC Irvine'
+const homeDescription = 'AISCI is UC Irvine\'s student community for AI alignment and AI safety. Join our Intro Fellowship, reading groups, and research programs at UCI focused on reducing risk from advanced AI.'
+
+export const metadata: Metadata = {
+  title: homeTitle,
+  description: homeDescription,
+  alternates: { canonical: '/' },
+  openGraph: {
+    title: `${homeTitle} | AI Safety Collective at Irvine`,
+    description: homeDescription,
+    url: 'https://aisafetyuci.org',
+    type: 'website',
+    images: ['/images/asinglenet-og.png'],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${homeTitle} | AI Safety Collective at Irvine`,
+    description: homeDescription,
+    images: ['/images/asinglenet-og.png'],
+  },
+}
 
 export default function Home() {
   return (
@@ -71,9 +94,9 @@ export default function Home() {
       <div className="w-full bg-white">
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-3xl mx-auto">
-            <h2 className="text-3xl font-semibold text-[#18234e] mb-6 text-center">Our Mission</h2>
+            <h2 className="text-3xl font-semibold text-[#18234e] mb-6 text-center">AI alignment and AI safety at UC Irvine</h2>
             <p className="text-lg text-gray-600 leading-relaxed">
-              Experts broadly expect rapid progress in AI to continue, potentially surpassing human intelligence. Already, AI advancement has outpaced our ability to explain its behavior, control its goals, and build robust safeguards. <strong>Reducing risks from advanced AI may be one of the most important challenges of our time.</strong> We are a community of students at UC Irvine dedicated to understanding AI behavior, ensuring it reflects human values, and building the technical and political foundations for safe AI development.
+              Experts broadly expect rapid progress in AI to continue, potentially surpassing human intelligence. Already, AI advancement has outpaced our ability to explain its behavior, control its goals, and build robust safeguards. <strong>Reducing risks from advanced AI may be one of the most important challenges of our time.</strong> AISCI is a community of students at UC Irvine (UCI) dedicated to AI alignment and AI safety &mdash; understanding AI behavior, ensuring it reflects human values, and building the technical and political foundations for safe AI development.
             </p>
             <div className="text-center mt-6">
               <Link href="/resources" className="text-sm text-gray-400 hover:text-[#18234e] transition-colors">

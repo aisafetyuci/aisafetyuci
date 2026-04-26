@@ -64,7 +64,7 @@ export default function Home() {
             <div className="flex justify-center">
               <Image
                 src="/images/asinglenet.png"
-                alt="Neural network illustration"
+                alt="Neural network illustration representing AI safety and AI alignment research at UC Irvine"
                 width={500}
                 height={400}
                 className="rounded-xl w-full h-auto object-cover"

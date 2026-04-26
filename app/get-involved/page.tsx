@@ -23,6 +23,37 @@ export const metadata: Metadata = {
   },
 }
 
+const faqs = [
+  {
+    q: 'Is there an AI safety club at UCI?',
+    a: 'Yes — AISCI (the AI Safety Collective at Irvine) is UC Irvine\'s student-led community for AI safety and AI alignment. We run a quarterly Technical Intro Fellowship, a weekly member reading group, workshops, and socials. Anyone at UCI interested in the field is welcome to join Discord or grab a coffee chat.',
+  },
+  {
+    q: 'What is AI safety?',
+    a: 'AI safety is the field of research focused on making advanced AI systems behave in ways that are safe, controllable, and aligned with human values — especially as those systems become more capable. It includes technical work on interpretability, robustness, scalable oversight, and evaluation, as well as governance and policy work on how AI is deployed.',
+  },
+  {
+    q: 'What is AI alignment?',
+    a: 'AI alignment is a subfield of AI safety focused specifically on making sure AI systems pursue the goals we actually want them to pursue, rather than something subtly different. Many researchers consider it one of the core technical problems in ensuring advanced AI goes well.',
+  },
+  {
+    q: 'How do I join AI safety research at UCI?',
+    a: 'The typical path is: (1) apply to the Technical Intro Fellowship to get grounded in the field, (2) continue as an AISCI member for weekly research reading and discussion, (3) work on research projects with the group or through external programs like Redwood Research, the U.S. AI Safety Institute, METR, or MATS. You can also start by attending any of our events or booking a coffee chat with a co-director.',
+  },
+  {
+    q: 'Do I need a technical background to join?',
+    a: 'No. The Intro Fellowship assumes no AI or ML background. Membership and board roles have a mix of technical and non-technical people — there\'s meaningful work on the governance, policy, and field-building side too.',
+  },
+  {
+    q: 'When does the Intro Fellowship run?',
+    a: 'Every quarter. Sessions meet Thursdays 5–7 PM in Humanities Hall at UC Irvine, with dinner provided. Applications open roughly a month before each quarter starts.',
+  },
+  {
+    q: 'Is AISCI part of UC Irvine?',
+    a: 'AISCI is a UCI-recognized student organization based on the UC Irvine campus in Irvine, California. We are student-led and student-run. Membership is primarily UCI students, but independent researchers and students from other universities are welcome.',
+  },
+]
+
 const membershipBenefits = [
   'Free Claude Pro / Claude Code subscription',
   'Compute and research tools',
@@ -146,8 +177,39 @@ export default function GetInvolved() {
             </div>
 
           </div>
+
+          <div className="mt-16">
+            <h2 className="text-3xl font-bold text-[#18234e] mb-8">Frequently Asked Questions</h2>
+            <div className="space-y-6">
+              {faqs.map((faq) => (
+                <div key={faq.q}>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{faq.q}</h3>
+                  <p className="text-gray-700 leading-relaxed">{faq.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </div>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: faqs.map((faq) => ({
+              '@type': 'Question',
+              name: faq.q,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.a,
+              },
+            })),
+          }),
+        }}
+      />
     </main>
   )
 }

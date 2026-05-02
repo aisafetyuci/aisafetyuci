@@ -610,11 +610,11 @@ export const weeks: Week[] = [
         type: 'blog',
       },
       {
-        title: 'Ctrl-Z: Controlling AI Agents via Resampling',
-        author: 'Redwood Research',
-        year: 2025,
-        url: 'https://www.lesswrong.com/posts/LPHMMMZFAWog6ty5x/',
-        type: 'paper',
+        title: 'Using Dangerous AI, But Safely?',
+        author: 'Robert Miles AI Safety',
+        year: 2024,
+        url: 'https://www.youtube.com/watch?v=0pgEMWy70Qk',
+        type: 'video',
       },
       {
         title: 'On Scalable Oversight With Weak LLMs Judging Strong LLMs',
@@ -639,10 +639,16 @@ export const weeks: Week[] = [
         type: 'essay',
       },
       {
-        title: 'AI Control: Improving Safety Despite Intentional Subversion',
+        title: 'How Can We Solve Diffuse Threats?',
         author: 'Redwood Research',
-        year: 2024,
-        url: 'https://arxiv.org/abs/2312.06942',
+        url: 'https://blog.redwoodresearch.org/p/how-can-we-solve-diffuse-threats',
+        type: 'blog',
+      },
+      {
+        title: 'Ctrl-Z: Controlling AI Agents via Resampling',
+        author: 'Redwood Research',
+        year: 2025,
+        url: 'https://www.lesswrong.com/posts/LPHMMMZFAWog6ty5x/',
         type: 'paper',
       },
       {

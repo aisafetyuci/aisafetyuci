@@ -35,13 +35,13 @@ export function generateMetadata({ params }: { params: Params }): Metadata {
       description,
       url: `https://aisafetyuci.org/tif/${week.number}`,
       type: 'website',
-      images: ['/images/asinglenet-og.png'],
+      images: [],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: 'summary',
       title: `${title} | AI Safety Collective at Irvine`,
       description,
-      images: ['/images/asinglenet-og.png'],
+      images: [],
     },
   }
 }

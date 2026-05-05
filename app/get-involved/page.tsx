@@ -46,7 +46,7 @@ const faqs = [
   },
   {
     q: 'When does the Intro Fellowship run?',
-    a: 'Every quarter. Sessions meet Thursdays 5–7 PM in Humanities Hall at UC Irvine, with dinner provided. Applications open roughly a month before each quarter starts.',
+    a: 'Every quarter. Sessions meet Thursdays 5–7 PM in HICF 100K at UC Irvine, with dinner provided. Applications open roughly a month before each quarter starts.',
   },
   {
     q: 'Is AISCI part of UC Irvine?',
@@ -89,7 +89,7 @@ export default function GetInvolved() {
                 </span>
               </div>
               <p className="text-gray-700 leading-relaxed mb-4">
-                An 8-week reading group on technical AI safety. Participants meet weekly in small sections on Thursdays from 5–7pm in Humanities Hall, with dinner provided. No work is expected outside of weekly meetings.
+                An 8-week reading group on technical AI safety. Participants meet weekly in small sections on Thursdays from 5–7pm in HICF 100K, with dinner provided. No work is expected outside of weekly meetings.
               </p>
               <p className="text-gray-700 leading-relaxed mb-4">
                 Topics include:

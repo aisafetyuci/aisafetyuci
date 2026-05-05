@@ -2,7 +2,7 @@ import { Metadata } from 'next'
 import WeekAccordion from './WeekAccordion'
 
 const tifTitle = 'Technical Intro Fellowship'
-const tifDescription = 'An 8-week reading and discussion group on AI safety at UC Irvine. Thursdays 5–7 PM in Humanities Hall 112, dinner provided. Covers AI trajectory, misalignment evidence, threat models, and technical safety approaches.'
+const tifDescription = 'An 8-week reading and discussion group on AI safety at UC Irvine. Thursdays 5–7 PM in HICF 100K, dinner provided. Covers AI trajectory, misalignment evidence, threat models, and technical safety approaches.'
 
 export const metadata: Metadata = {
   title: tifTitle,
@@ -37,15 +37,35 @@ export default function TechnicalIntroFellowship() {
       <div className="container mx-auto px-4 pt-8 pb-16">
         <div className="max-w-3xl mx-auto">
 
-          <div className="bg-[#18234e] rounded-lg p-6 mb-8 text-white flex flex-wrap justify-evenly gap-y-3 text-sm">
-            <span>Thursdays, 5 &ndash; 7 PM</span>
-            <span>Humanities Hall 112</span>
-            <span>Dinner provided</span>
+          <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-4 text-sm text-amber-900">
+            <strong className="font-semibold">Spring 2026 cohort is in session.</strong> The fellowship is application-only and not open for drop-ins. Applications for the next cohort open about a month before the quarter starts &mdash; see <a href="/get-involved" className="underline hover:no-underline">Get Involved</a>.
           </div>
 
-          <p className="text-sm text-gray-500 mb-6">
-            Curriculum adapted from MIT MAIA&apos;s AI Safety Fundamentals course. No work is assigned outside of weekly meetings.
-          </p>
+          <div className="bg-[#18234e] rounded-lg p-6 mb-8 text-white flex flex-wrap justify-evenly gap-y-3 text-sm">
+            <span>Thursdays, 5 &ndash; 7 PM</span>
+            <a
+              href="https://www.google.com/maps?cid=14914137050959626236"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 underline decoration-white/40 hover:decoration-white"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                className="w-4 h-4"
+                aria-hidden="true"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              HICF 100K
+            </a>
+            <span>Dinner provided</span>
+          </div>
 
           <WeekAccordion />
 

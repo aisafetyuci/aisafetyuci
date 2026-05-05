@@ -90,7 +90,7 @@ export default function StructuredData() {
       courseMode: 'In-person',
       location: {
         '@type': 'Place',
-        name: 'Humanities Hall 112, University of California, Irvine',
+        name: 'HICF 100K, University of California, Irvine',
         address: {
           '@type': 'PostalAddress',
           addressLocality: 'Irvine',

@@ -105,7 +105,7 @@ const reading = [
   {
     title: 'Gradual Disempowerment',
     authors: 'Kulveit, Douglas, Ammann, Turan, Krueger, Duvenaud',
-    format: 'Report',
+    format: 'Paper',
     url: 'https://gradual-disempowerment.ai/',
     summary: 'How advanced AI could erode human agency slowly through institutional drift, not sudden takeover.',
   },
@@ -183,13 +183,13 @@ export default function Resources() {
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
               Two tracks: a general intro on the left, and the technical research pipeline on the right.
             </p>
-            {/* Top row: two equal-height hero cards */}
-            <div className="grid gap-8 md:grid-cols-2">
+            {/* 2x2 grid on desktop; on mobile each hero is followed by its own dropdown */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
               <a
                 href="https://bluedot.org/courses/future-of-ai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col bg-white rounded-xl shadow-lg p-8 hover:shadow-xl hover:border-[#18234e]/30 border border-transparent transition-all focus:outline-none focus:ring-2 focus:ring-[#18234e]"
+                className="group flex flex-col bg-white rounded-xl shadow-lg p-8 hover:shadow-xl hover:border-[#18234e]/30 border border-transparent transition-all focus:outline-none focus:ring-2 focus:ring-[#18234e] md:row-start-1 md:col-start-1"
                 aria-label="BlueDot: The Future of AI course"
               >
                 <div className="flex items-center gap-4 mb-4">
@@ -215,40 +215,7 @@ export default function Resources() {
                 </div>
               </a>
 
-              <a
-                href="https://learn.arena.education/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col bg-white rounded-xl shadow-lg p-8 hover:shadow-xl hover:border-[#18234e]/30 border border-transparent transition-all focus:outline-none focus:ring-2 focus:ring-[#18234e]"
-                aria-label="ARENA: Alignment Research Engineer Accelerator"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-white">
-                    <Image src="/images/arena-logo.webp" alt="ARENA logo" width={56} height={56} className="w-full h-full object-contain" />
-                  </div>
-                  <Badge label="Technical" color="bg-indigo-100 text-indigo-700" />
-                  <span className="ml-auto"><ExternalIcon /></span>
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">ARENA — Alignment Research Engineer Accelerator</h3>
-                <p className="text-gray-700 mb-4">
-                  Hands-on technical curriculum: transformers, RL, mech interp, and evals. The standard pipeline for engineers entering alignment research.
-                </p>
-                <div className="text-sm text-gray-500 flex items-center gap-3 mt-auto">
-                  <span>~5 weeks</span>
-                  <span aria-hidden="true">·</span>
-                  <span>Cohort or self-study</span>
-                  <span aria-hidden="true">·</span>
-                  <span>Code-heavy</span>
-                </div>
-                <div className="mt-5 text-[#18234e] font-semibold text-sm group-hover:underline">
-                  Explore the curriculum →
-                </div>
-              </a>
-            </div>
-
-            {/* Bottom row: matching dropdowns under each hero */}
-            <div className="grid gap-8 md:grid-cols-2 mt-4 items-start">
-              <details className="group bg-white rounded-lg shadow-md overflow-hidden">
+              <details className="group bg-white rounded-lg shadow-md overflow-hidden md:row-start-2 md:col-start-1 md:self-start">
                 <summary className="cursor-pointer select-none list-none px-5 py-4 flex items-center justify-between gap-3 font-semibold text-[#18234e] hover:bg-gray-50 transition-colors [&::-webkit-details-marker]:hidden">
                   <span>More on the strategy track</span>
                   <svg className="w-5 h-5 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
@@ -297,7 +264,37 @@ export default function Resources() {
                 </div>
               </details>
 
-              <details className="group bg-white rounded-lg shadow-md overflow-hidden">
+              <a
+                href="https://learn.arena.education/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex flex-col bg-white rounded-xl shadow-lg p-8 hover:shadow-xl hover:border-[#18234e]/30 border border-transparent transition-all focus:outline-none focus:ring-2 focus:ring-[#18234e] md:row-start-1 md:col-start-2"
+                aria-label="ARENA: Alignment Research Engineer Accelerator"
+              >
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-white">
+                    <Image src="/images/arena-logo.webp" alt="ARENA logo" width={56} height={56} className="w-full h-full object-contain" />
+                  </div>
+                  <Badge label="Technical" color="bg-indigo-100 text-indigo-700" />
+                  <span className="ml-auto"><ExternalIcon /></span>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">ARENA — Alignment Research Engineer Accelerator</h3>
+                <p className="text-gray-700 mb-4">
+                  Hands-on technical curriculum: transformers, RL, mech interp, and evals. The standard pipeline for engineers entering alignment research.
+                </p>
+                <div className="text-sm text-gray-500 flex items-center gap-3 mt-auto">
+                  <span>~5 weeks</span>
+                  <span aria-hidden="true">·</span>
+                  <span>Cohort or self-study</span>
+                  <span aria-hidden="true">·</span>
+                  <span>Code-heavy</span>
+                </div>
+                <div className="mt-5 text-[#18234e] font-semibold text-sm group-hover:underline">
+                  Explore the curriculum →
+                </div>
+              </a>
+
+              <details className="group bg-white rounded-lg shadow-md overflow-hidden md:row-start-2 md:col-start-2 md:self-start">
                 <summary className="cursor-pointer select-none list-none px-5 py-4 flex items-center justify-between gap-3 font-semibold text-[#18234e] hover:bg-gray-50 transition-colors [&::-webkit-details-marker]:hidden">
                   <span>Research fellowships</span>
                   <svg className="w-5 h-5 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">

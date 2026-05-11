@@ -12,13 +12,13 @@ export const metadata: Metadata = {
     description: pageDescription,
     url: 'https://aisafetyuci.org/contact',
     type: 'website',
-    images: ['/images/asinglenet-og.png'],
+    images: [],
   },
   twitter: {
     card: 'summary_large_image',
     title: `${pageTitle} | AI Safety Collective at Irvine`,
     description: pageDescription,
-    images: ['/images/asinglenet-og.png'],
+    images: [],
   },
 }
 

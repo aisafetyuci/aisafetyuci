@@ -247,7 +247,7 @@ export default function Resources() {
             </div>
 
             {/* Bottom row: matching dropdowns under each hero */}
-            <div className="grid gap-8 md:grid-cols-2 mt-4">
+            <div className="grid gap-8 md:grid-cols-2 mt-4 items-start">
               <details className="group bg-white rounded-lg shadow-md overflow-hidden">
                 <summary className="cursor-pointer select-none list-none px-5 py-4 flex items-center justify-between gap-3 font-semibold text-[#18234e] hover:bg-gray-50 transition-colors [&::-webkit-details-marker]:hidden">
                   <span>More on the strategy track</span>

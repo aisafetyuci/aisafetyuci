@@ -953,6 +953,21 @@ export const weeks: Week[] = [
         type: 'paper',
       },
       {
+        title: 'An Early Warning System for Novel AI Risks',
+        author: 'Google DeepMind',
+        year: 2023,
+        url: 'https://deepmind.google/discover/blog/an-early-warning-system-for-novel-ai-risks/',
+        type: 'article',
+      },
+      {
+        title: "Translating Claude's Thoughts into Language",
+        author: 'Anthropic',
+        url: 'https://www.youtube.com/watch?v=j2knrqAzYVY',
+        type: 'video',
+      },
+    ],
+    recommended: [
+      {
         title: 'Difficulties with Evaluating a Deception Detector for AIs',
         author: 'Google DeepMind',
         year: 2025,
@@ -973,8 +988,6 @@ export const weeks: Week[] = [
         url: 'https://jonathanpgabor.substack.com/p/every-benchmark-is-broken',
         type: 'blog',
       },
-    ],
-    recommended: [
       {
         title: 'Interpretability Dreams',
         author: 'Chris Olah',

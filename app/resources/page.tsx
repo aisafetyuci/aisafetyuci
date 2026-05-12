@@ -215,27 +215,24 @@ export default function Resources() {
                 </div>
               </a>
 
-              <details className="group bg-white rounded-lg shadow-md overflow-hidden md:row-start-2 md:col-start-1 md:self-start">
-                <summary className="cursor-pointer select-none list-none px-5 py-4 flex items-center justify-between gap-3 font-semibold text-[#18234e] hover:bg-gray-50 transition-colors [&::-webkit-details-marker]:hidden">
+              <details className="group md:row-start-2 md:col-start-1">
+                <summary className="cursor-pointer select-none list-none bg-white rounded-lg shadow-md px-5 py-4 flex items-center justify-between gap-3 font-semibold text-[#18234e] hover:bg-gray-50 transition-colors [&::-webkit-details-marker]:hidden">
                   <span>More on the strategy track</span>
                   <svg className="w-5 h-5 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
-                <div className="px-5 pb-5 pt-1 border-t border-gray-100 flex flex-col gap-1">
+                <div className="mt-3 bg-white rounded-lg shadow-md p-5 flex flex-col gap-1">
                   <a
                     href="https://bluedot.org/courses/agi-strategy"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block rounded-lg p-4 -mx-1 mt-3 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#18234e]"
+                    className="block rounded-lg p-4 -mx-1 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#18234e]"
                     aria-label="BlueDot: AGI Strategy course"
                   >
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-9 h-9 rounded-md overflow-hidden flex-shrink-0">
-                        <Image src="/images/bluedot-logo.jpg" alt="BlueDot Impact logo" width={36} height={36} className="w-full h-full object-cover" />
-                      </div>
+                    <div className="flex items-start justify-between mb-2">
                       <Badge label="Course" color="bg-emerald-100 text-emerald-700" />
-                      <span className="ml-auto"><ExternalIcon /></span>
+                      <ExternalIcon />
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-1">BlueDot — AGI Strategy</h3>
                     <p className="text-sm text-gray-500 mb-2">25 hours · Cohort · Pay-what-you-want</p>
@@ -294,19 +291,19 @@ export default function Resources() {
                 </div>
               </a>
 
-              <details className="group bg-white rounded-lg shadow-md overflow-hidden md:row-start-2 md:col-start-2 md:self-start">
-                <summary className="cursor-pointer select-none list-none px-5 py-4 flex items-center justify-between gap-3 font-semibold text-[#18234e] hover:bg-gray-50 transition-colors [&::-webkit-details-marker]:hidden">
+              <details className="group md:row-start-2 md:col-start-2">
+                <summary className="cursor-pointer select-none list-none bg-white rounded-lg shadow-md px-5 py-4 flex items-center justify-between gap-3 font-semibold text-[#18234e] hover:bg-gray-50 transition-colors [&::-webkit-details-marker]:hidden">
                   <span>Research fellowships</span>
                   <svg className="w-5 h-5 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
-                <div className="px-5 pb-5 pt-1 border-t border-gray-100 flex flex-col gap-1">
+                <div className="mt-3 bg-white rounded-lg shadow-md p-5 flex flex-col gap-1">
                   <a
                     href="https://supervisedprogramforalignment.org/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block rounded-lg p-4 -mx-1 mt-3 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#18234e]"
+                    className="block rounded-lg p-4 -mx-1 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#18234e]"
                     aria-label="SPAR: Supervised Program for Alignment Research"
                   >
                     <div className="flex items-start justify-between mb-2">

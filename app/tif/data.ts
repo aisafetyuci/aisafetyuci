@@ -965,6 +965,13 @@ export const weeks: Week[] = [
         url: 'https://www.youtube.com/watch?v=j2knrqAzYVY',
         type: 'video',
       },
+      {
+        title: 'Natural Language Autoencoders — Llama 3.3 70B (Interactive Demo)',
+        author: 'Fraser-Taliente, Kantamneni, Ong et al. / Neuronpedia',
+        year: 2026,
+        url: 'https://www.neuronpedia.org/llama3.3-70b-it/nla',
+        type: 'article',
+      },
     ],
     recommended: [
       {

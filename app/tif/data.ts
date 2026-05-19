@@ -1157,7 +1157,7 @@ export const weeks: Week[] = [
     ],
     core: [
       {
-        title: 'Situational Awareness IIId: The Free World Must Prevail',
+        title: 'Situational Awareness: The Free World Must Prevail',
         author: 'Aschenbrenner',
         year: 2024,
         url: 'https://situational-awareness.ai/the-free-world-must-prevail/',
@@ -1220,6 +1220,13 @@ export const weeks: Week[] = [
         year: 2024,
         url: 'https://ai-frontiers.org/articles/us-chip-export-controls-china-ai',
         type: 'article',
+      },
+      {
+        title: 'Diversion and Resale: Estimating Compute Smuggling to China',
+        author: 'Juniewicz (Epoch AI)',
+        year: 2026,
+        url: 'https://epoch.ai/blog/chip-smuggling',
+        type: 'blog',
       },
       {
         title: 'The AI Regulator\'s Toolbox: A List of Concrete AI Governance Practices',

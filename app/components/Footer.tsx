@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="bg-[#18234e] text-[#f2f3f7]">
       <div className="container mx-auto px-4 py-5 flex flex-col md:flex-row items-center justify-between">
         <div className="text-sm">
-          <div>© {new Date().getFullYear()} AISCI — AI Safety Collective at Irvine</div>
+          <div>© {new Date().getFullYear()} AISCI · AI Safety Collective at Irvine</div>
           <div className="text-xs text-[#f2f3f7]/60 mt-0.5">AI safety &amp; AI alignment at UC Irvine (UCI) · Irvine, CA</div>
         </div>
         <div className="flex flex-col sm:flex-row items-center gap-2 my-3 md:my-0">

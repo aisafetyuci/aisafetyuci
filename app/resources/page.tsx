@@ -51,7 +51,7 @@ const reading = [
     authors: 'William MacAskill & Fin Moorhouse',
     format: 'Report',
     url: 'https://www.forethought.org/research/preparing-for-the-intelligence-explosion',
-    summary: 'How rapid AI advancement could compress centuries of progress into decades — and why that demands preparation now.',
+    summary: 'How rapid AI advancement could compress centuries of progress into decades, and why that demands preparation now.',
   },
   {
     title: 'AI 2027',
@@ -86,7 +86,7 @@ const reading = [
     authors: 'Ajeya Cotra & Arvind Narayanan',
     format: 'Article',
     url: 'https://asteriskmag.com/issues/10/does-ai-progress-have-a-speed-limit',
-    summary: 'Two researchers with contrasting views debate how fast AI is really moving — and what that means.',
+    summary: 'Two researchers with contrasting views debate how fast AI is really moving, and what that means.',
   },
   {
     title: 'Can AI Scaling Continue Through 2030?',
@@ -114,7 +114,7 @@ const reading = [
     authors: 'Robert Long, Jeff Sebo, et al.',
     format: 'Paper',
     url: 'https://arxiv.org/pdf/2411.00986',
-    summary: 'The case that future AI systems may be moral patients — and what we owe them if so.',
+    summary: 'The case that future AI systems may be moral patients, and what we owe them if so.',
   },
   {
     title: 'Machines of Loving Grace',
@@ -313,7 +313,7 @@ export default function Resources() {
                     <h3 className="text-lg font-bold text-gray-900 mb-1">SPAR</h3>
                     <p className="text-sm text-gray-500 mb-2">Supervised Program for Alignment Research</p>
                     <p className="text-gray-700 text-sm">
-                      Remote, part-time, mentor-led research projects. Lower barrier to entry than MATS — great as a first research experience.
+                      Remote, part-time, mentor-led research projects. Lower barrier to entry than MATS, great as a first research experience.
                     </p>
                   </a>
 
@@ -375,7 +375,7 @@ export default function Resources() {
               ))}
             </ol>
             <p className="text-center text-sm text-gray-500 mt-6">
-              Curated by 80,000 Hours —{' '}
+              Curated by 80,000 Hours ·{' '}
               <a
                 href="https://80000hours.org/articles/11-essential-resources-ai-risk/"
                 target="_blank"

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import CopyEmail from './CopyEmail';
 import { Metadata } from 'next'
+import { programsByKey } from '../data/programs'
 
 const pageTitle = 'Get Involved'
 const pageDescription = 'Explore our Intro Fellowship and Membership programs. Join AI safety reading groups and research at UC Irvine.'
@@ -26,11 +27,11 @@ export const metadata: Metadata = {
 const faqs = [
   {
     q: 'Is there an AI safety club at UCI?',
-    a: 'Yes — AISCI (the AI Safety Collective at Irvine) is UC Irvine\'s student-led community for AI safety and AI alignment. We run a quarterly Technical Intro Fellowship, a weekly member reading group, workshops, and socials. Anyone at UCI interested in the field is welcome to join Discord or grab a coffee chat.',
+    a: 'Yes, AISCI (the AI Safety Collective at Irvine) is UC Irvine\'s student-led community for AI safety and AI alignment. We run a quarterly Technical Intro Fellowship, a weekly member reading group, workshops, and socials. Anyone at UCI interested in the field is welcome to join Discord or grab a coffee chat.',
   },
   {
     q: 'What is AI safety?',
-    a: 'AI safety is the field of research focused on making advanced AI systems behave in ways that are safe, controllable, and aligned with human values — especially as those systems become more capable. It includes technical work on interpretability, robustness, scalable oversight, and evaluation, as well as governance and policy work on how AI is deployed.',
+    a: 'AI safety is the field of research focused on making advanced AI systems behave in ways that are safe, controllable, and aligned with human values, especially as those systems become more capable. It includes technical work on interpretability, robustness, scalable oversight, and evaluation, as well as governance and policy work on how AI is deployed.',
   },
   {
     q: 'What is AI alignment?',
@@ -38,11 +39,11 @@ const faqs = [
   },
   {
     q: 'How do I join AI safety research at UCI?',
-    a: 'The typical path is: (1) apply to the Technical Intro Fellowship to get grounded in the field, (2) continue as an AISCI member for weekly research reading and discussion, (3) work on research projects with the group or through external programs like Redwood Research, the U.S. AI Safety Institute, METR, or MATS. You can also start by attending any of our events or booking a coffee chat with a co-director.',
+    a: 'The typical path is: (1) apply to the Technical Intro Fellowship to get grounded in the field, (2) continue as an AISCI member for weekly research reading and discussion, (3) work on research projects with the group or through external programs like Redwood Research, the U.S. AI Safety Institute, METR, or MATS. If you\'re not ready to apply yet, browse our /resources page to get oriented, or book a coffee chat with a co-director.',
   },
   {
     q: 'Do I need a technical background to join?',
-    a: 'No. The Intro Fellowship assumes no AI or ML background. Membership and board roles have a mix of technical and non-technical people — there\'s meaningful work on the governance, policy, and field-building side too.',
+    a: 'No. The Intro Fellowship assumes no AI or ML background. Membership and board roles have a mix of technical and non-technical people. There\'s meaningful work on the governance, policy, and field-building side too.',
   },
   {
     q: 'When does the Intro Fellowship run?',
@@ -65,6 +66,10 @@ const membershipBenefits = [
 ]
 
 export default function GetInvolved() {
+  const intro = programsByKey.intro
+  const policy = programsByKey.policy
+  const membership = programsByKey.membership
+  const board = programsByKey.board
   return (
     <main className="min-h-screen bg-white">
       <div className="container mx-auto px-4 pt-12 pb-2">
@@ -83,9 +88,9 @@ export default function GetInvolved() {
                 <h2 className="text-2xl font-bold text-gray-900">
                   Technical Intro Fellowship
                 </h2>
-                <span className="inline-flex items-center gap-1.5 bg-gray-100 text-gray-500 text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-gray-400 inline-block"></span>
-                  Spring 2026 · Closed
+                <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
+                  {intro.status.label}
                 </span>
               </div>
               <p className="text-gray-700 leading-relaxed mb-4">
@@ -107,12 +112,35 @@ export default function GetInvolved() {
                 We run the fellowship every quarter.
               </p>
               <div className="mt-auto pt-6 flex gap-3">
-                <span className="inline-block bg-gray-300 text-gray-500 font-semibold px-6 py-2 rounded cursor-not-allowed">
-                  Applications Closed
-                </span>
+                <a href={intro.applyHref} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
+                  Apply
+                </a>
                 <Link href="/tif" className="inline-block border border-[#18234e] text-[#18234e] font-semibold px-6 py-2 rounded hover:bg-[#18234e] hover:text-white transition">
                   Syllabus
                 </Link>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <h2 className="text-2xl font-bold text-gray-900">
+                  Policy Fellowship
+                </h2>
+                <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
+                  {policy.status.label}
+                </span>
+              </div>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                A reading group on AI policy and governance. Explore how policymakers, researchers, and institutions are working to make AI development go well, and what students can do to contribute.
+              </p>
+              <p className="text-gray-700 leading-relaxed mb-4">
+                Open to undergraduate and graduate students from any background. No prior AI or policy experience required.
+              </p>
+              <div className="mt-auto pt-2 flex gap-3">
+                <a href={policy.applyHref} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
+                  Apply
+                </a>
               </div>
             </div>
 
@@ -123,7 +151,7 @@ export default function GetInvolved() {
                 </h2>
                 <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
-                  Rolling Admissions
+                  {membership.status.label}
                 </span>
               </div>
               <p className="text-gray-700 leading-relaxed mb-6">
@@ -140,23 +168,29 @@ export default function GetInvolved() {
                 ))}
               </div>
               <p className="text-gray-700 leading-relaxed mb-4">
-                Members generally contribute by running or participating in workshops, discussions, socials, hackathons, and more. While we are a UCI-recognized student group, membership is not restricted to UCI students — independent researchers and students from other universities are welcome.
+                Members generally contribute by running or participating in workshops, discussions, socials, hackathons, and more. While we are a UCI-recognized student group, membership is not restricted to UCI students; independent researchers and students from other universities are welcome.
               </p>
               <p className="text-gray-700 leading-relaxed mb-4">
-                If you aren't very familiar with AI safety, we recommend applying for our Technical Intro Fellowship above. We typically offer fellowship alumni priority in the application process.
+                If you aren't very familiar with AI safety, we recommend applying to one or both of our fellowships above and browsing our <Link href="/resources" className="text-[#18234e] underline hover:no-underline">resources</Link>. Fellowship alumni typically receive priority in the application process.
               </p>
               <p className="text-gray-600 text-sm">
                 Membership admission is rolling, but the board tends to make decisions every month. If we are slow to respond, please don't hesitate to email us at <CopyEmail email="aisafetyatuci@gmail.com" />.
               </p>
               <div className="mt-auto pt-6 flex gap-3">
-                <a href="https://airtable.com/appKZNlVqsXmdMztH/pagMczb6lf65AJyB8/form" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
-                  Apply Now
+                <a href={membership.applyHref} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
+                  Apply
                 </a>
               </div>
             </div>
 
             <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Facilitator / Board</h2>
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <h2 className="text-2xl font-bold text-gray-900">Facilitator / Board</h2>
+                <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
+                  {board.status.label}
+                </span>
+              </div>
               <p className="text-gray-700 leading-relaxed mb-4">
                 Facilitators lead small-group discussions in our Technical Intro Fellowship. Board members organize fellowships, events, workshops, and outreach, and steer the direction of the group.
               </p>
@@ -164,21 +198,13 @@ export default function GetInvolved() {
                 We look for people who are genuinely excited about AI safety: responsible, agentic, and high-context, with demonstrated commitment to the mission.
               </p>
               <div className="mt-auto flex gap-3">
-                <a
-                  href="https://airtable.com/appKZNlVqsXmdMztH/pagO6NP1r12Fp7rX3/form"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition"
-                >
-                  Apply as Facilitator / Board
-                </a>
-                <a
-                  href="https://docs.google.com/document/d/14FKNS9ckp-80HMVtT5wcCNtriQfRU7UXC6qZoLsLWrE/edit?tab=t.0"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-block border border-[#18234e] text-[#18234e] font-semibold px-6 py-2 rounded hover:bg-[#18234e] hover:text-white transition"
-                >
-                  Read Recruitment Doc
+                {board.secondary && (
+                  <a href={board.secondary.href} target="_blank" rel="noopener noreferrer" className="inline-block border border-[#18234e] text-[#18234e] font-semibold px-6 py-2 rounded hover:bg-[#18234e] hover:text-white transition">
+                    {board.secondary.label}
+                  </a>
+                )}
+                <a href={board.applyHref} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
+                  Apply
                 </a>
               </div>
             </div>

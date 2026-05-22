@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
-import { programs } from '../data/programs'
+import { programs, statusBadgeClasses } from '../data/programs'
 
 const pageTitle = 'Apply'
 const pageDescription = 'Apply to AISCI fellowships, membership, or board.'
@@ -35,7 +35,9 @@ export default function Apply() {
 
       <div className="container mx-auto px-4 pt-8 pb-16">
         <div className="max-w-3xl mx-auto flex flex-col gap-4">
-          {programs.map((p) => (
+          {programs.map((p) => {
+            const badge = statusBadgeClasses[p.status.tone]
+            return (
             <div
               key={p.title}
               className="bg-white rounded-lg shadow border border-gray-100 p-6 flex flex-col sm:flex-row sm:items-center gap-4"
@@ -43,8 +45,8 @@ export default function Apply() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-3 mb-1 flex-wrap">
                   <h2 className="text-xl font-bold text-gray-900">{p.title}</h2>
-                  <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap">
-                    <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
+                  <span className={`inline-flex items-center gap-1.5 ${badge.wrap} text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap`}>
+                    <span className={`w-1.5 h-1.5 rounded-full ${badge.dot} inline-block`}></span>
                     {p.status.label}
                   </span>
                 </div>
@@ -71,7 +73,8 @@ export default function Apply() {
                 </a>
               </div>
             </div>
-          ))}
+            )
+          })}
 
           <p className="text-sm text-gray-500 mt-4 text-center">
             Curious what these are? See{' '}

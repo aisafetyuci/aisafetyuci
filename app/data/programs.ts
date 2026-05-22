@@ -3,6 +3,17 @@ export type ProgramStatus = {
   tone: 'open' | 'closed'
 }
 
+export const statusBadgeClasses: Record<ProgramStatus['tone'], { wrap: string; dot: string }> = {
+  open: {
+    wrap: 'bg-green-100 text-green-700',
+    dot: 'bg-green-500',
+  },
+  closed: {
+    wrap: 'bg-gray-100 text-gray-500',
+    dot: 'bg-gray-400',
+  },
+}
+
 export type Program = {
   key: 'intro' | 'policy' | 'membership' | 'board'
   title: string

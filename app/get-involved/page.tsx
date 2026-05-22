@@ -1,7 +1,17 @@
 import Link from 'next/link';
 import CopyEmail from './CopyEmail';
 import { Metadata } from 'next'
-import { programsByKey } from '../data/programs'
+import { programsByKey, statusBadgeClasses, type Program } from '../data/programs'
+
+function StatusBadge({ status }: { status: Program['status'] }) {
+  const badge = statusBadgeClasses[status.tone]
+  return (
+    <span className={`inline-flex items-center gap-1.5 ${badge.wrap} text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0`}>
+      <span className={`w-1.5 h-1.5 rounded-full ${badge.dot} inline-block`}></span>
+      {status.label}
+    </span>
+  )
+}
 
 const pageTitle = 'Get Involved'
 const pageDescription = 'Explore our Intro Fellowship and Membership programs. Join AI safety reading groups and research at UC Irvine.'
@@ -88,10 +98,7 @@ export default function GetInvolved() {
                 <h2 className="text-2xl font-bold text-gray-900">
                   Technical Intro Fellowship
                 </h2>
-                <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
-                  {intro.status.label}
-                </span>
+                <StatusBadge status={intro.status} />
               </div>
               <p className="text-gray-700 leading-relaxed mb-4">
                 An 8-week reading group on technical AI safety. Participants meet weekly in small sections on Thursdays from 5–7pm in HICF 100K, with dinner provided. No work is expected outside of weekly meetings.
@@ -126,10 +133,7 @@ export default function GetInvolved() {
                 <h2 className="text-2xl font-bold text-gray-900">
                   Policy Fellowship
                 </h2>
-                <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
-                  {policy.status.label}
-                </span>
+                <StatusBadge status={policy.status} />
               </div>
               <p className="text-gray-700 leading-relaxed mb-4">
                 A reading group on AI policy and governance. Explore how policymakers, researchers, and institutions are working to make AI development go well, and what students can do to contribute.
@@ -149,10 +153,7 @@ export default function GetInvolved() {
                 <h2 className="text-2xl font-bold text-gray-900">
                   Membership
                 </h2>
-                <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
-                  {membership.status.label}
-                </span>
+                <StatusBadge status={membership.status} />
               </div>
               <p className="text-gray-700 leading-relaxed mb-6">
                 Being a member of the AISCI community comes with both opportunities and responsibilities. Membership includes:
@@ -186,10 +187,7 @@ export default function GetInvolved() {
             <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
               <div className="flex items-start justify-between gap-4 mb-4">
                 <h2 className="text-2xl font-bold text-gray-900">Facilitator / Board</h2>
-                <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0">
-                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
-                  {board.status.label}
-                </span>
+                <StatusBadge status={board.status} />
               </div>
               <p className="text-gray-700 leading-relaxed mb-4">
                 Facilitators lead small-group discussions in our Technical Intro Fellowship. Board members organize fellowships, events, workshops, and outreach, and steer the direction of the group.

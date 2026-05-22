@@ -156,22 +156,29 @@ export default function GetInvolved() {
             </div>
 
             <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Join the Board</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">Facilitator / Board</h2>
               <p className="text-gray-700 leading-relaxed mb-4">
-                We're always looking for motivated people to help run AISCI. Board members organize fellowships, events, workshops, and outreach, as well as steer the direction of the group.
+                Facilitators lead small-group discussions in our Technical Intro Fellowship. Board members organize fellowships, events, workshops, and outreach, and steer the direction of the group.
               </p>
-              <p className="text-gray-700 leading-relaxed mb-4">
-                We value people who are genuinely excited about AI safety. There's no single mold, but we look for responsible, agentic, and high-context individuals who have demonstrated commitment to our mission.
-              </p>
-              <p className="text-gray-600 text-sm mb-6">
-                The best first step is a conversation. Book a coffee chat and tell us what you're interested in.
+              <p className="text-gray-700 leading-relaxed mb-6">
+                We look for people who are genuinely excited about AI safety: responsible, agentic, and high-context, with demonstrated commitment to the mission.
               </p>
               <div className="mt-auto flex gap-3">
-                <a href="https://calendly.com/helenatran9305" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
-                  Coffee with Helena
+                <a
+                  href="https://airtable.com/appKZNlVqsXmdMztH/pagO6NP1r12Fp7rX3/form"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition"
+                >
+                  Apply as Facilitator / Board
                 </a>
-                <a href="https://calendar.app.google/mdAMY9qTR4kBcqb88" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
-                  Coffee with Harry
+                <a
+                  href="https://docs.google.com/document/d/14FKNS9ckp-80HMVtT5wcCNtriQfRU7UXC6qZoLsLWrE/edit?tab=t.0"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block border border-[#18234e] text-[#18234e] font-semibold px-6 py-2 rounded hover:bg-[#18234e] hover:text-white transition"
+                >
+                  Read Recruitment Doc
                 </a>
               </div>
             </div>

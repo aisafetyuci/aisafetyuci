@@ -60,6 +60,29 @@ export default function Apply() {
           </div>
 
           <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col">
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <h2 className="text-2xl font-bold text-gray-900">Policy Fellowship — Fall 2026</h2>
+              <span className="inline-flex items-center gap-1.5 bg-green-100 text-green-700 text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap flex-shrink-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 inline-block"></span>
+                Applications Open
+              </span>
+            </div>
+            <p className="text-gray-700 leading-relaxed mb-6">
+              A reading group on AI policy and governance. Explore how policymakers, researchers, and institutions are working to make AI development go well. Open to undergraduate and graduate students from any background.
+            </p>
+            <div className="mt-auto flex gap-3">
+              <a
+                href="https://airtable.com/appKZNlVqsXmdMztH/pagAV3fJFiimd0sRq/form"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition"
+              >
+                Apply to the Fellowship
+              </a>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Facilitator / Board</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
               Facilitators lead small-group discussions in our Technical Intro Fellowship. Board members organize fellowships, events, workshops, and outreach, and steer the direction of the group.

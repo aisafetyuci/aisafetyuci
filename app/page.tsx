@@ -77,16 +77,31 @@ export default function Home() {
       <div className="w-full bg-[#18234e]">
         <div className="container mx-auto px-4 py-12 text-center">
           <span className="inline-block bg-white/15 text-white text-xs font-bold px-3 py-1 rounded-full mb-4 tracking-widest uppercase">
-            Spring 2026
+            Rolling Admissions
           </span>
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-            Intro Fellowship Applications Are Closed
+            Facilitator & Organizer Apps Are Open
           </h2>
           <p className="text-white/70 text-lg mb-7 max-w-xl mx-auto">
-            Applications for Spring 2026 are now closed. Join our mailing list to get notified when they reopen, or <Link href="/tif" className="text-white underline hover:text-white/80 transition">read along</Link> with the current cohort.
+            We look for people who are genuinely excited about AI safety: responsible, agentic, and high-context, with demonstrated commitment to the mission.
           </p>
-          <div className="flex justify-center">
-            <MailingListForm variant="dark" />
+          <div className="flex gap-4 justify-center flex-wrap">
+            <a
+              href="https://airtable.com/appKZNlVqsXmdMztH/pagO6NP1r12Fp7rX3/form"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-white hover:bg-gray-100 text-[#18234e] font-semibold py-3 px-6 rounded-md shadow transition-colors"
+            >
+              Apply
+            </a>
+            <a
+              href="https://docs.google.com/document/d/14FKNS9ckp-80HMVtT5wcCNtriQfRU7UXC6qZoLsLWrE/edit?tab=t.0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block border border-white/30 hover:border-white/60 text-white font-semibold py-3 px-6 rounded-md transition-colors"
+            >
+              Recruitment Doc
+            </a>
           </div>
         </div>
       </div>

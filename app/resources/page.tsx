@@ -387,6 +387,27 @@ export default function Resources() {
             </p>
           </section>
 
+          {/* 3. Stay updated */}
+          <section className="mb-8">
+            <a
+              href="https://docs.google.com/document/d/1HDslg5FyVXqROnmUDDVVnOBolo-ktkO4LfSrYlEGDOc/edit?tab=t.0"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition-shadow border border-gray-100 focus:outline-none focus:ring-2 focus:ring-[#18234e]"
+              aria-label="Stay updated with the field"
+            >
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                  <h2 className="text-2xl font-bold text-[#18234e] mb-1">Stay updated with the field</h2>
+                  <p className="text-gray-600">Newsletters, podcasts, and feeds we follow to keep up with AI safety developments.</p>
+                </div>
+                <span className="text-[#18234e] text-lg font-semibold whitespace-nowrap group-hover:translate-x-1 transition-transform flex items-center gap-2">
+                  View list <ExternalIcon />
+                </span>
+              </div>
+            </a>
+          </section>
+
           {/* 4. Job board CTA */}
           <section>
             <a

@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const pageTitle = 'Resources'
 const pageDescription = "Everything we'd point you to if you're trying to get into AI safety: a video, courses, the essential reading list, and where to find a job."
@@ -162,18 +163,6 @@ export default function Resources() {
                   allowFullScreen
                 />
               </div>
-              <p className="text-center text-sm text-gray-500 mt-3">
-                From{' '}
-                <a
-                  href="https://www.youtube.com/@AI_In_Context"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-[#18234e] font-medium hover:underline"
-                >
-                  AI in Context
-                </a>{' '}
-                by 80,000 Hours.
-              </p>
             </div>
           </section>
 
@@ -408,25 +397,28 @@ export default function Resources() {
             </a>
           </section>
 
-          {/* 4. Job board CTA */}
+          {/* 4. Work on this CTA */}
           <section>
-            <a
-              href="https://jobs.80000hours.org/?refinementList%5Btags_area%5D%5B0%5D=AI%20safety%20%26%20policy"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group block bg-[#18234e] text-white rounded-xl p-8 hover:bg-[#111a3b] transition-colors focus:outline-none focus:ring-2 focus:ring-[#18234e] focus:ring-offset-2"
-              aria-label="80,000 Hours AI safety job board"
-            >
-              <div className="flex items-center justify-between gap-4 flex-wrap">
-                <div>
-                  <h2 className="text-2xl font-bold mb-1">Looking to work on this?</h2>
-                  <p className="text-white/80">Browse open roles on the 80,000 Hours AI safety &amp; policy job board.</p>
-                </div>
-                <span className="text-lg font-semibold whitespace-nowrap group-hover:translate-x-1 transition-transform">
+            <div className="bg-[#18234e] text-white rounded-xl p-8">
+              <h2 className="text-2xl font-bold mb-2">Looking to work on this?</h2>
+              <p className="text-white/80 mb-6">The best place to start is on your own campus. Or browse open roles on the 80,000 Hours AI safety &amp; policy job board.</p>
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href="/get-involved"
+                  className="inline-flex items-center bg-white text-[#18234e] font-semibold px-6 py-3 rounded-full hover:bg-[#f2f3f7] transition-colors"
+                >
+                  Get involved with AISCI →
+                </Link>
+                <a
+                  href="https://jobs.80000hours.org/?refinementList%5Btags_area%5D%5B0%5D=AI%20safety%20%26%20policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center border border-white/40 text-white font-semibold px-6 py-3 rounded-full hover:bg-white/10 transition-colors"
+                >
                   See jobs →
-                </span>
+                </a>
               </div>
-            </a>
+            </div>
           </section>
 
         </div>

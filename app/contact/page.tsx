@@ -37,7 +37,7 @@ export default function Contact() {
 
           <div className="bg-white rounded-lg shadow-lg p-8">
             <h2 className="text-2xl font-semibold text-[#18234e] mb-2">Grab a coffee with us</h2>
-            <p className="text-gray-600 mb-6">We love meeting people who are curious about AI safety; no background needed. Book a 30-minute chat and we'll cover whatever's on your mind. If you'd rather read up first, browse our <a href="/resources" className="text-[#18234e] underline hover:no-underline">resources</a>.</p>
+            <p className="text-gray-600 mb-6">We love meeting people who are curious about AI safety; no background needed. Book a 30-minute chat and we'll buy you coffee and cover whatever's on your mind.</p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
               {[

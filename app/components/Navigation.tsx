@@ -55,6 +55,9 @@ export default function Navigation() {
             <Link href="/contact" className="text-gray-900 hover:text-[#18234e] transition-colors font-medium">
               Contact
             </Link>
+            <Link href="/team" className="text-gray-900 hover:text-[#18234e] transition-colors font-medium">
+              Team
+            </Link>
           </div>
 
           <button
@@ -95,6 +98,13 @@ export default function Navigation() {
                 onClick={() => setIsOpen(false)}
               >
                 Contact
+              </Link>
+              <Link
+                href="/team"
+                className="text-gray-900 hover:text-[#18234e] transition-colors font-medium"
+                onClick={() => setIsOpen(false)}
+              >
+                Team
               </Link>
             </div>
           </div>

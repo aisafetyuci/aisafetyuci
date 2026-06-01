@@ -30,24 +30,40 @@ interface TeamMember {
   image: string
 }
 
-const leadership: TeamMember[] = [
+const executiveBoard: TeamMember[] = [
+  {
+    name: 'Dominic Mascetti',
+    role: 'Co-Director',
+    bio: 'Bio coming soon.',
+    image: '/images/team/dominic-mascetti.svg',
+  },
+  {
+    name: 'Prema Suthaharan',
+    role: 'Co-Director',
+    bio: 'Bio coming soon.',
+    image: '/images/team/prema-suthaharan.svg',
+  },
+  {
+    name: 'Ivan Shishkin',
+    role: 'Operations Lead',
+    bio: 'Bio coming soon.',
+    image: '/images/team/ivan-shishkin.svg',
+  },
   {
     name: 'Harry Waterman',
-    role: 'Co-President',
+    role: 'Advisor',
     bio: 'Bio coming soon.',
     image: '/images/team/harry-waterman.svg',
   },
   {
     name: 'Helena Tran',
-    role: 'Co-President',
+    role: 'Founder/Advisor',
     bio: 'Bio coming soon.',
     image: '/images/team/helena-tran.svg',
   },
 ]
 
-const team: TeamMember[] = []
-
-const alumni: TeamMember[] = []
+const organizers: TeamMember[] = []
 
 function PersonCard({ person }: { person: TeamMember }) {
   return (
@@ -92,9 +108,20 @@ export default function Team() {
       </div>
 
       <div className="container mx-auto px-4 pt-12 pb-16">
-        <Section title="Leadership" members={leadership} />
-        <Section title="Team" members={team} />
-        <Section title="Alumni" members={alumni} />
+        <Section title="Executive Board" members={executiveBoard} />
+
+        <section className="mb-16">
+          <h2 className="text-3xl font-semibold text-[#18234e] mb-10 text-center">Organizers</h2>
+          {organizers.length === 0 ? (
+            <p className="text-center text-gray-500">Organizing team to be announced.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 justify-items-center">
+              {organizers.map((person) => (
+                <PersonCard key={person.name} person={person} />
+              ))}
+            </div>
+          )}
+        </section>
 
         <div className="bg-[#18234e] rounded-lg p-10 text-center mt-8">
           <p className="text-2xl font-bold text-white mb-2">Want to join our team?</p>

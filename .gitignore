@@ -32,5 +32,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Local operator handoff doc (kept out of the public repo)
+# Local operator handoff + migration docs (kept out of the public repo)
 /MAINTAINING.md
+/MIGRATION.md

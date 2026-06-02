@@ -113,7 +113,7 @@ const landscape = [
   },
   {
     group: 'Funders',
-    orgs: ['Open Philanthropy', 'Coefficient Giving', 'Longview Philanthropy'],
+    orgs: ['Coefficient Giving', 'Longview Philanthropy'],
   },
 ]
 
@@ -143,11 +143,15 @@ export default function ContinuedEngagement() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="bg-[#f2f3f7] rounded-xl p-6">
                 <h3 className="font-bold text-[#18234e] mb-1">The field is talent-constrained</h3>
-                <p className="text-gray-700 text-sm">Demand for AI safety work outpaces the people doing it. Capable, motivated newcomers are genuinely needed.</p>
+                <p className="text-gray-700 text-sm">Demand for AI safety work outpaces the people doing it. The{' '}
+                  <a href="https://nanransohoff.substack.com/p/the-third-wave-of-american-philanthropy" target="_blank" rel="noopener noreferrer" className="text-[#18234e] font-semibold hover:underline">coming wave of AI philanthropy</a>{' '}
+                  will be bottlenecked on talent, not money, and capable newcomers are needed.</p>
               </div>
               <div className="bg-[#f2f3f7] rounded-xl p-6">
                 <h3 className="font-bold text-[#18234e] mb-1">Timelines may be short</h3>
-                <p className="text-gray-700 text-sm">Serious people put real odds on transformative AI within a decade. If that is even partly right, the next few years matter a lot.</p>
+                <p className="text-gray-700 text-sm">Forecasters put{' '}
+                  <a href="https://www.metaculus.com/questions/19356/transformative-ai-date/" target="_blank" rel="noopener noreferrer" className="text-[#18234e] font-semibold hover:underline">real odds</a>{' '}
+                  on transformative AI within a decade. If that is even partly right, the next few years matter a lot.</p>
               </div>
               <div className="bg-[#f2f3f7] rounded-xl p-6">
                 <h3 className="font-bold text-[#18234e] mb-1">You can start now</h3>
@@ -160,7 +164,7 @@ export default function ContinuedEngagement() {
           <section className="mb-16">
             <h2 className="text-3xl text-[#18234e] font-semibold mb-3 text-center">Stay in the loop</h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-              Pick two or three and actually keep up with them. Following the field is the cheapest way to stay engaged between programs.
+              Having a feel for where the field is going is essential to doing good work. Pick two or three of these and actually keep up.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {feeds.map((f) => (
@@ -214,13 +218,13 @@ export default function ContinuedEngagement() {
                 </li>
                 <li className="flex gap-3">
                   <span className="text-[#18234e] font-bold flex-shrink-0">2.</span>
-                  <span>Replicate a paper you found interesting. Small, finished replications teach more than half-read textbooks.</span>
+                  <span>Replicate a paper you found interesting.</span>
                 </li>
                 <li className="flex gap-3">
                   <span className="text-[#18234e] font-bold flex-shrink-0">3.</span>
                   <span>Run a little experiment and write it up on{' '}
                     <a href="https://www.lesswrong.com/" target="_blank" rel="noopener noreferrer" className="text-[#18234e] font-semibold hover:underline">LessWrong</a>{' '}or the{' '}
-                    <a href="https://www.alignmentforum.org/" target="_blank" rel="noopener noreferrer" className="text-[#18234e] font-semibold hover:underline">Alignment Forum</a>. Public work is how people find you.
+                    <a href="https://www.alignmentforum.org/" target="_blank" rel="noopener noreferrer" className="text-[#18234e] font-semibold hover:underline">Alignment Forum</a>.
                   </span>
                 </li>
                 <li className="flex gap-3">

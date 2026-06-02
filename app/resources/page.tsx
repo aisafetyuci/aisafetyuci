@@ -378,23 +378,21 @@ export default function Resources() {
 
           {/* 3. Stay updated */}
           <section className="mb-8">
-            <a
-              href="https://docs.google.com/document/d/1HDslg5FyVXqROnmUDDVVnOBolo-ktkO4LfSrYlEGDOc/edit?tab=t.0"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              href="/continued-engagement"
               className="group block bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition-shadow border border-gray-100 focus:outline-none focus:ring-2 focus:ring-[#18234e]"
-              aria-label="Stay updated with the field"
+              aria-label="Continued engagement: where to go next in AI safety"
             >
               <div className="flex items-center justify-between gap-4 flex-wrap">
                 <div>
-                  <h2 className="text-2xl font-bold text-[#18234e] mb-1">Stay updated with the field</h2>
-                  <p className="text-gray-600">Newsletters, podcasts, and feeds we follow to keep up with AI safety developments.</p>
+                  <h2 className="text-2xl font-bold text-[#18234e] mb-1">Where to go next</h2>
+                  <p className="text-gray-600">Newsletters and podcasts to follow, ways to build research skills, fellowships to apply to, and a map of the orgs doing the work.</p>
                 </div>
-                <span className="text-[#18234e] text-lg font-semibold whitespace-nowrap group-hover:translate-x-1 transition-transform flex items-center gap-2">
-                  View list <ExternalIcon />
+                <span className="text-[#18234e] text-lg font-semibold whitespace-nowrap group-hover:translate-x-1 transition-transform">
+                  Continued engagement →
                 </span>
               </div>
-            </a>
+            </Link>
           </section>
 
           {/* 4. Work on this CTA */}

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import CopyEmail from './CopyEmail';
 import { Metadata } from 'next'
 import { programsByKey, statusBadgeClasses, type Program } from '../data/programs'
+import { links } from '../data/links'
 
 function StatusBadge({ status }: { status: Program['status'] }) {
   const badge = statusBadgeClasses[status.tone]
@@ -175,7 +176,7 @@ export default function GetInvolved() {
                 If you aren't very familiar with AI safety, we recommend applying to one or both of our fellowships above and browsing our <Link href="/resources" className="text-[#18234e] underline hover:no-underline">resources</Link>. Fellowship alumni typically receive priority in the application process.
               </p>
               <p className="text-gray-600 text-sm">
-                Membership admission is rolling, but the board tends to make decisions every month. If we are slow to respond, please don't hesitate to email us at <CopyEmail email="aisafetyatuci@gmail.com" />.
+                Membership admission is rolling, but the board tends to make decisions every month. If we are slow to respond, please don't hesitate to email us at <CopyEmail email={links.email} />.
               </p>
               <div className="mt-auto pt-6 flex gap-3">
                 <a href={membership.applyHref} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">

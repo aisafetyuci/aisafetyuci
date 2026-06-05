@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import MailingListForm from '../components/MailingListForm'
+import { links } from '../data/links'
 
 const pageTitle = 'Contact Us'
 const pageDescription = 'Get in touch with AISCI. Join our Discord community, attend our events, or reach out with questions about our programs.'
@@ -58,10 +59,10 @@ export default function Contact() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <a href="https://calendly.com/helenatran9305" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#111a3b] transition-colors text-center">
+              <a href={links.coffeeHelena} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#111a3b] transition-colors text-center">
                 Coffee with Helena
               </a>
-              <a href="https://calendar.app.google/mdAMY9qTR4kBcqb88" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#111a3b] transition-colors text-center">
+              <a href={links.coffeeHarry} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#111a3b] transition-colors text-center">
                 Coffee with Harry
               </a>
             </div>
@@ -75,7 +76,7 @@ export default function Contact() {
                 <p className="text-gray-700 leading-relaxed mb-4">
                   Join our Discord and say hello in #general; it's the fastest way to hear back.
                 </p>
-                <a href="https://discord.gg/uENtNdDPPb" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full bg-[#5865F2] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#4752c4] transition-colors">
+                <a href={links.discord} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full bg-[#5865F2] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#4752c4] transition-colors">
                   <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.033.055a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
                   </svg>
@@ -86,11 +87,11 @@ export default function Contact() {
               <div>
                 <p className="text-gray-700 leading-relaxed mb-4">
                   Email us at{' '}
-                  <a href="mailto:aisafetyatuci@gmail.com" className="text-[#18234e] font-semibold underline">
-                    aisafetyatuci@gmail.com
+                  <a href={`mailto:${links.email}`} className="text-[#18234e] font-semibold underline">
+                    {links.email}
                   </a>, or find all our links in one place on Linktree.
                 </p>
-                <a href="https://linktr.ee/aisafetyatuci" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full bg-[#18234e] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#111a3b] transition-colors">
+                <a href={links.linktree} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2 w-full bg-[#18234e] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#111a3b] transition-colors">
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
                     <path d="m13.73635 5.85251 4.00467 -4.11665 2.3248 2.3808 -4.20064 4.00466h5.9085v3.30473h-5.9365l4.22865 4.10766 -2.3248 2.3338L12.0005 12.099l-5.74052 5.76852 -2.3248 -2.3248 4.22864 -4.10766h-5.9375V8.12132h5.9085L3.93417 4.11666l2.3248 -2.3808 4.00468 4.11665V0h3.4727zm-3.4727 10.30614h3.4727V24h-3.4727z" />
                   </svg>

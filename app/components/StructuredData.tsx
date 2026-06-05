@@ -1,3 +1,5 @@
+import { links } from '../data/links'
+
 export default function StructuredData() {
   const organization = {
     '@context': 'https://schema.org',
@@ -35,7 +37,7 @@ export default function StructuredData() {
       'AI robustness',
     ],
     keywords: 'AI safety, AI alignment, AI safety UCI, AI alignment UCI, AI alignment Irvine, AI safety Irvine, UC Irvine AI club, UCI AI club, AI safety fellowship, AI alignment fellowship, AISCI, AI Safety Collective at Irvine, AI safety student group, AI alignment reading group, AI safety Orange County',
-    sameAs: ['https://discord.gg/uENtNdDPPb'],
+    sameAs: [links.discord],
     parentOrganization: {
       '@type': 'CollegeOrUniversity',
       name: 'University of California, Irvine',

@@ -59,7 +59,7 @@ const executiveBoard: TeamMember[] = [
     name: 'Helena Tran',
     role: 'Founder/Advisor',
     bio: 'Bio coming soon.',
-    image: '/images/team/helena-tran.svg',
+    image: '/images/team/helenatranheadshot.jpg',
   },
 ]
 

@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { links } from '../data/links'
 
 const pageTitle = 'Grab a coffee'
 const pageDescription = "Book a 30-minute coffee chat with AISCI. We'll buy."
@@ -33,7 +34,7 @@ export default function Coffee() {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
-              href="https://calendly.com/helenatran9305"
+              href={links.coffeeHelena}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-[#18234e] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#111a3b] transition-colors"
@@ -41,7 +42,7 @@ export default function Coffee() {
               Coffee with Helena
             </a>
             <a
-              href="https://calendar.app.google/mdAMY9qTR4kBcqb88"
+              href={links.coffeeHarry}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-[#18234e] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#111a3b] transition-colors"

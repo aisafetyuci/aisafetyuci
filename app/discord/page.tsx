@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
+import { links } from '../data/links';
 
-const DISCORD_URL = 'https://discord.gg/uENtNdDPPb';
+const DISCORD_URL = links.discord;
 
 export const metadata: Metadata = {
   title: 'Redirecting to Discord...',

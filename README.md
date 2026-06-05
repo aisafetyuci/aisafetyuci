@@ -10,14 +10,13 @@ AISCI is a community of students at UC Irvine dedicated to understanding AI beha
 - Linktree: [linktr.ee/aisafetyatuci](https://linktr.ee/aisafetyatuci)
 - Discord: [discord.gg/uENtNdDPPb](https://discord.gg/uENtNdDPPb) — ask us anything in #general
 
-## Programs
+## Local development
 
-- **Technical Intro Fellowship** — An 8-week reading group covering landmark AI safety papers and key concepts. Open to all UCI students, no outside work required. Runs every quarter.
-- **Membership** — Weekly reading groups, small-group discussions with researchers, workshops, and socials. Members get compute access and a Claude Pro subscription (for those doing research), plus connections with top orgs like Redwood Research, the U.S. AI Safety Institute, and METR.
+```bash
+git clone https://github.com/aisafetyuci/aisafetyuci.git
+cd aisafetyuci
+npm install
+npm run dev
+```
 
-## Get involved
-
-- [Apply to a program](https://aisafetyuci.org/get-involved)
-- Subscribe to the #opportunities channel in our Discord
-- Book a coffee chat with Helena: [calendly.com/helenatran9305](https://calendly.com/helenatran9305)
-- Book a coffee chat with Harry: [calendar.app.google/mdAMY9qTR4kBcqb88](https://calendar.app.google/mdAMY9qTR4kBcqb88)
+Then open [http://localhost:3000](http://localhost:3000). `npm run build` generates the static site in `out/` — pushing to `main` builds and deploys it automatically via GitHub Pages.

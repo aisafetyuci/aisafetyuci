@@ -2,6 +2,8 @@ import Link from 'next/link'
 import Image from 'next/image'
 import type { Metadata } from 'next'
 import MailingListForm from './components/MailingListForm'
+import { links } from './data/links'
+import { programsByKey } from './data/programs'
 
 const homeTitle = 'AI Safety & Alignment at UC Irvine'
 const homeDescription = 'AISCI is UC Irvine\'s student community for AI alignment and AI safety. Join our Intro Fellowship, reading groups, and research programs at UCI focused on reducing risk from advanced AI.'
@@ -40,10 +42,9 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <h1 className="text-5xl font-bold text-gray-900 mb-6">A community dedicated to reducing risk from advanced AI.</h1>
-              <p className="text-xl text-gray-600 mb-8"></p>
               <div className="flex gap-4 flex-wrap">
                 <a
-                  href="https://discord.gg/uENtNdDPPb"
+                  href={links.discord}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-block bg-[#18234e] hover:bg-[#111a3b] text-white font-semibold py-3 px-6 rounded-md shadow transition-colors"
@@ -87,21 +88,23 @@ export default function Home() {
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <a
-              href="https://airtable.com/appKZNlVqsXmdMztH/pagO6NP1r12Fp7rX3/form"
+              href={programsByKey.board.applyHref}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-block bg-white hover:bg-gray-100 text-[#18234e] font-semibold py-3 px-6 rounded-md shadow transition-colors"
             >
               Apply
             </a>
-            <a
-              href="https://docs.google.com/document/d/14FKNS9ckp-80HMVtT5wcCNtriQfRU7UXC6qZoLsLWrE/edit?tab=t.0"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block border border-white/30 hover:border-white/60 text-white font-semibold py-3 px-6 rounded-md transition-colors"
-            >
-              Recruitment Doc
-            </a>
+            {programsByKey.board.secondary && (
+              <a
+                href={programsByKey.board.secondary.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block border border-white/30 hover:border-white/60 text-white font-semibold py-3 px-6 rounded-md transition-colors"
+              >
+                {programsByKey.board.secondary.label}
+              </a>
+            )}
           </div>
         </div>
       </div>

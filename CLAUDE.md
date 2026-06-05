@@ -16,18 +16,18 @@ Guidance for Claude Code working in this repo. See `MAINTAINING.md` for the huma
 
 ## Where content lives (source of truth)
 - **Programs** + apply links/status badges: `app/data/programs.ts`
+- **External links** (Discord invite, coffee-chat bookings, email, Linktree): `app/data/links.ts` — all site code imports from here
 - **Technical Intro Fellowship** weekly schedule/readings: `app/tif/` (`app/tif/data.ts`, dynamic route `app/tif/[week]`)
-- **Team/leadership:** `app/team/` + headshots in `public/images/team/` (SVG placeholders + a couple of jpgs)
+- **Team/leadership:** `app/team/` + headshots in `public/images/team/` (SVG placeholders + Helena's jpg)
 - **Resources / Essential Reading:** `app/resources/`
 - **Homepage hero / recruitment banner:** `app/page.tsx`
 - **Nav & footer:** `app/components/`
+- **Discord #info channel source text:** `docs/discord-info-channel.md`
 
 ## Duplication — change values EVERYWHERE
-Several values are hardcoded in multiple files. After changing one, grep the repo and update **every** hit:
-- Discord invite (`discord.gg/uENtNdDPPb`) — ~6 files
-- Meeting room/time (e.g. `HH156`, `5–7 PM`) — several files
-- Coffee-chat booking links and program apply links
-- `README.md` also restates programs/links.
+Site code gets Discord/coffee/email links from `app/data/links.ts` and apply links from `app/data/programs.ts`, but some values are still hardcoded in multiple files. After changing one, grep the repo and update **every** hit:
+- `docs/discord-info-channel.md` restates programs and all external links; `README.md` restates the Discord invite and Linktree (they can't import TS).
+- Meeting room/time (e.g. `HICF 100K`, Thursdays `5–7 PM`) — `app/tif/page.tsx`, `app/get-involved/page.tsx` FAQ, `app/components/StructuredData.tsx`.
 
 ## External integrations (separate accounts, not code)
 - **Applications → Airtable** (base `appKZNlVqsXmdMztH`).

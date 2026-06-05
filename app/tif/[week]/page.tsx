@@ -19,8 +19,9 @@ function getWeek(weekParam: string) {
   return week
 }
 
-export function generateMetadata({ params }: { params: Params }): Metadata {
-  const week = getWeek(params.week)
+export async function generateMetadata({ params }: { params: Promise<Params> }): Promise<Metadata> {
+  const { week: weekParam } = await params
+  const week = getWeek(weekParam)
   if (!week) return {}
 
   const title = `${week.label}: ${week.title}`
@@ -102,8 +103,9 @@ function ReadingTier({
   )
 }
 
-export default function WeekPage({ params }: { params: Params }) {
-  const week = getWeek(params.week)
+export default async function WeekPage({ params }: { params: Promise<Params> }) {
+  const { week: weekParam } = await params
+  const week = getWeek(weekParam)
   if (!week) notFound()
 
   return (

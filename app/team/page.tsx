@@ -28,6 +28,7 @@ interface TeamMember {
   role: string
   bio: string
   image: string
+  website?: string
 }
 
 const executiveBoard: TeamMember[] = [
@@ -36,30 +37,35 @@ const executiveBoard: TeamMember[] = [
     role: 'Co-Director',
     bio: 'Bio coming soon.',
     image: '/images/team/dominic-mascetti.svg',
+    website: 'https://dominicmascetti.com/',
   },
   {
     name: 'Prema Suthaharan',
     role: 'Co-Director',
-    bio: 'Bio coming soon.',
+    bio: 'Prema is an AI/ML engineering intern at Optum, with past internships at Medtronic and KPMG. She was previously events director and facilitator for AISCI.',
     image: '/images/team/prema-suthaharan.svg',
+    website: 'https://www.linkedin.com/in/prema-suthaharan/',
   },
   {
     name: 'Ivan Shishkin',
-    role: 'Operations Lead',
-    bio: 'Bio coming soon.',
-    image: '/images/team/ivan-shishkin.svg',
+    role: 'Co-Director',
+    bio: 'Ivan is a 3rd year Computer Science student at UCI researching AI literacy curriculum at the Digital Learning Lab. He also works part-time as a full-stack engineer and Arroyo Vista center attendant (come visit!).',
+    image: '/images/team/ivan-shishkin.jpg',
+    website: 'https://www.ivanshishkin.com/',
   },
   {
     name: 'Harry Waterman',
     role: 'Advisor',
-    bio: 'Bio coming soon.',
-    image: '/images/team/harry-waterman.svg',
+    bio: 'Harry is a Generator fellow at Constellation working on scaling AI safety. Previously, he helped with operations at BlueDot Impact and organized AISCI.',
+    image: '/images/team/harry-waterman.jpg',
+    website: 'https://harrywaterman.com/',
   },
   {
     name: 'Helena Tran',
     role: 'Founder/Advisor',
-    bio: 'Bio coming soon.',
-    image: '/images/team/helena-tran.svg',
+    bio: 'Helena is a program coordinator at Constellation, and previously contracted with Kairos for OASIS and SPAR. She has also researched LLM collusion through SPAR and AI Safety Camp, and completed ARENA 6.0. Most importantly, she founded AISCI.',
+    image: '/images/team/helena-tran.jpg',
+    website: 'https://helenatran.com/',
   },
 ]
 
@@ -67,7 +73,7 @@ const organizers: TeamMember[] = []
 
 function PersonCard({ person }: { person: TeamMember }) {
   return (
-    <div className="flex flex-col items-center text-center">
+    <div className="flex flex-col items-center text-center bg-white rounded-xl shadow-md border border-gray-200 p-8 w-full max-w-sm h-full">
       <div className="w-48 h-48 rounded-full overflow-hidden bg-gray-100 mb-4">
         <Image
           src={person.image}
@@ -77,9 +83,23 @@ function PersonCard({ person }: { person: TeamMember }) {
           className="w-full h-full object-cover"
         />
       </div>
-      <h3 className="text-xl font-semibold text-[#18234e]">{person.name}</h3>
+      <h3 className="text-xl font-semibold text-[#18234e]">
+        {person.website ? (
+          <a
+            href={person.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`${person.name}'s personal website`}
+            className="underline underline-offset-2 hover:text-gray-500 transition-colors"
+          >
+            {person.name}
+          </a>
+        ) : (
+          person.name
+        )}
+      </h3>
       <p className="text-sm font-medium text-gray-500 mb-3">{person.role}</p>
-      <p className="text-gray-600 text-sm leading-relaxed max-w-xs">{person.bio}</p>
+      <p className="text-gray-600 text-sm leading-relaxed">{person.bio}</p>
     </div>
   )
 }

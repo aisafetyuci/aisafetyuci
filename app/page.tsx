@@ -68,6 +68,7 @@ export default function Home() {
                 alt="Neural network illustration representing AI safety and AI alignment research at UC Irvine"
                 width={500}
                 height={400}
+                priority
                 className="rounded-xl w-full h-auto object-cover"
               />
             </div>

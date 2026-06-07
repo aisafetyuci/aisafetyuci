@@ -20,7 +20,7 @@ export default function Navigation() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2 text-xl font-bold text-black hover:text-gray-600 transition-colors">
-            <Image src="/favicon.png" alt="AI Safety Collective at Irvine logo" width={64} height={64} className="hidden md:block" />
+            <Image src="/favicon.png" alt="AI Safety Collective at Irvine logo" width={64} height={64} priority className="hidden md:block" />
             <span className="inline-flex" aria-label={scrolled ? 'AISCI' : 'AI Safety Collective at Irvine'}>
               {'AI Safety Collective at Irvine'.split('').map((ch, i) => {
                 const kept = new Set([0, 1, 3, 10, 24]).has(i)

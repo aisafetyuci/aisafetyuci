@@ -1,8 +1,9 @@
 import { Metadata } from 'next'
 import WeekAccordion from './WeekAccordion'
+import { meeting } from '../data/links'
 
 const tifTitle = 'Technical Intro Fellowship'
-const tifDescription = 'An 8-week reading and discussion group on AI safety at UC Irvine. Thursdays 5–7 PM in HICF 100K, dinner provided. Covers AI trajectory, misalignment evidence, threat models, and technical safety approaches.'
+const tifDescription = `An 8-week reading and discussion group on AI safety at UC Irvine. ${meeting.day} ${meeting.time} in ${meeting.room}, dinner provided. Covers AI trajectory, misalignment evidence, threat models, and technical safety approaches.`
 
 export const metadata: Metadata = {
   title: tifTitle,
@@ -42,7 +43,7 @@ export default function TechnicalIntroFellowship() {
           </div>
 
           <div className="bg-[#18234e] rounded-lg p-6 mb-8 text-white flex flex-wrap justify-evenly gap-y-3 text-sm">
-            <span>Thursdays, 5 &ndash; 7 PM</span>
+            <span>{meeting.day}, {meeting.time}</span>
             <a
               href="https://www.google.com/maps?cid=14914137050959626236"
               target="_blank"
@@ -62,7 +63,7 @@ export default function TechnicalIntroFellowship() {
                   clipRule="evenodd"
                 />
               </svg>
-              HICF 100K
+              {meeting.room}
             </a>
             <span>Dinner provided</span>
           </div>

@@ -7,3 +7,10 @@ export const links = {
   email: 'aisafetyatuci@gmail.com',
   linktree: 'https://linktr.ee/aisafetyatuci',
 }
+
+// Weekly fellowship meeting logistics — used by /tif, /get-involved, and structured data.
+export const meeting = {
+  day: 'Thursdays',
+  time: '5–7 PM',
+  room: 'HICF 100K',
+}

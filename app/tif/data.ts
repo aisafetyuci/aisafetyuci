@@ -1,4 +1,4 @@
-export type ReadingType = 'paper' | 'blog' | 'video' | 'article' | 'essay' | 'guide'
+type ReadingType = 'paper' | 'blog' | 'video' | 'article' | 'essay' | 'guide'
 
 export type Reading = {
   title: string

@@ -7,10 +7,5 @@ export default function JoinRedirectClient() {
     window.location.replace('/get-involved')
   }, [])
 
-  return (
-    <>
-      {/* eslint-disable-next-line @next/next/no-head-element */}
-      <meta httpEquiv="refresh" content="0; url=/get-involved" />
-    </>
-  )
+  return <meta httpEquiv="refresh" content="0; url=/get-involved" />
 }

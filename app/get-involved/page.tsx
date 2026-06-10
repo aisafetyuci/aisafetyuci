@@ -2,7 +2,7 @@ import Link from 'next/link';
 import CopyEmail from './CopyEmail';
 import { Metadata } from 'next'
 import { programsByKey, statusBadgeClasses, type Program } from '../data/programs'
-import { links } from '../data/links'
+import { links, meeting } from '../data/links'
 
 function StatusBadge({ status }: { status: Program['status'] }) {
   const badge = statusBadgeClasses[status.tone]
@@ -58,7 +58,7 @@ const faqs = [
   },
   {
     q: 'When does the Intro Fellowship run?',
-    a: 'Every quarter. Sessions meet Thursdays 5–7 PM in HICF 100K at UC Irvine, with dinner provided. Applications open roughly a month before each quarter starts.',
+    a: `Every quarter. Sessions meet ${meeting.day} ${meeting.time} in ${meeting.room} at UC Irvine, with dinner provided. Applications open roughly a month before each quarter starts.`,
   },
   {
     q: 'Is AISCI part of UC Irvine?',
@@ -102,7 +102,7 @@ export default function GetInvolved() {
                 <StatusBadge status={intro.status} />
               </div>
               <p className="text-gray-700 leading-relaxed mb-4">
-                An 8-week reading group on technical AI safety. Participants meet weekly in small sections on Thursdays from 5–7pm in HICF 100K, with dinner provided. No work is expected outside of weekly meetings.
+                An 8-week reading group on technical AI safety. Participants meet weekly in small sections on {meeting.day} from {meeting.time} in {meeting.room}, with dinner provided. No work is expected outside of weekly meetings.
               </p>
               <p className="text-gray-700 leading-relaxed mb-4">
                 Topics include:

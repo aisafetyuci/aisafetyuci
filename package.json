@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
+    "build": "next build"
   },
   "dependencies": {
     "next": "^16.2.7",
@@ -13,7 +12,7 @@
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
-    "@types/node": "^20.10.5",
+    "@types/node": "^24.13.1",
     "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.23",

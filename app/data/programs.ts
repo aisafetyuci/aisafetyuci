@@ -1,4 +1,4 @@
-export type ProgramStatus = {
+type ProgramStatus = {
   label: string
   tone: 'open' | 'closed'
 }
@@ -17,7 +17,6 @@ export const statusBadgeClasses: Record<ProgramStatus['tone'], { wrap: string; d
 export type Program = {
   key: 'intro' | 'policy' | 'membership' | 'board'
   title: string
-  shortTitle: string
   blurb: string
   status: ProgramStatus
   applyHref: string
@@ -28,7 +27,6 @@ export const programs: Program[] = [
   {
     key: 'intro',
     title: 'Intro Fellowship, Fall 2026',
-    shortTitle: 'Technical Intro Fellowship',
     blurb: 'Technical AI safety reading group, 8 weeks.',
     status: { label: 'Applications Open', tone: 'open' },
     applyHref: 'https://airtable.com/appKZNlVqsXmdMztH/pagFgRZ9bLP6ZfZbt/form',
@@ -36,7 +34,6 @@ export const programs: Program[] = [
   {
     key: 'policy',
     title: 'Policy Fellowship, Fall 2026',
-    shortTitle: 'Policy Fellowship',
     blurb: 'AI policy and governance reading group.',
     status: { label: 'Applications Open', tone: 'open' },
     applyHref: 'https://airtable.com/appKZNlVqsXmdMztH/pagAV3fJFiimd0sRq/form',
@@ -44,7 +41,6 @@ export const programs: Program[] = [
   {
     key: 'membership',
     title: 'Membership',
-    shortTitle: 'Membership',
     blurb: 'Join the community: weekly reading, workshops, events.',
     status: { label: 'Rolling Admissions', tone: 'open' },
     applyHref: 'https://airtable.com/appKZNlVqsXmdMztH/pagMczb6lf65AJyB8/form',
@@ -52,7 +48,6 @@ export const programs: Program[] = [
   {
     key: 'board',
     title: 'Facilitator / Board',
-    shortTitle: 'Facilitator / Board',
     blurb: 'Lead a fellowship section or help run the club.',
     status: { label: 'Rolling Admissions', tone: 'open' },
     applyHref: 'https://airtable.com/appKZNlVqsXmdMztH/pagO6NP1r12Fp7rX3/form',

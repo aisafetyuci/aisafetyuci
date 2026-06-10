@@ -104,18 +104,22 @@ function PersonCard({ person }: { person: TeamMember }) {
   )
 }
 
-function Section({ title, members }: { title: string; members: TeamMember[] }) {
-  if (members.length === 0) return null
+function Section({ title, members, emptyMessage }: { title: string; members: TeamMember[]; emptyMessage?: string }) {
+  if (members.length === 0 && !emptyMessage) return null
   return (
     <section className="mb-16">
       <h2 className="text-3xl font-semibold text-[#18234e] mb-10 text-center">{title}</h2>
-      <div className="flex flex-wrap justify-center gap-12">
-        {members.map((person) => (
-          <div key={person.name} className="flex justify-center w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-2rem)]">
-            <PersonCard person={person} />
-          </div>
-        ))}
-      </div>
+      {members.length === 0 ? (
+        <p className="text-center text-gray-500">{emptyMessage}</p>
+      ) : (
+        <div className="flex flex-wrap justify-center gap-12">
+          {members.map((person) => (
+            <div key={person.name} className="flex justify-center w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-2rem)]">
+              <PersonCard person={person} />
+            </div>
+          ))}
+        </div>
+      )}
     </section>
   )
 }
@@ -131,21 +135,7 @@ export default function Team() {
 
       <div className="container mx-auto px-4 pt-12 pb-16">
         <Section title="Executive Board" members={executiveBoard} />
-
-        <section className="mb-16">
-          <h2 className="text-3xl font-semibold text-[#18234e] mb-10 text-center">Organizers</h2>
-          {organizers.length === 0 ? (
-            <p className="text-center text-gray-500">Organizing team to be announced.</p>
-          ) : (
-            <div className="flex flex-wrap justify-center gap-12">
-              {organizers.map((person) => (
-                <div key={person.name} className="flex justify-center w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-2rem)]">
-                  <PersonCard person={person} />
-                </div>
-              ))}
-            </div>
-          )}
-        </section>
+        <Section title="Organizers" members={organizers} emptyMessage="Organizing team to be announced." />
 
         <div className="bg-[#18234e] rounded-lg p-10 text-center mt-8">
           <p className="text-2xl font-bold text-white mb-2">Want to join our team?</p>

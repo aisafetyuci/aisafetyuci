@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
+import MissionStatement from '../components/MissionStatement'
 
 const pageTitle = 'Our Mission'
 const pageDescription = 'Why the AI Safety Collective at Irvine exists, and what we are trying to do about it.'
@@ -34,9 +35,7 @@ export default function Mission() {
 
       <div className="container mx-auto px-4 pt-8 pb-16">
         <div className="max-w-4xl mx-auto">
-          <p className="text-lg text-gray-700 mb-10">
-            Experts broadly expect rapid progress in AI to continue, potentially surpassing human intelligence. Already, AI advancement has outpaced our ability to explain its behavior, control its goals, and build robust safeguards. <strong>Reducing risks from advanced AI may be one of the most important challenges of our time.</strong> AISCI is a community of students at UC Irvine dedicated to AI alignment and AI safety: understanding AI behavior, ensuring it reflects human values, and building the technical and political foundations for safe AI development.
-          </p>
+          <MissionStatement className="text-lg text-gray-700 mb-10" />
 
           <h2 className="text-3xl text-[#18234e] font-semibold mb-8">Want to go deeper?</h2>
 

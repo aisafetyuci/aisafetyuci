@@ -6,6 +6,7 @@ Experts broadly expect rapid progress in AI to continue, potentially surpassing 
 - Check out our [Linktree](https://linktr.ee/aisafetyatuci)
 ## We provide opportunities to upskill and contribute to AI safety:
 - Technical Intro Fellowship — An 8-week reading group covering landmark AI safety papers and key concepts. Open to all UCI students, no outside work required. We run it every quarter
+- Policy Fellowship — A reading group on AI policy and governance: how policymakers, researchers, and institutions are working to make AI development go well. Open to students from any background, no prior AI or policy experience required
 - Membership — Join weekly reading groups, small-group discussions with researchers, workshops, and socials. Members get compute access and a Claude Pro subscription (if you're doing research), as well as connections with top orgs like Redwood Research, the U.S. AI Safety Institute, and METR
 ## Get involved:
 - Book a coffee chat with Helena: https://calendly.com/helenatran9305

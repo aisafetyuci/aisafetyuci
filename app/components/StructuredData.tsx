@@ -1,4 +1,4 @@
-import { links } from '../data/links'
+import { links, meeting } from '../data/links'
 
 export default function StructuredData() {
   const organization = {
@@ -92,7 +92,7 @@ export default function StructuredData() {
       courseMode: 'In-person',
       location: {
         '@type': 'Place',
-        name: 'HICF 100K, University of California, Irvine',
+        name: `${meeting.room}, University of California, Irvine`,
         address: {
           '@type': 'PostalAddress',
           addressLocality: 'Irvine',

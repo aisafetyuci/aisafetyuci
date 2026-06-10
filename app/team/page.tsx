@@ -35,8 +35,8 @@ const executiveBoard: TeamMember[] = [
   {
     name: 'Dominic Mascetti',
     role: 'Co-Director',
-    bio: 'Bio coming soon.',
-    image: '/images/team/dominic-mascetti.svg',
+    bio: 'Dominic leads AISCI’s fellowships and external events. His interests include AI governance, field strategy, and writing.',
+    image: '/images/team/dominic-mascetti.jpg',
     website: 'https://dominicmascetti.com/',
   },
   {
@@ -109,9 +109,11 @@ function Section({ title, members }: { title: string; members: TeamMember[] }) {
   return (
     <section className="mb-16">
       <h2 className="text-3xl font-semibold text-[#18234e] mb-10 text-center">{title}</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 justify-items-center">
+      <div className="flex flex-wrap justify-center gap-12">
         {members.map((person) => (
-          <PersonCard key={person.name} person={person} />
+          <div key={person.name} className="flex justify-center w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-2rem)]">
+            <PersonCard person={person} />
+          </div>
         ))}
       </div>
     </section>
@@ -135,9 +137,11 @@ export default function Team() {
           {organizers.length === 0 ? (
             <p className="text-center text-gray-500">Organizing team to be announced.</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12 justify-items-center">
+            <div className="flex flex-wrap justify-center gap-12">
               {organizers.map((person) => (
-                <PersonCard key={person.name} person={person} />
+                <div key={person.name} className="flex justify-center w-full sm:w-[calc(50%-1.5rem)] lg:w-[calc(33.333%-2rem)]">
+                  <PersonCard person={person} />
+                </div>
               ))}
             </div>
           )}

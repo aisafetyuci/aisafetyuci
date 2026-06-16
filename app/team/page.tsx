@@ -44,7 +44,7 @@ const executiveBoard: TeamMember[] = [
     role: 'Co-Director',
     bio: 'Prema is an AI/ML engineering intern at Optum, with past internships at Medtronic and KPMG. She was previously events director and facilitator for AISCI.',
     image: '/images/team/prema-suthaharan.jpg',
-    website: 'https://www.linkedin.com/in/prema-suthaharan/',
+    website: 'https://premasuthaharan.com/',
   },
   {
     name: 'Ivan Shishkin',

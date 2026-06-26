@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import CopyEmail from './CopyEmail';
+import Faqs from './Faqs';
 import { Metadata } from 'next'
 import { programsByKey, statusBadgeClasses, type Program } from '../data/programs'
 import { links, meeting } from '../data/links'
@@ -212,14 +213,7 @@ export default function GetInvolved() {
 
           <div className="mt-16">
             <h2 className="text-3xl font-bold text-[#18234e] mb-8">Frequently Asked Questions</h2>
-            <div className="space-y-6">
-              {faqs.map((faq) => (
-                <div key={faq.q}>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{faq.q}</h3>
-                  <p className="text-gray-700 leading-relaxed">{faq.a}</p>
-                </div>
-              ))}
-            </div>
+            <Faqs faqs={faqs} />
           </div>
 
         </div>

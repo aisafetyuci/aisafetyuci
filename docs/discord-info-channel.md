@@ -9,8 +9,9 @@ Experts broadly expect rapid progress in AI to continue, potentially surpassing 
 - Policy Fellowship — A reading group on AI policy and governance: how policymakers, researchers, and institutions are working to make AI development go well. Open to students from any background, no prior AI or policy experience required
 - Membership — Join weekly reading groups, small-group discussions with researchers, workshops, and socials. Members get compute access and a Claude Pro subscription (if you're doing research), as well as connections with top orgs like Redwood Research, the U.S. AI Safety Institute, and METR
 ## Get involved:
-- Book a coffee chat with Helena: https://calendly.com/helenatran9305
-- Book a coffee chat with Harry: https://calendar.app.google/mdAMY9qTR4kBcqb88
+- Book a coffee chat with Dominic: https://cal.com/dominicmascetti/coffee
+- Book a coffee chat with Ivan: https://cal.com/ivanshishkin/quick-chat
+- Reach Prema via her website: https://premasuthaharan.com/
 - [Apply](https://aisafetyuci.org/get-involved) to a program
 - Subscribe to the #opportunities channel
 

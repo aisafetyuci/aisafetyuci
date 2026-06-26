@@ -1,7 +1,7 @@
 import { Metadata } from 'next'
 import DiscordIcon from '../components/DiscordIcon'
 import MailingListForm from '../components/MailingListForm'
-import { links } from '../data/links'
+import { links, coffeeChats } from '../data/links'
 
 const pageTitle = 'Contact Us'
 const pageDescription = 'Get in touch with AISCI. Join our Discord community, attend our events, or reach out with questions about our programs.'
@@ -59,13 +59,12 @@ export default function Contact() {
               ))}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <a href={links.coffeeHelena} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#111a3b] transition-colors text-center">
-                Coffee with Helena
-              </a>
-              <a href={links.coffeeHarry} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#111a3b] transition-colors text-center">
-                Coffee with Harry
-              </a>
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
+              {coffeeChats.map((c) => (
+                <a key={c.name} href={c.url} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#111a3b] transition-colors text-center">
+                  Coffee with {c.name}
+                </a>
+              ))}
             </div>
           </div>
 

@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { links } from '../data/links'
+import { coffeeChats } from '../data/links'
 
 const pageTitle = 'Grab a coffee'
 const pageDescription = "Book a 30-minute coffee chat with AISCI. We'll buy."
@@ -32,23 +32,18 @@ export default function Coffee() {
             We love meeting people who are curious about AI safety; no background needed. Book a 30-minute chat and we&rsquo;ll buy you coffee and cover whatever&rsquo;s on your mind.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <a
-              href={links.coffeeHelena}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-[#18234e] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#111a3b] transition-colors"
-            >
-              Coffee with Helena
-            </a>
-            <a
-              href={links.coffeeHarry}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-[#18234e] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#111a3b] transition-colors"
-            >
-              Coffee with Harry
-            </a>
+          <div className="flex flex-col sm:flex-row flex-wrap gap-3 justify-center">
+            {coffeeChats.map((c) => (
+              <a
+                key={c.name}
+                href={c.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-[#18234e] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#111a3b] transition-colors"
+              >
+                Coffee with {c.name}
+              </a>
+            ))}
           </div>
         </div>
       </div>

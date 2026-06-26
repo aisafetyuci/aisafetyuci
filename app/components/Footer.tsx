@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { links } from '../data/links'
+import { links, coffeeChats } from '../data/links'
 import DiscordIcon from './DiscordIcon'
 
 export default function Footer() {
@@ -12,13 +12,12 @@ export default function Footer() {
         </div>
         <div className="flex flex-col sm:flex-row items-center gap-2 my-3 md:my-0">
           <span className="text-sm text-[#f2f3f7]">Curious about AI safety?</span>
-          <div className="flex gap-2">
-            <a href={links.coffeeHelena} target="_blank" rel="noopener noreferrer" className="inline-block text-sm bg-[#f2f3f7] text-[#18234e] font-semibold px-4 py-2 rounded-full hover:bg-white transition-colors">
-              Coffee with Helena
-            </a>
-            <a href={links.coffeeHarry} target="_blank" rel="noopener noreferrer" className="inline-block text-sm bg-[#f2f3f7] text-[#18234e] font-semibold px-4 py-2 rounded-full hover:bg-white transition-colors">
-              Coffee with Harry
-            </a>
+          <div className="flex flex-wrap justify-center gap-2">
+            {coffeeChats.map((c) => (
+              <a key={c.name} href={c.url} target="_blank" rel="noopener noreferrer" className="inline-block text-sm bg-[#f2f3f7] text-[#18234e] font-semibold px-4 py-2 rounded-full hover:bg-white transition-colors">
+                Coffee with {c.name}
+              </a>
+            ))}
           </div>
         </div>
         <div className="flex items-center space-x-4 text-sm">

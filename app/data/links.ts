@@ -7,11 +7,11 @@ export const links = {
 }
 
 // Coffee-chat booking links, one per facilitator. Restated manually in
-// docs/discord-info-channel.md. Prema points to her website until she has a booking link.
+// docs/discord-info-channel.md.
 export const coffeeChats = [
   { name: 'Dominic', url: 'https://cal.com/dominicmascetti/coffee' },
   { name: 'Ivan', url: 'https://cal.com/ivanshishkin/quick-chat' },
-  { name: 'Prema', url: 'https://premasuthaharan.com/' },
+  { name: 'Prema', url: 'https://cal.com/prema-suthaharan/coffee' },
 ]
 
 // Weekly fellowship meeting logistics — used by /tif, /get-involved, and structured data.

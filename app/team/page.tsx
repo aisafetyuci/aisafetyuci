@@ -49,7 +49,7 @@ const executiveBoard: TeamMember[] = [
   {
     name: 'Ivan Shishkin',
     role: 'Co-Director',
-    bio: 'Ivan is a 3rd year Computer Science student at UCI researching AI literacy curriculum at the Digital Learning Lab. He also works part-time as a full-stack engineer and Arroyo Vista center attendant (come visit!).',
+    bio: 'Ivan is a 3rd year CS student in charge of operations and the fellowship. He is researching AI literacy at the Digital Learning Lab and also works part-time as a full-stack engineer.',
     image: '/images/team/ivan-shishkin.jpg',
     website: 'https://www.ivanshishkin.com/',
   },

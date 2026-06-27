@@ -11,7 +11,7 @@ Experts broadly expect rapid progress in AI to continue, potentially surpassing 
 ## Get involved:
 - Book a coffee chat with Dominic: https://cal.com/dominicmascetti/coffee
 - Book a coffee chat with Ivan: https://cal.com/ivanshishkin/quick-chat
-- Reach Prema via her website: https://premasuthaharan.com/
+- Book a coffee chat with Prema: https://cal.com/prema-suthaharan/coffee
 - [Apply](https://aisafetyuci.org/get-involved) to a program
 - Subscribe to the #opportunities channel
 

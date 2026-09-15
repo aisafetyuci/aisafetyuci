@@ -15,7 +15,7 @@ export const statusBadgeClasses: Record<ProgramStatus['tone'], { wrap: string; d
 }
 
 export type Program = {
-  key: 'intro' | 'policy' | 'membership' | 'board'
+  key: 'intro' | 'membership' | 'board'
   title: string
   blurb: string
   status: ProgramStatus
@@ -30,13 +30,6 @@ export const programs: Program[] = [
     blurb: 'Technical AI safety reading group, 8 weeks.',
     status: { label: 'Applications Open', tone: 'open' },
     applyHref: 'https://airtable.com/appKZNlVqsXmdMztH/pagFgRZ9bLP6ZfZbt/form',
-  },
-  {
-    key: 'policy',
-    title: 'Policy Fellowship, Fall 2026',
-    blurb: 'AI policy and governance reading group.',
-    status: { label: 'Applications Open', tone: 'open' },
-    applyHref: 'https://airtable.com/appKZNlVqsXmdMztH/pagAV3fJFiimd0sRq/form',
   },
   {
     key: 'membership',

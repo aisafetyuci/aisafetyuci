@@ -4,7 +4,6 @@ import type { Metadata } from 'next'
 import MailingListForm from './components/MailingListForm'
 import MissionStatement from './components/MissionStatement'
 import { links } from './data/links'
-import { programsByKey } from './data/programs'
 
 const homeTitle = 'AI Safety Collective at Irvine'
 const homeDescription = 'AISCI is UC Irvine\'s student community for AI alignment and AI safety. Join our Intro Fellowship, reading groups, and research programs at UCI focused on reducing risk from advanced AI.'
@@ -73,40 +72,6 @@ export default function Home() {
                 className="rounded-xl w-full h-auto object-cover"
               />
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="w-full bg-[#18234e]">
-        <div className="container mx-auto px-4 py-12 text-center">
-          <span className="inline-block bg-white/15 text-white text-xs font-bold px-3 py-1 rounded-full mb-4 tracking-widest uppercase">
-            Rolling Admissions
-          </span>
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">
-            Facilitator & Organizer Apps Are Open
-          </h2>
-          <p className="text-white/70 text-lg mb-7 max-w-xl mx-auto">
-            We look for people who are genuinely excited about AI safety: responsible, agentic, and high-context, with demonstrated commitment to the mission.
-          </p>
-          <div className="flex gap-4 justify-center flex-wrap">
-            <a
-              href={programsByKey.board.applyHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-white hover:bg-gray-100 text-[#18234e] font-semibold py-3 px-6 rounded-md shadow transition-colors"
-            >
-              Apply
-            </a>
-            {programsByKey.board.secondary && (
-              <a
-                href={programsByKey.board.secondary.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block border border-white/30 hover:border-white/60 text-white font-semibold py-3 px-6 rounded-md transition-colors"
-              >
-                {programsByKey.board.secondary.label}
-              </a>
-            )}
           </div>
         </div>
       </div>

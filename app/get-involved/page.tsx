@@ -51,7 +51,7 @@ const faqs = [
   },
   {
     q: 'How do I join AI safety research at UCI?',
-    a: 'The typical path is: (1) apply to the Technical Intro Fellowship to get grounded in the field, (2) continue as an AISCI member for weekly research reading and discussion, (3) work on research projects with the group or through external programs like Redwood Research, the U.S. AI Safety Institute, METR, or MATS. If you\'re not ready to apply yet, browse our /resources page to get oriented, or book a coffee chat with a co-director.',
+    a: 'The typical path is: (1) apply to the Technical Intro Fellowship to get grounded in the field, (2) continue as an AISCI member for weekly research reading and discussion, (3) work on research projects with the group or through external programs like Redwood Research, the U.S. AI Safety Institute, METR, or MATS. If you\'re not ready to apply yet, browse our /resources page to get oriented, or book a coffee chat with an organizer.',
   },
   {
     q: 'Do I need a technical background to join?',
@@ -59,7 +59,7 @@ const faqs = [
   },
   {
     q: 'When does the Intro Fellowship run?',
-    a: `Every quarter. Sessions meet ${meeting.day} ${meeting.time} in ${meeting.room} at UC Irvine, with dinner provided. Applications open roughly a month before each quarter starts.`,
+    a: `Every quarter. For Fall 2026, sessions meet ${meeting.day} ${meeting.time} at UC Irvine, with dinner provided. Room: ${meeting.room}. Applications open roughly a month before each quarter starts.`,
   },
   {
     q: 'Is AISCI part of UC Irvine?',
@@ -79,7 +79,6 @@ const membershipBenefits = [
 
 export default function GetInvolved() {
   const intro = programsByKey.intro
-  const policy = programsByKey.policy
   const membership = programsByKey.membership
   const board = programsByKey.board
   return (
@@ -103,7 +102,7 @@ export default function GetInvolved() {
                 <StatusBadge status={intro.status} />
               </div>
               <p className="text-gray-700 leading-relaxed mb-4">
-                An 8-week reading group on technical AI safety. Participants meet weekly in small sections on {meeting.day} from {meeting.time} in {meeting.room}, with dinner provided. No work is expected outside of weekly meetings.
+                An 8-week reading group on technical AI safety for Fall 2026. Participants meet weekly in small sections on {meeting.day} from {meeting.time}, with dinner provided. Room: {meeting.room}. No work is expected outside of weekly meetings.
               </p>
               <p className="text-gray-700 leading-relaxed mb-4">
                 Topics include:
@@ -133,26 +132,6 @@ export default function GetInvolved() {
             <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
               <div className="flex items-start justify-between gap-4 mb-4">
                 <h2 className="text-2xl font-bold text-gray-900">
-                  Policy Fellowship
-                </h2>
-                <StatusBadge status={policy.status} />
-              </div>
-              <p className="text-gray-700 leading-relaxed mb-4">
-                A reading group on AI policy and governance. Explore how policymakers, researchers, and institutions are working to make AI development go well, and what students can do to contribute.
-              </p>
-              <p className="text-gray-700 leading-relaxed mb-4">
-                Open to undergraduate and graduate students from any background. No prior AI or policy experience required.
-              </p>
-              <div className="mt-auto pt-2 flex gap-3">
-                <a href={policy.applyHref} target="_blank" rel="noopener noreferrer" className="inline-block bg-[#18234e] text-white font-semibold px-6 py-2 rounded hover:bg-[#111a3b] transition">
-                  Apply
-                </a>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow flex flex-col">
-              <div className="flex items-start justify-between gap-4 mb-4">
-                <h2 className="text-2xl font-bold text-gray-900">
                   Membership
                 </h2>
                 <StatusBadge status={membership.status} />
@@ -174,7 +153,7 @@ export default function GetInvolved() {
                 Members generally contribute by running or participating in workshops, discussions, socials, hackathons, and more. While we are a UCI-recognized student group, membership is not restricted to UCI students; independent researchers and students from other universities are welcome.
               </p>
               <p className="text-gray-700 leading-relaxed mb-4">
-                If you aren't very familiar with AI safety, we recommend applying to one or both of our fellowships above and browsing our <Link href="/resources" className="text-[#18234e] underline hover:no-underline">resources</Link>. Fellowship alumni typically receive priority in the application process.
+                If you aren't very familiar with AI safety, we recommend applying to our Intro Fellowship above and browsing our <Link href="/resources" className="text-[#18234e] underline hover:no-underline">resources</Link>. Fellowship alumni typically receive priority in the application process.
               </p>
               <p className="text-gray-600 text-sm">
                 Membership admission is rolling, but the board tends to make decisions every month. If we are slow to respond, please don't hesitate to email us at <CopyEmail email={links.email} />.
@@ -193,9 +172,6 @@ export default function GetInvolved() {
               </div>
               <p className="text-gray-700 leading-relaxed mb-4">
                 Facilitators lead small-group discussions in our Technical Intro Fellowship. Board members organize fellowships, events, workshops, and outreach, and steer the direction of the group.
-              </p>
-              <p className="text-gray-700 leading-relaxed mb-6">
-                We look for people who are genuinely excited about AI safety: responsible, agentic, and high-context, with demonstrated commitment to the mission.
               </p>
               <div className="mt-auto flex gap-3">
                 {board.secondary && (

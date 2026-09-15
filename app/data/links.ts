@@ -17,6 +17,6 @@ export const coffeeChats = [
 // Weekly fellowship meeting logistics — used by /tif, /get-involved, and structured data.
 export const meeting = {
   day: 'Thursdays',
-  time: '5–7 PM',
-  room: 'HICF 100K',
+  time: '6–8 PM',
+  room: 'TBD',
 }

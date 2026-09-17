@@ -18,7 +18,7 @@ export default function Faqs({ faqs }: { faqs: Faq[] }) {
         return (
           <div
             key={faq.q}
-            className="bg-white rounded-lg shadow-md overflow-hidden"
+            className="surface-card overflow-hidden"
             onMouseEnter={() => setHoveredIndex(i)}
             onMouseLeave={() => setHoveredIndex(null)}
           >
@@ -27,7 +27,7 @@ export default function Faqs({ faqs }: { faqs: Faq[] }) {
               onClick={() => setPinnedIndex(pinnedIndex === i ? null : i)}
               aria-expanded={isOpen}
               aria-controls={`faq-answer-${i}`}
-              className="w-full flex items-center justify-between gap-3 text-left px-5 py-4 font-semibold text-[#18234e] hover:bg-gray-50 transition-colors cursor-pointer"
+              className="w-full flex items-center justify-between gap-3 text-left px-5 py-4 font-semibold text-brand hover:bg-gray-50 transition-colors cursor-pointer"
             >
               <span className="text-lg">{faq.q}</span>
               <svg

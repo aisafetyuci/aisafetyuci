@@ -49,7 +49,7 @@ const typeColors: Record<string, string> = {
 const trackColors: Record<string, string> = {
   Technical: 'bg-indigo-100 text-indigo-700',
   Policy: 'bg-rose-100 text-rose-700',
-  Both: 'bg-[#18234e]/10 text-[#18234e]',
+  Both: 'bg-brand/10 text-brand',
 }
 
 const feeds = [
@@ -128,33 +128,33 @@ const advice = [
 
 export default function ContinuedEngagement() {
   return (
-    <main className="min-h-screen bg-white">
-      <div className="container mx-auto px-4 pt-12 pb-2">
-        <div className="border-b border-gray-200 pb-8">
-          <h1 className="text-5xl font-bold text-[#18234e]">Continued engagement</h1>
+    <main className="min-h-screen bg-brand-wash">
+      <div className="site-container pt-12 pb-2">
+        <div className="page-header">
+          <h1 className="page-title">Continued engagement</h1>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 pt-8 pb-16">
+      <div className="site-container pt-8 pb-16">
         <div className="max-w-6xl mx-auto">
 
           {/* Why now */}
           <section className="mb-16">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-[#f2f3f7] rounded-xl p-6">
-                <h3 className="font-bold text-[#18234e] mb-1">The field is talent-constrained</h3>
+              <div className="bg-brand-soft rounded-xl p-6">
+                <h3 className="font-bold text-brand mb-1">The field is talent-constrained</h3>
                 <p className="text-gray-700 text-sm">Demand for AI safety work outpaces the people doing it. The{' '}
-                  <a href="https://nanransohoff.substack.com/p/the-third-wave-of-american-philanthropy" target="_blank" rel="noopener noreferrer" className="text-[#18234e] font-semibold hover:underline">coming wave of AI philanthropy</a>{' '}
+                  <a href="https://nanransohoff.substack.com/p/the-third-wave-of-american-philanthropy" target="_blank" rel="noopener noreferrer" className="text-brand font-semibold hover:underline">coming wave of AI philanthropy</a>{' '}
                   will be bottlenecked on talent, not money, and capable newcomers are needed.</p>
               </div>
-              <div className="bg-[#f2f3f7] rounded-xl p-6">
-                <h3 className="font-bold text-[#18234e] mb-1">Timelines may be short</h3>
+              <div className="bg-brand-soft rounded-xl p-6">
+                <h3 className="font-bold text-brand mb-1">Timelines may be short</h3>
                 <p className="text-gray-700 text-sm">Forecasters put{' '}
-                  <a href="https://www.metaculus.com/questions/19356/transformative-ai-date/" target="_blank" rel="noopener noreferrer" className="text-[#18234e] font-semibold hover:underline">real odds</a>{' '}
+                  <a href="https://www.metaculus.com/questions/19356/transformative-ai-date/" target="_blank" rel="noopener noreferrer" className="text-brand font-semibold hover:underline">real odds</a>{' '}
                   on transformative AI within a decade. If that is even partly right, the next few years matter a lot.</p>
               </div>
-              <div className="bg-[#f2f3f7] rounded-xl p-6">
-                <h3 className="font-bold text-[#18234e] mb-1">You can start now</h3>
+              <div className="bg-brand-soft rounded-xl p-6">
+                <h3 className="font-bold text-brand mb-1">You can start now</h3>
                 <p className="text-gray-700 text-sm">No permission, lab, or PhD required to begin. The rest of this page is concrete first steps, so pick one.</p>
               </div>
             </div>
@@ -162,7 +162,7 @@ export default function ContinuedEngagement() {
 
           {/* Stay in the loop */}
           <section className="mb-16">
-            <h2 className="text-3xl text-[#18234e] font-semibold mb-3 text-center">Stay in the loop</h2>
+            <h2 className="text-3xl text-brand font-semibold mb-3 text-center">Stay in the loop</h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
               Having a feel for where the field is going is essential to doing good work. Pick two or three of these and actually keep up.
             </p>
@@ -173,14 +173,14 @@ export default function ContinuedEngagement() {
                   href={f.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-col bg-white rounded-lg shadow-md p-5 hover:shadow-xl transition-shadow focus:outline-none focus:ring-2 focus:ring-[#18234e]"
+                  className="surface-card interactive-card group flex flex-col p-5 focus:outline-none focus:ring-2 focus:ring-brand"
                   aria-label={`${f.name} by ${f.author}`}
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <Badge label={f.type} color={typeColors[f.type]} />
                     <span className="ml-auto"><ExternalIcon /></span>
                   </div>
-                  <h3 className="text-base font-semibold text-gray-900 group-hover:text-[#18234e] transition-colors leading-snug">{f.name}</h3>
+                  <h3 className="text-base font-semibold text-brand group-hover:text-brand transition-colors leading-snug">{f.name}</h3>
                   <p className="text-xs text-gray-500 mb-2">{f.author}</p>
                   <p className="text-sm text-gray-700 mt-auto">{f.note}</p>
                 </a>
@@ -189,11 +189,11 @@ export default function ContinuedEngagement() {
 
             {/* Books */}
             <div className="mt-8">
-              <h3 className="text-xl font-semibold text-[#18234e] mb-4 text-center">…or read a book</h3>
+              <h3 className="text-xl font-semibold text-brand mb-4 text-center">…or read a book</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {books.map((b) => (
-                  <div key={b.title} className="bg-white rounded-lg shadow-md p-5">
-                    <h4 className="font-semibold text-gray-900 leading-snug">{b.title}</h4>
+                  <div key={b.title} className="surface-card p-5">
+                    <h4 className="font-semibold text-brand leading-snug">{b.title}</h4>
                     <p className="text-xs text-gray-500 mb-2">{b.authors}</p>
                     <p className="text-sm text-gray-700">{b.note}</p>
                   </div>
@@ -204,31 +204,31 @@ export default function ContinuedEngagement() {
 
           {/* Build skills */}
           <section className="mb-16">
-            <h2 className="text-3xl text-[#18234e] font-semibold mb-8 text-center">Build real skills</h2>
-            <div className="bg-white rounded-xl shadow-md p-8 border border-gray-100">
+            <h2 className="text-3xl text-brand font-semibold mb-8 text-center">Build real skills</h2>
+            <div className="surface-card p-8">
               <ul className="space-y-4 text-gray-700">
                 <li className="flex gap-3">
-                  <span className="text-[#18234e] font-bold flex-shrink-0">1.</span>
+                  <span className="text-brand font-bold flex-shrink-0">1.</span>
                   <span>
                     Work through{' '}
-                    <a href="https://learn.arena.education/" target="_blank" rel="noopener noreferrer" className="text-[#18234e] font-semibold hover:underline">ARENA</a>,
+                    <a href="https://learn.arena.education/" target="_blank" rel="noopener noreferrer" className="text-brand font-semibold hover:underline">ARENA</a>,
                     the standard hands-on curriculum for transformers, RL, mech interp, and evals. See the{' '}
-                    <Link href="/resources" className="text-[#18234e] font-semibold hover:underline">resources page</Link> for courses to start with.
+                    <Link href="/resources" className="text-brand font-semibold hover:underline">resources page</Link> for courses to start with.
                   </span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-[#18234e] font-bold flex-shrink-0">2.</span>
+                  <span className="text-brand font-bold flex-shrink-0">2.</span>
                   <span>Replicate a paper you found interesting.</span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-[#18234e] font-bold flex-shrink-0">3.</span>
+                  <span className="text-brand font-bold flex-shrink-0">3.</span>
                   <span>Run a little experiment and write it up on{' '}
-                    <a href="https://www.lesswrong.com/" target="_blank" rel="noopener noreferrer" className="text-[#18234e] font-semibold hover:underline">LessWrong</a>{' '}or the{' '}
-                    <a href="https://www.alignmentforum.org/" target="_blank" rel="noopener noreferrer" className="text-[#18234e] font-semibold hover:underline">Alignment Forum</a>.
+                    <a href="https://www.lesswrong.com/" target="_blank" rel="noopener noreferrer" className="text-brand font-semibold hover:underline">LessWrong</a>{' '}or the{' '}
+                    <a href="https://www.alignmentforum.org/" target="_blank" rel="noopener noreferrer" className="text-brand font-semibold hover:underline">Alignment Forum</a>.
                   </span>
                 </li>
                 <li className="flex gap-3">
-                  <span className="text-[#18234e] font-bold flex-shrink-0">4.</span>
+                  <span className="text-brand font-bold flex-shrink-0">4.</span>
                   <span>Email a grad student, professor, or org whose paper you liked, and ask to help. This works far more often than people expect.</span>
                 </li>
               </ul>
@@ -237,7 +237,7 @@ export default function ContinuedEngagement() {
 
           {/* Fellowships */}
           <section className="mb-16">
-            <h2 className="text-3xl text-[#18234e] font-semibold mb-3 text-center">Fellowships &amp; programs</h2>
+            <h2 className="text-3xl text-brand font-semibold mb-3 text-center">Fellowships &amp; programs</h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
               Structured ways to do mentored research over a term or a summer. Deadlines move every year, so if one is closed,
               note it and set a reminder for the next round.
@@ -254,12 +254,12 @@ export default function ContinuedEngagement() {
                   href={p.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex flex-col bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow focus:outline-none focus:ring-2 focus:ring-[#18234e]"
+                  className="surface-card interactive-card group flex flex-col p-6 focus:outline-none focus:ring-2 focus:ring-brand"
                   aria-label={p.name}
                 >
                   <div className="flex items-center gap-2 mb-2">
                     <Badge label={p.track} color={trackColors[p.track]} />
-                    <h3 className="text-lg font-semibold text-gray-900 group-hover:text-[#18234e] transition-colors">{p.name}</h3>
+                    <h3 className="text-lg font-semibold text-brand group-hover:text-brand transition-colors">{p.name}</h3>
                     <span className="ml-auto"><ExternalIcon /></span>
                   </div>
                   <p className="text-sm text-gray-700">{p.note}</p>
@@ -270,18 +270,18 @@ export default function ContinuedEngagement() {
 
           {/* Landscape */}
           <section className="mb-16">
-            <h2 className="text-3xl text-[#18234e] font-semibold mb-3 text-center">Who is doing the work</h2>
+            <h2 className="text-3xl text-brand font-semibold mb-3 text-center">Who is doing the work</h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
               A rough map of where technical and policy AI safety happens. Useful for knowing whose papers to read, whose
               talks to watch, and where to eventually apply.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {landscape.map((cat) => (
-                <div key={cat.group} className="bg-white rounded-lg shadow-md p-6">
-                  <h3 className="font-bold text-[#18234e] mb-3">{cat.group}</h3>
+                <div key={cat.group} className="surface-card p-6">
+                  <h3 className="font-bold text-brand mb-3">{cat.group}</h3>
                   <div className="flex flex-wrap gap-2">
                     {cat.orgs.map((o) => (
-                      <span key={o} className="inline-block text-sm bg-[#f2f3f7] text-gray-700 rounded-full px-3 py-1">{o}</span>
+                      <span key={o} className="inline-block text-sm bg-brand-soft text-gray-700 rounded-full px-3 py-1">{o}</span>
                     ))}
                   </div>
                 </div>
@@ -292,7 +292,7 @@ export default function ContinuedEngagement() {
                 href="https://www.aisafety.com/landscape-map"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 text-[#18234e] font-semibold hover:underline"
+                className="inline-flex items-center gap-2 text-brand font-semibold hover:underline"
               >
                 Explore the full landscape map: 340+ orgs, programs, and projects <ExternalIcon />
               </a>
@@ -301,8 +301,8 @@ export default function ContinuedEngagement() {
 
           {/* Career advice & job boards */}
           <section className="mb-16">
-            <h2 className="text-3xl text-[#18234e] font-semibold mb-6 text-center">Career advice &amp; jobs</h2>
-            <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100 divide-y divide-gray-100">
+            <h2 className="text-3xl text-brand font-semibold mb-6 text-center">Career advice &amp; jobs</h2>
+            <div className="surface-card p-6 divide-y divide-gray-100">
               {advice.map((a) => (
                 <a
                   key={a.url}
@@ -312,7 +312,7 @@ export default function ContinuedEngagement() {
                   className="group flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0 focus:outline-none"
                   aria-label={a.title}
                 >
-                  <span className="text-gray-800 group-hover:text-[#18234e] font-medium transition-colors">{a.title}</span>
+                  <span className="text-gray-800 group-hover:text-brand font-medium transition-colors">{a.title}</span>
                   <ExternalIcon />
                 </a>
               ))}
@@ -321,7 +321,7 @@ export default function ContinuedEngagement() {
 
           {/* CTA */}
           <section>
-            <div className="bg-[#18234e] text-white rounded-xl p-8">
+            <div className="bg-brand text-white rounded-2xl p-6 sm:p-8">
               <h2 className="text-2xl font-bold mb-2">Keep going with us</h2>
               <p className="text-white/80 mb-6">
                 The easiest place to stay engaged is right here on campus: reading groups, projects, and people working on the same thing.
@@ -329,13 +329,13 @@ export default function ContinuedEngagement() {
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/get-involved"
-                  className="inline-flex items-center bg-white text-[#18234e] font-semibold px-6 py-3 rounded-full hover:bg-[#f2f3f7] transition-colors"
+                  className="button-inverse"
                 >
                   Get involved with AISCI →
                 </Link>
                 <Link
                   href="/resources"
-                  className="inline-flex items-center border border-white/40 text-white font-semibold px-6 py-3 rounded-full hover:bg-white/10 transition-colors"
+                  className="button-outline-light"
                 >
                   Back to resources →
                 </Link>

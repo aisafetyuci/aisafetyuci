@@ -43,7 +43,7 @@ const formatColors: Record<string, string> = {
   Article: 'bg-sky-100 text-sky-700',
   Report: 'bg-indigo-100 text-indigo-700',
   Essay: 'bg-violet-100 text-violet-700',
-  Paper: 'bg-[#18234e]/10 text-[#18234e]',
+  Paper: 'bg-brand/10 text-brand',
 }
 
 const reading = [
@@ -128,33 +128,33 @@ const reading = [
 
 export default function Resources() {
   return (
-    <main className="min-h-screen bg-white">
-      <div className="container mx-auto px-4 pt-12 pb-2">
-        <div className="border-b border-gray-200 pb-8">
-          <h1 className="text-5xl font-bold text-[#18234e]">Resources</h1>
+    <main className="min-h-screen bg-brand-wash">
+      <div className="site-container pt-12 pb-2">
+        <div className="page-header">
+          <h1 className="page-title">Resources</h1>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 pt-8 pb-16">
+      <div className="site-container pt-8 pb-16">
         <div className="max-w-6xl mx-auto">
 
           {/* 0. Watch first */}
           <section className="mb-16">
-            <h2 className="text-3xl text-[#18234e] font-semibold mb-3 text-center">Start here</h2>
+            <h2 className="text-3xl text-brand font-semibold mb-3 text-center">Start here</h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
               <em>We're Not Ready for Superintelligence</em> is a walkthrough of the{' '}
               <a
                 href="https://ai-2027.com/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#18234e] font-medium hover:underline"
+                className="text-brand font-medium hover:underline"
               >
                 <em>AI 2027</em>
               </a>{' '}
               scenario, one expert view of where things might be headed.
             </p>
             <div className="max-w-4xl mx-auto">
-              <div className="relative w-full rounded-xl overflow-hidden shadow-lg bg-black" style={{ paddingTop: '56.25%' }}>
+              <div className="relative w-full rounded-2xl overflow-hidden border border-brand-border shadow-card bg-black" style={{ paddingTop: '56.25%' }}>
                 <iframe
                   className="absolute inset-0 w-full h-full"
                   src="https://www.youtube-nocookie.com/embed/5KVDDfAkRgc"
@@ -168,7 +168,7 @@ export default function Resources() {
 
           {/* 1. Start with a course */}
           <section className="mb-16">
-            <h2 className="text-3xl text-[#18234e] font-semibold mb-6 text-center">Courses &amp; programs</h2>
+            <h2 className="text-3xl text-brand font-semibold mb-6 text-center">Courses &amp; programs</h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
               Two tracks: a general intro on the left, and the technical research pipeline on the right.
             </p>
@@ -178,7 +178,7 @@ export default function Resources() {
                 href="https://bluedot.org/courses/future-of-ai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col bg-white rounded-xl shadow-lg p-8 hover:shadow-xl hover:border-[#18234e]/30 border border-transparent transition-all focus:outline-none focus:ring-2 focus:ring-[#18234e] md:row-start-1 md:col-start-1"
+                className="surface-card interactive-card group flex flex-col p-8 transition-all focus:outline-none focus:ring-2 focus:ring-brand md:row-start-1 md:col-start-1"
                 aria-label="BlueDot: The Future of AI course"
               >
                 <div className="flex items-center gap-4 mb-4">
@@ -188,7 +188,7 @@ export default function Resources() {
                   <Badge label="Course" color="bg-emerald-100 text-emerald-700" />
                   <span className="ml-auto"><ExternalIcon /></span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">BlueDot — The Future of AI</h3>
+                <h3 className="text-2xl font-bold text-brand mb-2">BlueDot — The Future of AI</h3>
                 <p className="text-gray-700 mb-4">
                   Finish in an evening with a clearer picture of frontier AI, the risks, and what's being done about them. The standard on-ramp into the field.
                 </p>
@@ -199,31 +199,31 @@ export default function Resources() {
                   <span aria-hidden="true">·</span>
                   <span>Self-paced</span>
                 </div>
-                <div className="mt-5 text-[#18234e] font-semibold text-sm group-hover:underline">
+                <div className="mt-5 text-brand font-semibold text-sm group-hover:underline">
                   Start the course →
                 </div>
               </a>
 
               <details className="group md:row-start-2 md:col-start-1">
-                <summary className="cursor-pointer select-none list-none bg-white rounded-lg shadow-md px-5 py-4 flex items-center justify-between gap-3 font-semibold text-[#18234e] hover:bg-gray-50 transition-colors [&::-webkit-details-marker]:hidden">
+                <summary className="surface-card cursor-pointer select-none list-none px-5 py-4 flex items-center justify-between gap-3 font-semibold text-brand hover:bg-gray-50 transition-colors [&::-webkit-details-marker]:hidden">
                   <span>More on the strategy track</span>
                   <svg className="w-5 h-5 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
-                <div className="mt-3 bg-white rounded-lg shadow-md p-5 flex flex-col gap-1">
+                <div className="surface-card mt-3 p-5 flex flex-col gap-1">
                   <a
                     href="https://bluedot.org/courses/agi-strategy"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block rounded-lg p-4 -mx-1 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#18234e]"
+                    className="block rounded-lg p-4 -mx-1 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
                     aria-label="BlueDot: AGI Strategy course"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <Badge label="Course" color="bg-emerald-100 text-emerald-700" />
                       <ExternalIcon />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-1">BlueDot — AGI Strategy</h3>
+                    <h3 className="text-lg font-bold text-brand mb-1">BlueDot — AGI Strategy</h3>
                     <p className="text-sm text-gray-500 mb-2">25 hours · Cohort · Pay-what-you-want</p>
                     <p className="text-gray-700 text-sm">
                       The serious follow-up to Future of AI: development trajectories, possible outcomes, and what strategic interventions might steer things well.
@@ -234,14 +234,14 @@ export default function Resources() {
                     href="https://constellation.org/programs/astra"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block rounded-lg p-4 -mx-1 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#18234e]"
+                    className="block rounded-lg p-4 -mx-1 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
                     aria-label="Astra Fellowship by Constellation — strategy and governance stream"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <Badge label="Fellowship" color="bg-orange-100 text-orange-700" />
                       <ExternalIcon />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-1">Astra Fellowship — Strategy &amp; Governance</h3>
+                    <h3 className="text-lg font-bold text-brand mb-1">Astra Fellowship — Strategy &amp; Governance</h3>
                     <p className="text-sm text-gray-500 mb-2">Constellation · 5 months · Berkeley · Paid</p>
                     <p className="text-gray-700 text-sm">
                       In-person stream for catastrophic-risk policy, AI governance, and field-building projects with senior advisors.
@@ -254,7 +254,7 @@ export default function Resources() {
                 href="https://learn.arena.education/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col bg-white rounded-xl shadow-lg p-8 hover:shadow-xl hover:border-[#18234e]/30 border border-transparent transition-all focus:outline-none focus:ring-2 focus:ring-[#18234e] md:row-start-1 md:col-start-2"
+                className="surface-card interactive-card group flex flex-col p-8 transition-all focus:outline-none focus:ring-2 focus:ring-brand md:row-start-1 md:col-start-2"
                 aria-label="ARENA: Alignment Research Engineer Accelerator"
               >
                 <div className="flex items-center gap-4 mb-4">
@@ -264,7 +264,7 @@ export default function Resources() {
                   <Badge label="Technical" color="bg-indigo-100 text-indigo-700" />
                   <span className="ml-auto"><ExternalIcon /></span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">ARENA — Alignment Research Engineer Accelerator</h3>
+                <h3 className="text-2xl font-bold text-brand mb-2">ARENA — Alignment Research Engineer Accelerator</h3>
                 <p className="text-gray-700 mb-4">
                   Hands-on technical curriculum: transformers, RL, mech interp, and evals. The standard pipeline for engineers entering alignment research.
                 </p>
@@ -275,31 +275,31 @@ export default function Resources() {
                   <span aria-hidden="true">·</span>
                   <span>Code-heavy</span>
                 </div>
-                <div className="mt-5 text-[#18234e] font-semibold text-sm group-hover:underline">
+                <div className="mt-5 text-brand font-semibold text-sm group-hover:underline">
                   Explore the curriculum →
                 </div>
               </a>
 
               <details className="group md:row-start-2 md:col-start-2">
-                <summary className="cursor-pointer select-none list-none bg-white rounded-lg shadow-md px-5 py-4 flex items-center justify-between gap-3 font-semibold text-[#18234e] hover:bg-gray-50 transition-colors [&::-webkit-details-marker]:hidden">
+                <summary className="surface-card cursor-pointer select-none list-none px-5 py-4 flex items-center justify-between gap-3 font-semibold text-brand hover:bg-gray-50 transition-colors [&::-webkit-details-marker]:hidden">
                   <span>Research fellowships</span>
                   <svg className="w-5 h-5 transition-transform duration-200 group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
-                <div className="mt-3 bg-white rounded-lg shadow-md p-5 flex flex-col gap-1">
+                <div className="surface-card mt-3 p-5 flex flex-col gap-1">
                   <a
                     href="https://supervisedprogramforalignment.org/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block rounded-lg p-4 -mx-1 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#18234e]"
+                    className="block rounded-lg p-4 -mx-1 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
                     aria-label="SPAR: Supervised Program for Alignment Research"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <Badge label="Fellowship" color="bg-orange-100 text-orange-700" />
                       <ExternalIcon />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-1">SPAR</h3>
+                    <h3 className="text-lg font-bold text-brand mb-1">SPAR</h3>
                     <p className="text-sm text-gray-500 mb-2">Supervised Program for Alignment Research</p>
                     <p className="text-gray-700 text-sm">
                       Remote, part-time, mentor-led research projects. Lower barrier to entry than MATS, great as a first research experience.
@@ -310,14 +310,14 @@ export default function Resources() {
                     href="https://www.matsprogram.org/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block rounded-lg p-4 -mx-1 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-[#18234e]"
+                    className="block rounded-lg p-4 -mx-1 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
                     aria-label="MATS: ML Alignment & Theory Scholars"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <Badge label="Fellowship" color="bg-orange-100 text-orange-700" />
                       <ExternalIcon />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-1">MATS</h3>
+                    <h3 className="text-lg font-bold text-brand mb-1">MATS</h3>
                     <p className="text-sm text-gray-500 mb-2">ML Alignment &amp; Theory Scholars</p>
                     <p className="text-gray-700 text-sm">
                       Selective ~10-week paid research program. You're matched with a senior alignment researcher and ship a real project.
@@ -331,7 +331,7 @@ export default function Resources() {
 
           {/* 2. Essential reading */}
           <section className="mb-16">
-            <h2 className="text-3xl text-[#18234e] font-semibold mb-6 text-center">Essential reading</h2>
+            <h2 className="text-3xl text-brand font-semibold mb-6 text-center">Essential reading</h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
               The eleven pieces 80,000 Hours considers the best on-ramp to understanding AI risk and where the field is going.
             </p>
@@ -342,10 +342,10 @@ export default function Resources() {
                     href={r.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex gap-5 bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition-shadow focus:outline-none focus:ring-2 focus:ring-[#18234e]"
+                    className="surface-card interactive-card group flex gap-5 p-6 focus:outline-none focus:ring-2 focus:ring-brand"
                     aria-label={`${r.title} by ${r.authors}`}
                   >
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-[#18234e]/10 text-[#18234e] font-bold flex items-center justify-center text-lg">
+                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center text-lg">
                       {i + 1}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -354,7 +354,7 @@ export default function Resources() {
                         <span className="text-sm text-gray-500">{r.authors}</span>
                         <span className="ml-auto"><ExternalIcon /></span>
                       </div>
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1 group-hover:text-[#18234e] transition-colors">
+                      <h3 className="text-lg font-semibold text-brand mb-1 group-hover:text-brand transition-colors">
                         {r.title}
                       </h3>
                       <p className="text-gray-700 text-sm">{r.summary}</p>
@@ -369,7 +369,7 @@ export default function Resources() {
                 href="https://80000hours.org/articles/11-essential-resources-ai-risk/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#18234e] font-medium hover:underline"
+                className="text-brand font-medium hover:underline"
               >
                 read the original list →
               </a>
@@ -380,15 +380,15 @@ export default function Resources() {
           <section className="mb-8">
             <Link
               href="/continued-engagement"
-              className="group block bg-white rounded-xl shadow-md p-8 hover:shadow-xl transition-shadow border border-gray-100 focus:outline-none focus:ring-2 focus:ring-[#18234e]"
+              className="surface-card interactive-card group block p-8 focus:outline-none focus:ring-2 focus:ring-brand"
               aria-label="Continued engagement: where to go next in AI safety"
             >
               <div className="flex items-center justify-between gap-4 flex-wrap">
                 <div>
-                  <h2 className="text-2xl font-bold text-[#18234e] mb-1">Where to go next</h2>
+                  <h2 className="text-2xl font-bold text-brand mb-1">Where to go next</h2>
                   <p className="text-gray-600">Newsletters and podcasts to follow, ways to build research skills, fellowships to apply to, and a map of the orgs doing the work.</p>
                 </div>
-                <span className="text-[#18234e] text-lg font-semibold whitespace-nowrap group-hover:translate-x-1 transition-transform">
+                <span className="text-brand text-lg font-semibold whitespace-nowrap group-hover:translate-x-1 transition-transform">
                   Continued engagement →
                 </span>
               </div>
@@ -397,13 +397,13 @@ export default function Resources() {
 
           {/* 4. Work on this CTA */}
           <section>
-            <div className="bg-[#18234e] text-white rounded-xl p-8">
+            <div className="bg-brand text-white rounded-2xl p-6 sm:p-8">
               <h2 className="text-2xl font-bold mb-2">Looking to work on this?</h2>
               <p className="text-white/80 mb-6">The best place to start is on your own campus. Or browse open roles on the 80,000 Hours AI safety &amp; policy job board.</p>
               <div className="flex flex-wrap gap-3">
                 <Link
                   href="/get-involved"
-                  className="inline-flex items-center bg-white text-[#18234e] font-semibold px-6 py-3 rounded-full hover:bg-[#f2f3f7] transition-colors"
+                  className="button-inverse"
                 >
                   Get involved with AISCI →
                 </Link>
@@ -411,7 +411,7 @@ export default function Resources() {
                   href="https://jobs.80000hours.org/?refinementList%5Btags_area%5D%5B0%5D=AI%20safety%20%26%20policy"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center border border-white/40 text-white font-semibold px-6 py-3 rounded-full hover:bg-white/10 transition-colors"
+                  className="button-outline-light"
                 >
                   See jobs →
                 </a>

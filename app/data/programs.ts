@@ -20,6 +20,7 @@ export type Program = {
   blurb: string
   status: ProgramStatus
   applyHref: string
+  applicationDeadline?: { label: string; date: string }
   secondary?: { href: string; label: string }
 }
 
@@ -29,6 +30,7 @@ export const programs: Program[] = [
     title: 'Intro Fellowship, Fall 2026',
     blurb: 'Technical AI safety reading group, 8 weeks.',
     status: { label: 'Applications Open', tone: 'open' },
+    applicationDeadline: { label: 'October 6, 2026', date: '2026-10-06' },
     applyHref: 'https://airtable.com/appKZNlVqsXmdMztH/pagFgRZ9bLP6ZfZbt/form',
   },
   {

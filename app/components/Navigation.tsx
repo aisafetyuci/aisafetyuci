@@ -3,8 +3,17 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+
+const navigation = [
+  { href: '/get-involved', label: 'Get Involved' },
+  { href: '/resources', label: 'Resources' },
+  { href: '/contact', label: 'Contact' },
+  { href: '/team', label: 'Team' },
+]
 
 export default function Navigation() {
+  const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -16,12 +25,13 @@ export default function Navigation() {
   }, [])
 
   return (
-    <nav className="bg-white sticky top-0 z-50">
-      <div className="container mx-auto px-4">
+    <nav aria-label="Main navigation" className="sticky top-0 z-50 border-b border-brand-border/70 bg-white/95 backdrop-blur-sm">
+      <div className="site-container">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2 text-xl font-bold text-black hover:text-gray-600 transition-colors">
-            <Image src="/favicon.png" alt="AI Safety Collective at Irvine logo" width={64} height={64} priority className="hidden md:block" />
-            <span className="inline-flex" aria-label={scrolled ? 'AISCI' : 'AI Safety Collective at Irvine'}>
+          <Link href="/" className="flex min-w-0 items-center gap-2 text-lg font-semibold text-brand hover:text-brand-accent transition-colors">
+            <Image src="/favicon.png" alt="AI Safety Collective at Irvine logo" width={48} height={48} priority className="h-12 w-12 shrink-0" />
+            <span className="sm:hidden">AISCI</span>
+            <span className="hidden sm:inline-flex" aria-label={scrolled ? 'AISCI' : 'AI Safety Collective at Irvine'}>
               {'AI Safety Collective at Irvine'.split('').map((ch, i) => {
                 const kept = new Set([0, 1, 3, 10, 24]).has(i)
                 return (
@@ -45,25 +55,20 @@ export default function Navigation() {
             </span>
           </Link>
 
-          <div className="hidden md:flex space-x-8">
-            <Link href="/get-involved" className="text-gray-900 hover:text-[#18234e] transition-colors font-medium">
-              Get Involved
-            </Link>
-            <Link href="/resources" className="text-gray-900 hover:text-[#18234e] transition-colors font-medium">
-              Resources
-            </Link>
-            <Link href="/contact" className="text-gray-900 hover:text-[#18234e] transition-colors font-medium">
-              Contact
-            </Link>
-            <Link href="/team" className="text-gray-900 hover:text-[#18234e] transition-colors font-medium">
-              Team
-            </Link>
+          <div className="hidden lg:flex items-center gap-2">
+            {navigation.map(({ href, label }) => (
+              <Link key={href} href={href} aria-current={pathname === href ? 'page' : undefined} className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${pathname === href ? 'bg-brand-soft text-brand' : 'text-gray-600 hover:bg-brand-wash hover:text-brand'}`}>
+                {label}
+              </Link>
+            ))}
           </div>
 
           <button
-            className="md:hidden text-gray-900 hover:text-[#18234e] transition-colors p-2"
+            className="lg:hidden rounded-lg text-brand hover:bg-brand-soft transition-colors p-2"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
+            aria-expanded={isOpen}
+            aria-controls="mobile-navigation"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isOpen ? (
@@ -76,36 +81,13 @@ export default function Navigation() {
         </div>
 
         {isOpen && (
-          <div className="md:hidden pb-4">
-            <div className="flex flex-col space-y-3">
-              <Link
-                href="/get-involved"
-                className="text-gray-900 hover:text-[#18234e] transition-colors font-medium"
-                onClick={() => setIsOpen(false)}
-              >
-                Get Involved
-              </Link>
-              <Link
-                href="/resources"
-                className="text-gray-900 hover:text-[#18234e] transition-colors font-medium"
-                onClick={() => setIsOpen(false)}
-              >
-                Resources
-              </Link>
-              <Link
-                href="/contact"
-                className="text-gray-900 hover:text-[#18234e] transition-colors font-medium"
-                onClick={() => setIsOpen(false)}
-              >
-                Contact
-              </Link>
-              <Link
-                href="/team"
-                className="text-gray-900 hover:text-[#18234e] transition-colors font-medium"
-                onClick={() => setIsOpen(false)}
-              >
-                Team
-              </Link>
+          <div id="mobile-navigation" className="lg:hidden pb-4">
+            <div className="flex flex-col gap-1">
+              {navigation.map(({ href, label }) => (
+                <Link key={href} href={href} aria-current={pathname === href ? 'page' : undefined} onClick={() => setIsOpen(false)} className={`rounded-lg px-4 py-3 font-medium transition-colors ${pathname === href ? 'bg-brand-soft text-brand' : 'text-gray-600 hover:bg-brand-wash hover:text-brand'}`}>
+                  {label}
+                </Link>
+              ))}
             </div>
           </div>
         )}

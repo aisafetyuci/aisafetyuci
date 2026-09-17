@@ -1,3 +1,128 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-brand-wash text-gray-600 antialiased;
+  }
+
+  h1, h2, h3 {
+    @apply tracking-tight;
+  }
+
+  :where(a, button, input, summary):focus-visible {
+    outline: 2px solid #53688a;
+    outline-offset: 4px;
+  }
+
+  ::selection {
+    background: #dce1eb;
+    color: #18234e;
+  }
+}
+
+@layer components {
+  .site-container {
+    @apply mx-auto w-full max-w-7xl px-5 sm:px-8;
+  }
+
+  .page-header {
+    @apply border-b border-brand-border pb-8 sm:pb-10;
+  }
+
+  .page-title {
+    @apply text-4xl font-semibold leading-tight tracking-tight text-brand sm:text-5xl;
+  }
+
+  .surface-card {
+    @apply rounded-2xl border border-brand-border bg-white shadow-card;
+  }
+
+  .interactive-card {
+    @apply transition-[border-color,box-shadow] hover:border-brand-muted hover:shadow-card-hover;
+  }
+
+  .button-primary, .button-secondary, .button-inverse, .button-outline-light {
+    @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-colors;
+  }
+
+  .button-primary {
+    @apply bg-brand text-white hover:bg-brand-hover;
+  }
+
+  .button-secondary {
+    @apply border border-brand-border bg-white text-brand hover:bg-brand-soft;
+  }
+
+  .button-inverse {
+    @apply bg-white text-brand hover:bg-brand-soft;
+  }
+
+  .button-outline-light {
+    @apply border border-white/40 text-white hover:bg-white/10;
+  }
+
+  .hero-photo-control {
+    @apply inline-flex h-9 w-9 items-center justify-center rounded-full text-sm text-brand transition-colors hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand;
+  }
+}
+
+.ai-progress-headline {
+  container-type: inline-size;
+}
+
+.ai-progress-heading {
+  /* Size against the text column so each curated line fits beside the photos, too. */
+  font-size: clamp(1.375rem, 8.5cqw, 3.25rem);
+  line-height: 1.15;
+}
+
+.collaborator-marquee {
+  overflow: hidden;
+  mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+}
+
+.collaborator-track {
+  display: flex;
+  width: max-content;
+  animation: collaborator-scroll 65s linear infinite;
+}
+
+.collaborator-group {
+  display: flex;
+  flex-shrink: 0;
+  gap: 2.5rem;
+  padding-inline: 1.25rem;
+}
+
+.collaborator-group > li {
+  width: 11rem;
+  flex-shrink: 0;
+}
+
+.collaborator-marquee:hover .collaborator-track,
+.collaborator-marquee:focus-within .collaborator-track,
+.collaborator-marquee[data-paused='true'] .collaborator-track {
+  animation-play-state: paused;
+}
+
+@keyframes collaborator-scroll {
+  to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collaborator-marquee {
+    overflow-x: auto;
+    mask-image: none;
+  }
+
+  .collaborator-track {
+    animation: none;
+  }
+
+  .collaborator-group[aria-hidden='true'],
+  .collaborator-controls {
+    display: none;
+  }
+}

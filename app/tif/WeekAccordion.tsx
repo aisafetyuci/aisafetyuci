@@ -86,7 +86,7 @@ export default function WeekAccordion() {
           const number = Number(event.target.value)
           openWeek(number)
           window.location.hash = `week-${number}`
-        }} className="w-full rounded-lg border border-brand-border bg-white p-3 text-sm text-brand lg:hidden">
+        }} className="w-full rounded-lg border border-brand-border bg-white p-3 text-base sm:text-sm text-brand lg:hidden">
           {weeks.map((week) => <option key={week.number} value={week.number} disabled={week.comingSoon}>{week.label}: {week.title}{week.comingSoon ? ' — Coming soon' : ''}</option>)}
         </select>
         <nav aria-label="Fellowship weeks" className="hidden max-h-[calc(100vh-8rem)] overflow-y-auto pr-2 lg:block">
@@ -122,7 +122,7 @@ export default function WeekAccordion() {
             }} onToggle={(event) => {
               if (event.currentTarget.open) setActiveWeek(week.number)
             }} className="group/week surface-card scroll-mt-24 overflow-hidden open:border-brand-muted">
-              <summary className="flex cursor-pointer list-none items-center gap-5 p-6 transition-colors hover:bg-brand-wash sm:p-8 [&::-webkit-details-marker]:hidden">
+              <summary className="flex cursor-pointer list-none items-center gap-3 p-4 sm:gap-5 transition-colors hover:bg-brand-wash sm:p-8 [&::-webkit-details-marker]:hidden">
                 <div className="min-w-0 flex-1">
                   <div className="mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm">
                     <span className="font-semibold text-brand-accent">{week.label}</span>
@@ -135,9 +135,9 @@ export default function WeekAccordion() {
                   <Chevron className="transition-transform group-open/week:rotate-180" />
                 </span>
               </summary>
-              <div className="border-t border-brand-border px-6 pb-2 pt-6 sm:px-8 sm:pt-8">
+              <div className="border-t border-brand-border px-4 pb-2 pt-4 sm:px-8 sm:pt-8">
                 {!!week.objectives?.length && (
-                  <section aria-labelledby={`objectives-${week.number}`} className="mb-8 rounded-xl bg-brand-wash p-5 sm:p-6">
+                  <section aria-labelledby={`objectives-${week.number}`} className="mb-8 rounded-xl bg-brand-wash p-4 sm:p-6">
                     <h4 id={`objectives-${week.number}`} className="mb-3 text-sm font-semibold text-brand">Learning objectives</h4>
                     <ul className="list-disc space-y-2 pl-5 text-sm leading-relaxed text-gray-600 marker:text-brand-muted">
                       {week.objectives.map((objective) => <li key={objective}>{objective}</li>)}

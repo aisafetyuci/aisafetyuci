@@ -205,7 +205,7 @@ export default function ContinuedEngagement() {
           {/* Build skills */}
           <section className="mb-16">
             <h2 className="text-3xl text-brand font-semibold mb-8 text-center">Build real skills</h2>
-            <div className="surface-card p-8">
+            <div className="surface-card p-5 sm:p-8">
               <ul className="space-y-4 text-gray-700">
                 <li className="flex gap-3">
                   <span className="text-brand font-bold flex-shrink-0">1.</span>
@@ -242,7 +242,7 @@ export default function ContinuedEngagement() {
               Structured ways to do mentored research over a term or a summer. Deadlines move every year, so if one is closed,
               note it and set a reminder for the next round.
             </p>
-            <div className="flex items-center justify-center gap-3 mb-6 text-sm text-gray-500">
+            <div className="flex flex-wrap items-center justify-center gap-3 mb-6 sm:flex-nowrap text-sm text-gray-500">
               <span className="flex items-center gap-1.5"><Badge label="Technical" color={trackColors.Technical} /></span>
               <span className="flex items-center gap-1.5"><Badge label="Policy" color={trackColors.Policy} /></span>
               <span className="flex items-center gap-1.5"><Badge label="Both" color={trackColors.Both} /> research or governance</span>

@@ -2,7 +2,6 @@
 
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import PlaybackIcon from './PlaybackIcon'
 
 const slides = [
   [
@@ -26,7 +25,6 @@ const slides = [
 
 export default function HeroPhotos() {
   const [active, setActive] = useState(0)
-  const [paused, setPaused] = useState(false)
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(true)
@@ -40,14 +38,13 @@ export default function HeroPhotos() {
   }, [])
 
   useEffect(() => {
-    if (paused || hovered || focused || reducedMotion) return
+    if (hovered || focused || reducedMotion) return
     const timer = window.setInterval(() => setActive((index) => (index + 1) % slides.length), 6500)
     return () => window.clearInterval(timer)
-  }, [paused, hovered, focused, reducedMotion])
+  }, [hovered, focused, reducedMotion])
 
   function select(index: number) {
     setActive((index + slides.length) % slides.length)
-    setPaused(true)
   }
 
   return (
@@ -85,29 +82,13 @@ export default function HeroPhotos() {
                   src={photo.src}
                   alt={photo.alt}
                   fill
-                  sizes={photos.length === 1 ? '(max-width: 1023px) 100vw, 55vw' : '(max-width: 1023px) 50vw, 28vw'}
-                  priority={index === 0}
+                  sizes={photos.length === 1 ? '(max-width: 959px) 100vw, 896px' : '(max-width: 959px) 50vw, 448px'}
                   className="object-cover"
                 />
               </div>
             ))}
           </div>
         ))}
-      </div>
-      <div className="mt-3 flex items-center justify-end gap-1">
-        <button type="button" onClick={() => select(active - 1)} aria-label="Previous photo" className="hero-photo-control">←</button>
-        <span className="min-w-10 text-center text-xs tabular-nums text-gray-500" aria-live={paused || reducedMotion ? 'polite' : 'off'}>
-          <span className="sr-only">Slide </span>{active + 1} / {slides.length}
-        </span>
-        <button type="button" onClick={() => select(active + 1)} aria-label="Next photo" className="hero-photo-control">→</button>
-        {!reducedMotion && (
-          <button type="button" onClick={() => {
-            setPaused(!paused)
-            if (paused) setFocused(false)
-          }} aria-label={paused ? 'Play photo slideshow' : 'Pause photo slideshow'} className="hero-photo-control ml-1">
-            <PlaybackIcon paused={paused} />
-          </button>
-        )}
       </div>
       <div className="mt-3 grid grid-cols-5 gap-2 px-1 sm:gap-3" role="group" aria-label="Choose a slide">
         {slides.map((photos, index) => (
@@ -117,15 +98,22 @@ export default function HeroPhotos() {
             onClick={() => select(index)}
             aria-label={`Show slide ${index + 1}`}
             aria-pressed={active === index}
-            className={`relative flex aspect-[3/2] gap-0.5 overflow-hidden rounded-lg transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand ${active === index ? 'ring-2 ring-brand ring-offset-2 ring-offset-brand-wash' : 'opacity-60 hover:opacity-100'}`}
+            className={`relative flex aspect-[3/2] gap-0.5 overflow-hidden rounded-lg transition-all focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand ${active === index ? 'ring-2 ring-brand ring-offset-2 ring-offset-white' : 'opacity-60 hover:opacity-100'}`}
           >
             {photos.map((photo) => (
               <span key={photo.src} className="relative min-w-0 flex-1">
-                <Image src={photo.src} alt="" fill sizes="(max-width: 640px) 18vw, 120px" className="object-cover" />
+                <Image src={photo.src} alt="" fill sizes="(max-width: 959px) 18vw, 170px" className="object-cover" />
               </span>
             ))}
           </button>
         ))}
+      </div>
+      <div className="mt-4 flex items-center justify-center gap-2">
+        <button type="button" onClick={() => select(active - 1)} aria-label="Previous photo" className="hero-photo-control">←</button>
+        <span className="min-w-10 text-center text-xs tabular-nums text-gray-500" aria-live={hovered || focused || reducedMotion ? 'polite' : 'off'}>
+          <span className="sr-only">Slide </span>{active + 1} / {slides.length}
+        </span>
+        <button type="button" onClick={() => select(active + 1)} aria-label="Next photo" className="hero-photo-control">→</button>
       </div>
     </div>
   )

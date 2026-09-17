@@ -37,7 +37,7 @@ export default function Contact() {
       <div className="site-container pt-8 pb-16">
         <div className="max-w-4xl mx-auto flex flex-col gap-6">
 
-          <div className="surface-card p-8">
+          <div className="surface-card p-5 sm:p-8">
             <h2 className="text-2xl font-semibold text-brand mb-2">Grab a coffee with us</h2>
             <p className="text-gray-600 mb-6">We love meeting people who are curious about AI safety; no background needed. Book a 30-minute chat and we'll buy you coffee and cover whatever's on your mind.</p>
 
@@ -68,7 +68,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="surface-card p-8">
+          <div className="surface-card p-5 sm:p-8">
             <h2 className="text-2xl font-semibold text-brand mb-6">Other ways to reach us</h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -85,7 +85,7 @@ export default function Contact() {
               <div>
                 <p className="text-gray-700 leading-relaxed mb-4">
                   Email us at{' '}
-                  <a href={`mailto:${links.email}`} className="text-brand font-semibold underline">
+                  <a href={`mailto:${links.email}`} className="break-words text-brand font-semibold underline">
                     {links.email}
                   </a>, or find all our links in one place on Linktree.
                 </p>
@@ -99,7 +99,7 @@ export default function Contact() {
             </div>
           </div>
 
-          <div className="surface-card p-8">
+          <div className="surface-card p-5 sm:p-8">
             <h2 className="text-2xl font-semibold text-brand mb-2">Stay in the loop</h2>
             <p className="text-gray-600 mb-6">Get occasional updates about events, fellowships, and AI safety news from AISCI.</p>
             <MailingListForm />

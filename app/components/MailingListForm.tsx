@@ -36,7 +36,7 @@ export default function MailingListForm({ prominent = false }: { prominent?: boo
   }
 
   return (
-    <form onSubmit={handleSubmit} className={prominent ? 'flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap' : 'flex gap-2 flex-wrap'}>
+    <form onSubmit={handleSubmit} className={prominent ? 'flex w-full flex-col gap-3 sm:flex-row sm:flex-wrap' : 'flex flex-col gap-2 sm:flex-row sm:flex-wrap'}>
       <label htmlFor={emailId} className="sr-only">Email address</label>
       <input
         id={emailId}
@@ -47,7 +47,7 @@ export default function MailingListForm({ prominent = false }: { prominent?: boo
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="your@email.com"
-        className={`border rounded-lg bg-white focus:outline-none focus:ring-2 border-gray-300 text-gray-900 placeholder-gray-500 ${prominent ? 'w-full min-w-0 flex-1 px-4 py-3 text-base focus:ring-brand-light sm:w-auto' : 'min-h-12 w-full min-w-0 flex-1 px-4 py-3 text-sm focus:ring-brand sm:w-auto'}`}
+        className={`border rounded-lg bg-white focus:outline-none focus:ring-2 border-gray-300 text-gray-900 placeholder-gray-500 ${prominent ? 'w-full min-w-0 flex-1 px-4 py-3 text-base focus:ring-brand-light sm:w-auto' : 'min-h-12 w-full min-w-0 flex-1 px-4 py-3 text-base sm:text-sm focus:ring-brand sm:w-auto'}`}
       />
       <button
         type="submit"

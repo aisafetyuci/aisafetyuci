@@ -178,7 +178,7 @@ export default function Resources() {
                 href="https://bluedot.org/courses/future-of-ai"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="surface-card interactive-card group flex flex-col p-8 transition-all focus:outline-none focus:ring-2 focus:ring-brand md:row-start-1 md:col-start-1"
+                className="surface-card interactive-card group flex flex-col p-5 sm:p-8 transition-all focus:outline-none focus:ring-2 focus:ring-brand md:row-start-1 md:col-start-1"
                 aria-label="BlueDot: The Future of AI course"
               >
                 <div className="flex items-center gap-4 mb-4">
@@ -192,7 +192,7 @@ export default function Resources() {
                 <p className="text-gray-700 mb-4">
                   Finish in an evening with a clearer picture of frontier AI, the risks, and what's being done about them. The standard on-ramp into the field.
                 </p>
-                <div className="text-sm text-gray-500 flex items-center gap-3 mt-auto">
+                <div className="text-sm text-gray-500 flex flex-wrap items-center gap-x-3 gap-y-1 mt-auto sm:flex-nowrap">
                   <span>2 hours</span>
                   <span aria-hidden="true">·</span>
                   <span>Free</span>
@@ -254,7 +254,7 @@ export default function Resources() {
                 href="https://learn.arena.education/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="surface-card interactive-card group flex flex-col p-8 transition-all focus:outline-none focus:ring-2 focus:ring-brand md:row-start-1 md:col-start-2"
+                className="surface-card interactive-card group flex flex-col p-5 sm:p-8 transition-all focus:outline-none focus:ring-2 focus:ring-brand md:row-start-1 md:col-start-2"
                 aria-label="ARENA: Alignment Research Engineer Accelerator"
               >
                 <div className="flex items-center gap-4 mb-4">
@@ -268,7 +268,7 @@ export default function Resources() {
                 <p className="text-gray-700 mb-4">
                   Hands-on technical curriculum: transformers, RL, mech interp, and evals. The standard pipeline for engineers entering alignment research.
                 </p>
-                <div className="text-sm text-gray-500 flex items-center gap-3 mt-auto">
+                <div className="text-sm text-gray-500 flex flex-wrap items-center gap-x-3 gap-y-1 mt-auto sm:flex-nowrap">
                   <span>~5 weeks</span>
                   <span aria-hidden="true">·</span>
                   <span>Cohort or self-study</span>
@@ -342,10 +342,10 @@ export default function Resources() {
                     href={r.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="surface-card interactive-card group flex gap-5 p-6 focus:outline-none focus:ring-2 focus:ring-brand"
+                    className="surface-card interactive-card group flex gap-3 p-4 sm:gap-5 sm:p-6 focus:outline-none focus:ring-2 focus:ring-brand"
                     aria-label={`${r.title} by ${r.authors}`}
                   >
-                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center text-lg">
+                    <div className="flex-shrink-0 w-8 h-8 sm:w-12 sm:h-12 rounded-full bg-brand/10 text-brand font-bold flex items-center justify-center text-lg">
                       {i + 1}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -380,7 +380,7 @@ export default function Resources() {
           <section className="mb-8">
             <Link
               href="/continued-engagement"
-              className="surface-card interactive-card group block p-8 focus:outline-none focus:ring-2 focus:ring-brand"
+              className="surface-card interactive-card group block p-5 sm:p-8 focus:outline-none focus:ring-2 focus:ring-brand"
               aria-label="Continued engagement: where to go next in AI safety"
             >
               <div className="flex items-center justify-between gap-4 flex-wrap">

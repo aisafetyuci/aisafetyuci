@@ -64,7 +64,7 @@ export default function Navigation() {
           </div>
 
           <button
-            className="lg:hidden rounded-lg text-brand hover:bg-brand-soft transition-colors p-2"
+            className="lg:hidden rounded-lg text-brand hover:bg-brand-soft transition-colors p-3 sm:p-2"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
             aria-expanded={isOpen}

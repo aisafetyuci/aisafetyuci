@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 
-type Faq = { q: string; a: string }
+type Faq = { q: string; a: string; steps?: string[]; outro?: string }
 
 export default function Faqs({ faqs }: { faqs: Faq[] }) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
@@ -45,7 +45,15 @@ export default function Faqs({ faqs }: { faqs: Faq[] }) {
               className={`grid transition-[grid-template-rows] duration-200 ease-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
             >
               <div className="overflow-hidden">
-                <p className="px-5 pb-5 text-gray-700 leading-relaxed">{faq.a}</p>
+                <div className="px-5 pb-5 text-gray-700 leading-relaxed">
+                  <p>{faq.a}</p>
+                  {faq.steps && (
+                    <ol className="my-4 list-decimal space-y-3 pl-6 marker:font-semibold marker:text-brand">
+                      {faq.steps.map((step) => <li key={step} className="pl-2">{step}</li>)}
+                    </ol>
+                  )}
+                  {faq.outro && <p>{faq.outro}</p>}
+                </div>
               </div>
             </div>
           </div>

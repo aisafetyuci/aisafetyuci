@@ -4,6 +4,7 @@ import MailingListForm from './components/MailingListForm'
 import MissionStatement from './components/MissionStatement'
 import MemberCollaborations from './components/MemberCollaborations'
 import HomeHero from './components/HomeHero'
+import HeroPhotos from './components/HeroPhotos'
 
 const homeTitle = 'AI Safety Collective at Irvine'
 const homeDescription = 'AISCI is UC Irvine\'s student community for AI alignment and AI safety. Join our Intro Fellowship, reading groups, and research programs at UCI focused on reducing risk from advanced AI.'
@@ -55,9 +56,7 @@ export default function Home() {
         </div>
       </div>
 
-      <MemberCollaborations />
-
-      <div className="w-full bg-gray-50">
+      <div className="w-full border-y border-brand-border/60 bg-brand-wash">
         <div className="site-container py-16">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-semibold text-brand mb-10 text-center">Get Involved</h2>
@@ -97,7 +96,9 @@ export default function Home() {
         </div>
       </div>
 
-      <div id="events" className="w-full bg-white scroll-mt-16">
+      <MemberCollaborations />
+
+      <div id="events" className="w-full border-y border-brand-border/60 bg-brand-wash scroll-mt-16">
         <div className="site-container py-16">
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-semibold text-brand mb-2 text-center">Our Events</h2>
@@ -105,11 +106,21 @@ export default function Home() {
             <div>
               <div className="w-full rounded-xl overflow-hidden border border-gray-100 shadow-sm">
                 <iframe
+                  src="https://calendar.google.com/calendar/embed?mode=AGENDA&height=480&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&showTitle=0&showCalendars=0&src=NDg2OTI3NzUyZWFlYzI3OWNlNDk3MzRjYjVhMzVkZGE4MDMxNDBlMjVhYjBhZWJkM2EyMTRlZTJiZmFiMTU4ZUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%23616161"
+                  style={{ border: 0 }}
+                  width="100%"
+                  height="480"
+                  title="AISCI Events agenda"
+                  className="sm:hidden"
+                  loading="lazy"
+                />
+                <iframe
                   src="https://calendar.google.com/calendar/embed?height=600&wkst=1&ctz=America%2FLos_Angeles&showPrint=0&showTitle=0&showCalendars=0&src=NDg2OTI3NzUyZWFlYzI3OWNlNDk3MzRjYjVhMzVkZGE4MDMxNDBlMjVhYjBhZWJkM2EyMTRlZTJiZmFiMTU4ZUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t&color=%23616161"
                   style={{ border: 0 }}
                   width="100%"
                   height="600"
                   title="AISCI Calendar"
+                  className="hidden sm:block"
                 />
               </div>
 
@@ -117,6 +128,15 @@ export default function Home() {
           </div>
         </div>
       </div>
+      <section aria-labelledby="community-photos-heading" className="bg-white">
+        <div className="site-container py-16">
+          <div className="mx-auto max-w-4xl">
+            <h2 id="community-photos-heading" className="text-center text-3xl font-semibold text-brand">AISCI in Pictures</h2>
+            <p className="mb-10 mt-2 text-center text-gray-500">Photos from our discussions, events, and time together.</p>
+            <HeroPhotos />
+          </div>
+        </div>
+      </section>
     </main>
   )
 }

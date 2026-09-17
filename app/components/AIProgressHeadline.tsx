@@ -2,11 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { aiHighlights } from '../data/aiHighlights'
-import PlaybackIcon from './PlaybackIcon'
 
 export default function AIProgressHeadline() {
   const [active, setActive] = useState(0)
-  const [paused, setPaused] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(true)
 
   useEffect(() => {
@@ -18,12 +16,12 @@ export default function AIProgressHeadline() {
   }, [])
 
   useEffect(() => {
-    if (paused || reducedMotion) return
+    if (reducedMotion) return
     const timer = window.setInterval(() => {
       setActive((index) => (index + 1) % aiHighlights.length)
     }, 3000)
     return () => window.clearInterval(timer)
-  }, [paused, reducedMotion])
+  }, [reducedMotion])
 
   function select(index: number) {
     setActive((index + aiHighlights.length) % aiHighlights.length)
@@ -63,32 +61,6 @@ export default function AIProgressHeadline() {
         </span>
       </h1>
 
-      <div className="mt-4 flex items-center">
-        <div role="group" aria-label="Choose an AI progress example" className="flex items-center">
-          {aiHighlights.map((highlight, index) => (
-            <button
-              key={highlight.href}
-              type="button"
-              aria-label={`Show example ${index + 1}: Artificial intelligence is ${highlight.text}`}
-              aria-pressed={active === index}
-              onClick={() => select(index)}
-              className="flex h-9 w-7 items-center justify-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-brand"
-            >
-              <span className={`h-1.5 rounded-full transition-all motion-reduce:transition-none ${active === index ? 'w-4 bg-brand' : 'w-1.5 bg-brand/25'}`} />
-            </button>
-          ))}
-          {!reducedMotion && (
-            <button
-              type="button"
-              className="hero-photo-control ml-1"
-              aria-label={paused ? 'Play headline rotation' : 'Pause headline rotation'}
-              onClick={() => setPaused((current) => !current)}
-            >
-              <PlaybackIcon paused={paused} />
-            </button>
-          )}
-        </div>
-      </div>
     </div>
   )
 }

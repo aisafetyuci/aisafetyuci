@@ -6,12 +6,13 @@ export const links = {
   linktree: 'https://linktr.ee/aisafetyatuci',
 }
 
-// Coffee-chat booking links, one per facilitator. Restated manually in
+// Coffee-chat booking links, one per director. Restated manually in
 // docs/discord-info-channel.md.
 export const coffeeChats = [
-  { name: 'Dominic', url: 'https://cal.com/dominicmascetti/coffee' },
-  { name: 'Ivan', url: 'https://cal.com/ivanshishkin/quick-chat' },
-  { name: 'Prema', url: 'https://cal.com/prema-suthaharan/coffee' },
+  { name: 'Dominic', fullName: 'Dominic Mascetti', url: 'https://cal.com/dominicmascetti/coffee' },
+  { name: 'Ivan', fullName: 'Ivan Shishkin', url: 'https://cal.com/ivanshishkin/quick-chat' },
+  { name: 'Prema', fullName: 'Prema Suthaharan', url: 'https://cal.com/prema-suthaharan/coffee' },
+  { name: 'Swaraag', fullName: 'Swaraag Sistla', url: 'https://cal.com/swaraag' },
 ]
 
 // Weekly fellowship meeting logistics — used by /tif, /get-involved, and structured data.

@@ -5,11 +5,7 @@ import { useState } from 'react'
 type Faq = { q: string; a: string; steps?: string[]; outro?: string }
 
 export default function Faqs({ faqs }: { faqs: Faq[] }) {
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
-  const [pinnedIndex, setPinnedIndex] = useState<number | null>(null)
-
-  // Hover takes precedence over the pinned item, so only ever one is open.
-  const openIndex = hoveredIndex !== null ? hoveredIndex : pinnedIndex
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
 
   return (
     <div className="space-y-3">
@@ -19,12 +15,10 @@ export default function Faqs({ faqs }: { faqs: Faq[] }) {
           <div
             key={faq.q}
             className="surface-card overflow-hidden"
-            onMouseEnter={() => setHoveredIndex(i)}
-            onMouseLeave={() => setHoveredIndex(null)}
           >
             <button
               type="button"
-              onClick={() => setPinnedIndex(pinnedIndex === i ? null : i)}
+              onClick={() => setOpenIndex((current) => current === i ? null : i)}
               aria-expanded={isOpen}
               aria-controls={`faq-answer-${i}`}
               className="w-full flex items-center justify-between gap-3 text-left px-5 py-4 font-semibold text-brand hover:bg-gray-50 transition-colors cursor-pointer"
@@ -42,7 +36,7 @@ export default function Faqs({ faqs }: { faqs: Faq[] }) {
             </button>
             <div
               id={`faq-answer-${i}`}
-              className={`grid transition-[grid-template-rows] duration-200 ease-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+              hidden={!isOpen}
             >
               <div className="overflow-hidden">
                 <div className="px-5 pb-5 text-gray-700 leading-relaxed">

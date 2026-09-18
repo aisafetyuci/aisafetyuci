@@ -1,8 +1,8 @@
-// Sources reviewed September 17, 2026. Keep claims tied to the linked evidence.
+// Sources reviewed September 18, 2026. Keep claims tied to the linked evidence.
 export const aiHighlights = [
   {
-    text: 'tackling 90-year-old math problems.',
-    lines: ['tackling 90-year-old', 'math problems.'],
+    text: 'solving 90-year-old math problems.',
+    lines: ['solving 90-year-old', 'math problems.'],
     source: 'Navier–Stokes · reported proof',
     href: 'https://openai.com/index/navier-stokes-solution/',
   },
@@ -13,10 +13,10 @@ export const aiHighlights = [
     href: 'https://metr.org/blog/2026-08-26-openai-hugging-face-incident-investigation/',
   },
   {
-    text: 'learning to work across different robots.',
-    lines: ['learning to work across', 'different robots.'],
-    source: 'Gemini Robotics · Google DeepMind',
-    href: 'https://deepmind.google/blog/gemini-robotics-15-brings-ai-agents-into-the-physical-world/',
+    text: 'learning to paint with a robot.',
+    lines: ['learning to paint', 'with a robot.'],
+    source: 'Astra robot painting demo · thijs (@cdngdev)',
+    href: 'https://x.com/cdngdev/status/2097339677128982873',
   },
   {
     text: 'speeding up research on its own development.',

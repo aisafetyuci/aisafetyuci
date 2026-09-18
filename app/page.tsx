@@ -131,8 +131,7 @@ export default function Home() {
       <section aria-labelledby="community-photos-heading" className="bg-white">
         <div className="site-container py-16">
           <div className="mx-auto max-w-4xl">
-            <h2 id="community-photos-heading" className="text-center text-3xl font-semibold text-brand">AISCI in Pictures</h2>
-            <p className="mb-10 mt-2 text-center text-gray-500">Photos from our discussions, events, and time together.</p>
+            <h2 id="community-photos-heading" className="mb-10 text-center text-3xl font-semibold text-brand">Around AISCI</h2>
             <HeroPhotos />
           </div>
         </div>

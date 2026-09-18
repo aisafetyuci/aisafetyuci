@@ -60,7 +60,7 @@ const faqs = [
     steps: [
       'Apply to the Technical Intro Fellowship to get grounded in the field.',
       'Continue as an AISCI member for weekly research reading and discussion.',
-      'Work on research projects with the group or through external programs like Redwood Research, the U.S. AI Safety Institute, METR, or MATS.',
+      'Work on research projects with the group or apply to external research programs such as SPAR or MATS.',
     ],
     outro: "If you're not ready to apply yet, browse our /resources page to get oriented, or book a coffee chat with an organizer.",
   },
@@ -83,7 +83,7 @@ const membershipBenefits = [
   'Compute and research tools',
   'Weekly member meetings to read and discuss alignment research',
   'Small group discussions with alignment researchers and professors',
-  'Connections with top orgs like Redwood Research, the U.S. AI Safety Institute, and METR',
+  'Connections with researchers and others working in AI safety',
   'Opportunities for AI safety community workshops & retreats',
   'A community of talented students interested in reducing risks from advanced AI',
 ]

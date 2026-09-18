@@ -14,7 +14,7 @@ export default function HomeHero() {
           <div className="min-w-0 max-w-xl">
             <AIProgressHeadline />
             <p className="mt-5 max-w-lg text-base sm:mt-6 sm:text-lg leading-relaxed text-gray-600">
-              Learn how to contribute with other students at UC Irvine through our AI safety fellowship, research discussions, and events.
+              Navigating rapid AI progress may be humanity’s greatest challenge yet. AISCI focuses on reducing catastrophic risks from advanced AI systems and helping students at UC Irvine work on AI safety.
             </p>
             <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:flex-wrap">
               <Link href="/get-involved#intro-fellowship" className="button-primary">

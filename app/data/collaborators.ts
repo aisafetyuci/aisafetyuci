@@ -1,7 +1,6 @@
 // Member experience confirmed by AISCI. This is not a list of organizational sponsors.
 export const collaborators = [
   { name: 'METR', href: 'https://metr.org/', logo: '/images/collaborators/metr.svg' },
-  { name: 'Redwood Research', href: 'https://www.redwoodresearch.org/', logo: '/images/collaborators/redwood.svg' },
   { name: 'Kairos', href: 'https://kairos-project.org/', logo: '/images/collaborators/kairos.svg' },
   { name: 'Constellation Institute', href: 'https://constellation.org/', logo: '/images/collaborators/constellation-clean.svg' },
   { name: 'BlueDot Impact', href: 'https://bluedot.org/', logo: '/images/bluedot-logo.jpg' },

@@ -63,7 +63,7 @@ const feeds = [
   { name: 'Dwarkesh Podcast', author: 'Dwarkesh Patel', type: 'Podcast', url: 'https://www.dwarkesh.com/', note: 'Deep technical interviews with researchers and lab leaders.' },
   { name: 'Emerging Tech Policy', author: 'Emerging Tech Policy', type: 'Podcast', url: 'https://emergingtechpolicy.org/podcast/', note: 'How to actually work on AI and bio policy.' },
   { name: 'Cold Takes', author: 'Holden Karnofsky', type: 'Blog', url: 'https://www.cold-takes.com/', note: 'The "most important century" series and more.' },
-  { name: 'AI Futures Project', author: 'Kokotajlo et al.', type: 'Blog', url: 'https://blog.ai-futures.org/', note: 'Technically-grounded forecasting and scenarios.' },
+  { name: 'AI Futures Project', author: 'Kokotajlo et al.', type: 'Blog', url: 'https://blog.aifutures.org/', note: 'Technically-grounded forecasting and scenarios.' },
   { name: 'Astral Codex Ten', author: 'Scott Alexander', type: 'Blog', url: 'https://www.astralcodexten.com/', note: 'Wide-ranging essays; frequent, sharp AI coverage.' },
   { name: 'Anthropic Alignment Science', author: 'Anthropic', type: 'Blog', url: 'https://alignment.anthropic.com/', note: 'Research notes straight from a frontier lab.' },
   { name: 'Redwood Research', author: 'Redwood Research', type: 'Blog', url: 'https://blog.redwoodresearch.org/', note: 'AI control and back-chained alignment strategy.' },

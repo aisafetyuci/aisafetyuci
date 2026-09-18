@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 import type { ReactNode } from 'react'
+import { coffeeChats } from '../data/links'
 
 const pageTitle = 'Team'
 const pageDescription = "Meet the people behind AISCI — the students, researchers, and advisors working on AI safety at UC Irvine."
@@ -126,6 +127,7 @@ const organizers: TeamMember[] = [
 ]
 
 function PersonCard({ person }: { person: TeamMember }) {
+  const coffeeChat = coffeeChats.find((chat) => chat.fullName === person.name)
   return (
     <div className="surface-card flex flex-col items-center text-center p-6 w-full max-w-sm h-full">
       <div className="flex w-40 h-40 items-center justify-center rounded-full overflow-hidden bg-gray-100 mb-4">
@@ -160,6 +162,13 @@ function PersonCard({ person }: { person: TeamMember }) {
       </h3>
       <p className="text-sm font-medium text-gray-500 mb-3">{person.role}</p>
       {person.bio && <p className="text-gray-600 text-sm leading-relaxed">{person.bio}</p>}
+      {coffeeChat && (
+        <div className="mt-auto w-full pt-5">
+          <a href={coffeeChat.url} target="_blank" rel="noopener noreferrer" aria-label={`Book a coffee chat with ${person.name}`} className="button-secondary w-full">
+            Book a coffee chat <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+      )}
     </div>
   )
 }

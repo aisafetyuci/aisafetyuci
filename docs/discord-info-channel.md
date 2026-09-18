@@ -6,11 +6,12 @@ Experts broadly expect rapid progress in AI to continue, potentially surpassing 
 - Check out our [Linktree](https://linktr.ee/aisafetyatuci)
 ## We provide opportunities to upskill and contribute to AI safety:
 - Technical Intro Fellowship — An 8-week reading group covering landmark AI safety papers and key concepts. Open to all UCI students, no outside work required. We run it every quarter. Fall 2026 applications are due October 6, 2026.
-- Membership — Join weekly reading groups, small-group discussions with researchers, workshops, and socials. Members get compute access and a Claude Pro subscription (if you're doing research), as well as connections with top orgs like Redwood Research, the U.S. AI Safety Institute, and METR
+- Membership — Join weekly reading groups, small-group discussions with researchers, workshops, and socials. Members get compute access and a Claude Pro subscription (if you're doing research), as well as connections with researchers and others working in AI safety.
 ## Get involved:
 - Book a coffee chat with Dominic: https://cal.com/dominicmascetti/coffee
 - Book a coffee chat with Ivan: https://cal.com/ivanshishkin/quick-chat
 - Book a coffee chat with Prema: https://cal.com/prema-suthaharan/coffee
+- Book a coffee chat with Swaraag: https://cal.com/swaraag
 - [Apply](https://aisafetyuci.org/get-involved) to a program
 - Subscribe to the #opportunities channel
 

@@ -18,7 +18,8 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50)
+    // Separate thresholds prevent flicker when scrolling around the cutoff.
+    const onScroll = () => setScrolled((current) => current ? window.scrollY > 32 : window.scrollY > 64)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -31,27 +32,13 @@ export default function Navigation() {
           <Link href="/" className="flex min-w-0 items-center gap-2 text-lg font-semibold text-brand hover:text-brand-accent transition-colors">
             <Image src="/favicon.png" alt="AI Safety Collective at Irvine logo" width={48} height={48} priority className="h-12 w-12 shrink-0" />
             <span className="sm:hidden">AISCI</span>
-            <span className="hidden sm:inline-flex" aria-label={scrolled ? 'AISCI' : 'AI Safety Collective at Irvine'}>
-              {'AI Safety Collective at Irvine'.split('').map((ch, i) => {
-                const kept = new Set([0, 1, 3, 10, 24]).has(i)
-                return (
-                  <span
-                    key={i}
-                    aria-hidden="true"
-                    className="inline-block overflow-hidden whitespace-pre transition-all duration-500 ease-in-out"
-                    style={
-                      kept
-                        ? undefined
-                        : {
-                            maxWidth: scrolled ? '0' : '1ch',
-                            opacity: scrolled ? 0 : 1,
-                          }
-                    }
-                  >
-                    {ch}
-                  </span>
-                )
-              })}
+            <span className="hidden sm:grid" aria-label="AI Safety Collective at Irvine">
+              <span aria-hidden="true" className={`col-start-1 row-start-1 whitespace-nowrap transition-opacity duration-300 motion-reduce:transition-none ${scrolled ? 'opacity-0' : 'opacity-100'}`}>
+                AI Safety Collective at Irvine
+              </span>
+              <span aria-hidden="true" className={`col-start-1 row-start-1 transition-opacity duration-300 motion-reduce:transition-none ${scrolled ? 'opacity-100' : 'opacity-0'}`}>
+                AISCI
+              </span>
             </span>
           </Link>
 

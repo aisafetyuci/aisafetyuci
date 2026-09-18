@@ -62,6 +62,13 @@ const reading = [
     summary: 'A concrete, near-term AGI scenario built around AI-automated research, with explicit forecasts.',
   },
   {
+    title: 'AI 2040: Plan A',
+    authors: 'Larsen, Dean, Halstead, Lifland, Greenblatt, Kokotajlo',
+    format: 'Report',
+    url: 'https://ai-2040.com/',
+    summary: 'A scenario exploring international cooperation to reduce catastrophic AI risk and delay superintelligence until 2040. A policy proposal, rather than a prediction.',
+  },
+  {
     title: 'Situational Awareness: The Decade Ahead',
     authors: 'Leopold Aschenbrenner',
     format: 'Essay',
@@ -289,18 +296,18 @@ export default function Resources() {
                 </summary>
                 <div className="surface-card mt-3 p-5 flex flex-col gap-1">
                   <a
-                    href="https://supervisedprogramforalignment.org/"
+                    href="https://www.sparai.org/"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block rounded-lg p-4 -mx-1 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-brand"
-                    aria-label="SPAR: Supervised Program for Alignment Research"
+                    aria-label="SPAR: Research Program for AI Risks"
                   >
                     <div className="flex items-start justify-between mb-2">
                       <Badge label="Fellowship" color="bg-orange-100 text-orange-700" />
                       <ExternalIcon />
                     </div>
                     <h3 className="text-lg font-bold text-brand mb-1">SPAR</h3>
-                    <p className="text-sm text-gray-500 mb-2">Supervised Program for Alignment Research</p>
+                    <p className="text-sm text-gray-500 mb-2">Research Program for AI Risks</p>
                     <p className="text-gray-700 text-sm">
                       Remote, part-time, mentor-led research projects. Lower barrier to entry than MATS, great as a first research experience.
                     </p>
@@ -320,7 +327,7 @@ export default function Resources() {
                     <h3 className="text-lg font-bold text-brand mb-1">MATS</h3>
                     <p className="text-sm text-gray-500 mb-2">ML Alignment &amp; Theory Scholars</p>
                     <p className="text-gray-700 text-sm">
-                      Selective ~10-week paid research program. You're matched with a senior alignment researcher and ship a real project.
+                      Paid research fellowship with mentorship in AI alignment, governance, and security. See the program site for current cohort dates and application details.
                     </p>
                   </a>
 
@@ -333,7 +340,7 @@ export default function Resources() {
           <section className="mb-16">
             <h2 className="text-3xl text-brand font-semibold mb-6 text-center">Essential reading</h2>
             <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
-              The eleven pieces 80,000 Hours considers the best on-ramp to understanding AI risk and where the field is going.
+              A starting point for understanding AI risk and where the field is going, drawn from 80,000 Hours’ essential reading list, with AI 2040 added by AISCI.
             </p>
             <ol className="flex flex-col gap-4">
               {reading.map((r, i) => (
@@ -364,7 +371,7 @@ export default function Resources() {
               ))}
             </ol>
             <p className="text-center text-sm text-gray-500 mt-6">
-              Curated by 80,000 Hours ·{' '}
+              Based on 80,000 Hours’ reading list ·{' '}
               <a
                 href="https://80000hours.org/articles/11-essential-resources-ai-risk/"
                 target="_blank"

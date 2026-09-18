@@ -6,6 +6,8 @@ import { aiHighlights } from '../data/aiHighlights'
 export default function AIProgressHeadline() {
   const [active, setActive] = useState(0)
   const [reducedMotion, setReducedMotion] = useState(true)
+  const [hovered, setHovered] = useState(false)
+  const [focused, setFocused] = useState(false)
 
   useEffect(() => {
     const preference = window.matchMedia('(prefers-reduced-motion: reduce)')
@@ -16,12 +18,12 @@ export default function AIProgressHeadline() {
   }, [])
 
   useEffect(() => {
-    if (reducedMotion) return
+    if (reducedMotion || hovered || focused) return
     const timer = window.setInterval(() => {
       setActive((index) => (index + 1) % aiHighlights.length)
-    }, 3000)
+    }, 5000)
     return () => window.clearInterval(timer)
-  }, [reducedMotion])
+  }, [reducedMotion, hovered, focused])
 
   function select(index: number) {
     setActive((index + aiHighlights.length) % aiHighlights.length)
@@ -30,6 +32,12 @@ export default function AIProgressHeadline() {
   return (
     <div
       className="ai-progress-headline"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocusCapture={() => setFocused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) setFocused(false)
+      }}
       onKeyDown={(event) => {
         if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
           event.preventDefault()
@@ -49,7 +57,7 @@ export default function AIProgressHeadline() {
               rel="noopener noreferrer"
               aria-hidden={index !== active}
               tabIndex={index === active ? 0 : -1}
-              className={`col-start-1 row-start-1 rounded-sm text-brand-accent decoration-brand-accent/35 decoration-2 underline-offset-8 transition-[opacity,transform] duration-500 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transform-none motion-reduce:transition-none ${index === active ? 'visible translate-y-0 opacity-100' : 'invisible translate-y-2 opacity-0'}`}
+              className={`col-start-1 row-start-1 rounded-sm text-brand-accent decoration-brand-accent/35 decoration-2 underline-offset-8 transition-opacity duration-700 ease-in-out hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none ${index === active ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
             >
               {highlight.lines.map((line, lineIndex) => (
                   <span key={line} className="block whitespace-nowrap">
@@ -60,7 +68,6 @@ export default function AIProgressHeadline() {
           ))}
         </span>
       </h1>
-
     </div>
   )
 }

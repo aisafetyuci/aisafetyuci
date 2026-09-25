@@ -1,10 +1,11 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type CSSProperties } from 'react'
 import { aiHighlights } from '../data/aiHighlights'
 
 export default function AIProgressHeadline() {
-  const [active, setActive] = useState(0)
+  // Track the outgoing phrase so it can exit upward while the next one rises in.
+  const [{ active, previous }, setSlide] = useState({ active: 0, previous: -1 })
   const [reducedMotion, setReducedMotion] = useState(true)
   const [hovered, setHovered] = useState(false)
   const [focused, setFocused] = useState(false)
@@ -20,13 +21,14 @@ export default function AIProgressHeadline() {
   useEffect(() => {
     if (reducedMotion || hovered || focused) return
     const timer = window.setInterval(() => {
-      setActive((index) => (index + 1) % aiHighlights.length)
-    }, 5000)
+      setSlide(({ active }) => ({ active: (active + 1) % aiHighlights.length, previous: active }))
+    }, 2000)
     return () => window.clearInterval(timer)
   }, [reducedMotion, hovered, focused])
 
   function select(index: number) {
-    setActive((index + aiHighlights.length) % aiHighlights.length)
+    const next = (index + aiHighlights.length) % aiHighlights.length
+    setSlide(({ active }) => (next === active ? { active, previous } : { active: next, previous: active }))
   }
 
   return (
@@ -57,10 +59,11 @@ export default function AIProgressHeadline() {
               rel="noopener noreferrer"
               aria-hidden={index !== active}
               tabIndex={index === active ? 0 : -1}
-              className={`col-start-1 row-start-1 rounded-sm text-brand-accent decoration-brand-accent/35 decoration-2 underline-offset-8 transition-opacity duration-700 ease-in-out hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none ${index === active ? 'opacity-100' : 'pointer-events-none opacity-0'}`}
+              data-state={index === active ? 'active' : index === previous ? 'leaving' : 'waiting'}
+              className={`ai-phrase col-start-1 row-start-1 rounded-sm text-brand-accent decoration-brand-accent/35 decoration-2 underline-offset-8 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand ${index === active ? '' : 'pointer-events-none'}`}
             >
               {highlight.lines.map((line, lineIndex) => (
-                  <span key={line} className="block whitespace-nowrap">
+                  <span key={line} className="ai-phrase-line block whitespace-nowrap" style={{ '--line': lineIndex } as CSSProperties}>
                     {line}{lineIndex < highlight.lines.length - 1 ? ' ' : ''}
                   </span>
                 ))}

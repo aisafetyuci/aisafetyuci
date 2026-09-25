@@ -3,7 +3,7 @@ import CopyEmail from './CopyEmail';
 import Faqs from './Faqs';
 import { Metadata } from 'next'
 import { programsByKey, statusBadgeClasses, type Program } from '../data/programs'
-import { links, meeting } from '../data/links'
+import { links, meeting, memberMeeting } from '../data/links'
 
 function StatusBadge({ status }: { status: Program['status'] }) {
   const badge = statusBadgeClasses[status.tone]
@@ -70,7 +70,7 @@ const faqs = [
   },
   {
     q: 'When does the Intro Fellowship run?',
-    a: `Every quarter. For Fall 2026, sessions meet ${meeting.day} ${meeting.time} at UC Irvine, with dinner provided. Room: ${meeting.room}. Applications open roughly a month before each quarter starts. The Fall 2026 application deadline is ${programsByKey.intro.applicationDeadline?.label}.`,
+    a: `Every quarter. For Fall 2026, sessions meet ${meeting.day} ${meeting.time} in ${meeting.room} (Donald Bren Hall) at UC Irvine, with dinner provided. Applications open roughly a month before each quarter starts. The Fall 2026 application deadline is ${programsByKey.intro.applicationDeadline?.label}.`,
   },
   {
     q: 'Is AISCI part of UC Irvine?',
@@ -112,7 +112,7 @@ export default function GetInvolved() {
                   <p className="mt-4 text-gray-600">Technical AI safety in small reading groups. No AI or ML background needed.</p>
                   <dl className="mt-5 grid grid-cols-2 gap-x-4 gap-y-4 rounded-xl bg-brand-soft p-4 text-sm sm:gap-x-6 sm:p-5 lg:grid-cols-3">
                     <div><dt className="text-gray-500">When</dt><dd className="mt-1 font-medium text-brand">{meeting.day}, {meeting.time}</dd></div>
-                    <div><dt className="text-gray-500">Where</dt><dd className="mt-1 font-medium text-brand">UC Irvine · Room {meeting.room}</dd></div>
+                    <div><dt className="text-gray-500">Where</dt><dd className="mt-1 font-medium text-brand">{meeting.room} · <a href={meeting.mapUrl} target="_blank" rel="noopener noreferrer" aria-label={`${meeting.room} on the UCI campus map (opens in a new tab)`} className="underline decoration-brand/30 underline-offset-4 hover:decoration-brand">Campus map ↗</a></dd></div>
                     <div><dt className="text-gray-500">Duration</dt><dd className="mt-1 font-medium text-brand">Fall 2026 · 8 weeks</dd></div>
                     <div><dt className="text-gray-500">Commitment</dt><dd className="mt-1 text-brand">Weekly meetings only; no outside work</dd></div>
                     <div><dt className="text-gray-500">Food</dt><dd className="mt-1 text-brand">Dinner provided</dd></div>
@@ -167,7 +167,8 @@ export default function GetInvolved() {
                       <li key={benefit} className="rounded-lg bg-brand-soft px-3 py-2">{benefit}</li>
                     ))}
                   </ul>
-                  <p className="mt-4 text-sm text-gray-500">Open beyond UCI · Fellowship alumni usually get priority · Board reviews typically monthly</p>
+                  <p className="mt-4 text-sm text-gray-600">Weekly member meetings in <span className="font-medium text-brand">{memberMeeting.room}</span> · <a href={memberMeeting.mapUrl} target="_blank" rel="noopener noreferrer" aria-label={`${memberMeeting.room} on the UCI campus map (opens in a new tab)`} className="font-medium text-brand underline decoration-brand/30 underline-offset-4 hover:decoration-brand">Campus map ↗</a></p>
+                  <p className="mt-2 text-sm text-gray-500">Open beyond UCI · Fellowship alumni usually get priority · Board reviews typically monthly</p>
 
                   <details className="group mt-5 border-y border-brand-border">
                     <summary className="flex cursor-pointer list-none items-center justify-between gap-4 py-4 text-sm font-semibold text-brand [&::-webkit-details-marker]:hidden">

@@ -39,7 +39,7 @@ export default function TechnicalIntroFellowship() {
               <p className="mt-3 text-2xl font-semibold">{meeting.day}</p>
               <p className="mt-1 text-xl text-brand-soft">{meeting.time}</p>
               <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 border-t border-white/20 pt-5 text-sm text-brand-soft">
-                <span>Room: {meeting.room}</span>
+                <span>Room: {meeting.room} · <a href={meeting.mapUrl} target="_blank" rel="noopener noreferrer" aria-label={`${meeting.room} on the UCI campus map (opens in a new tab)`} className="text-white underline decoration-white/40 underline-offset-4 hover:decoration-white">Campus map ↗</a></span>
                 <span>Dinner provided</span>
               </div>
             </div>

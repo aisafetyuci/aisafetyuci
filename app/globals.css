@@ -78,6 +78,36 @@
   line-height: 1.15;
 }
 
+/* Headline phrases: the old one drifts up and blurs out, the next rises into focus line by line. */
+.ai-phrase-line {
+  opacity: 0;
+  transform: translateY(0.45em);
+  filter: blur(10px);
+}
+
+.ai-phrase[data-state='active'] .ai-phrase-line {
+  opacity: 1;
+  transform: none;
+  filter: blur(0);
+  transition: opacity 450ms ease-out, transform 600ms cubic-bezier(0.22, 1, 0.36, 1), filter 500ms ease-out;
+  transition-delay: calc(150ms + var(--line, 0) * 90ms);
+}
+
+.ai-phrase[data-state='leaving'] .ai-phrase-line {
+  transform: translateY(-0.35em);
+  transition: opacity 300ms ease-in, transform 350ms ease-in, filter 300ms ease-in;
+  transition-delay: calc(var(--line, 0) * 50ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ai-phrase .ai-phrase-line,
+  .ai-phrase[data-state] .ai-phrase-line {
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}
+
 .collaborator-marquee {
   overflow: hidden;
   mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);

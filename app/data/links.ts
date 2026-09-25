@@ -15,9 +15,19 @@ export const coffeeChats = [
   { name: 'Swaraag', fullName: 'Swaraag Sistla', url: 'https://cal.com/swaraag' },
 ]
 
+// Donald Bren Hall on the official UCI campus map.
+const dbhMapUrl = 'https://map.uci.edu/?id=463#!m/1117348'
+
 // Weekly fellowship meeting logistics — used by /tif, /get-involved, and structured data.
 export const meeting = {
   day: 'Thursdays',
   time: '5–7 PM',
-  room: 'TBD',
+  room: 'DBH 1200',
+  mapUrl: dbhMapUrl,
+}
+
+// Weekly member meeting location — used by /get-involved.
+export const memberMeeting = {
+  room: 'DBH 1423',
+  mapUrl: dbhMapUrl,
 }

@@ -92,7 +92,7 @@ export default function StructuredData() {
       courseMode: 'In-person',
       location: {
         '@type': 'Place',
-        name: `University of California, Irvine (room: ${meeting.room})`,
+        name: `${meeting.room}, Donald Bren Hall, University of California, Irvine`,
         address: {
           '@type': 'PostalAddress',
           addressLocality: 'Irvine',

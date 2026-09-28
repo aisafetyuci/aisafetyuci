@@ -19,4 +19,13 @@ npm install
 npm run dev
 ```
 
-Then open [http://localhost:3000](http://localhost:3000). `npm run build` generates the static site in `out/` — pushing to `main` builds and deploys it automatically via GitHub Pages.
+Then open [http://localhost:3000](http://localhost:3000). `npm run build` generates the static site in `out/` — pushing to `main` builds and deploys it automatically.
+
+## Hosting
+
+The domain is registered and its DNS is managed on Cloudflare (club account). Every push to `main` deploys to two places:
+
+- **Cloudflare Workers** (live): the `aisafetyuci` Worker builds the site and serves `out/` using `wrangler.jsonc`. `aisafetyuci.org` is attached to it as a custom domain.
+- **GitHub Pages** (backup): `.github/workflows/deploy.yml` still publishes the same build. `www.aisafetyuci.org` is a CNAME to GitHub Pages, which redirects it to `aisafetyuci.org`.
+
+**To switch back to GitHub Pages:** in Cloudflare, remove the custom domain from the `aisafetyuci` Worker (Domains tab), then add four proxied `A` records for `aisafetyuci.org` pointing to `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, and `185.199.111.153`. Before ever turning GitHub Pages off, add a Cloudflare redirect rule from `www` to the root domain.

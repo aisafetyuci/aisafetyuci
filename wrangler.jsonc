@@ -1,0 +1,11 @@
+// Cloudflare Workers hosting config. The site is a static export: `npm run build`
+// writes it to out/, and Cloudflare serves those files as-is (no server code).
+// GitHub Pages still deploys from .github/workflows/deploy.yml as a live backup.
+{
+  "name": "aisafetyuci",
+  "compatibility_date": "2026-09-01",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page"
+  }
+}

@@ -3,7 +3,7 @@ title: Fall kickoff recap
 date: 2026-09-26
 summary: "Sample post: a short recap with no cover image."
 authors:
-  - Prema Suthaharan
+  - Sample Author
 category: Recap
 ---
 

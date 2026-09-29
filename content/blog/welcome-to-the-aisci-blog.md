@@ -3,7 +3,7 @@ title: Welcome to the AISCI blog
 date: 2026-09-20
 summary: "Sample post: why we started a blog, what we plan to write about, and how you can contribute a post of your own."
 authors:
-  - Ivan Shishkin
+  - Sample Author
 category: Announcement
 cover: /images/blog/samples/sample-cover-meeting.jpg
 coverAlt: Students sitting around a table at a weekly AISCI meeting

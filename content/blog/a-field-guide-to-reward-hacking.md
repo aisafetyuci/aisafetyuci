@@ -4,7 +4,7 @@ date: 2026-09-12
 updated: 2026-09-26
 summary: "Sample post: a long explainer that exercises every formatting feature the blog supports: headings, lists, quotes, tables, footnotes, code, links, and images."
 authors:
-  - Dominic Mascetti
+  - Sample Author
 category: Explainer
 ---
 

@@ -157,3 +157,8 @@
     display: none;
   }
 }
+
+/* Team cards are anchor targets (blog bylines link to /team#name); keep them clear of the sticky nav. */
+.surface-card[id] {
+  scroll-margin-top: 6rem;
+}

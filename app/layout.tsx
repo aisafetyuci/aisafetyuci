@@ -4,6 +4,7 @@ import './globals.css'
 import Navigation from './components/Navigation'
 import Footer from './components/Footer'
 import StructuredData from './components/StructuredData'
+import { getAllPosts } from './lib/blog'
 
 const dmSans = DM_Sans({
   subsets: ['latin'],
@@ -71,13 +72,15 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // Only pass the prop when true so pages render byte-identical while the blog is empty.
+  const navProps = getAllPosts().length > 0 ? { showBlog: true } : {}
   return (
     <html lang="en">
       <head>
         <StructuredData />
       </head>
       <body className={dmSans.className}>
-        <Navigation />
+        <Navigation {...navProps} />
         {children}
         <Footer />
       </body>

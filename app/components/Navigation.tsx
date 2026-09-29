@@ -12,8 +12,13 @@ const navigation = [
   { href: '/team', label: 'Team' },
 ]
 
-export default function Navigation() {
+// `showBlog` is decided on the server (layout) once at least one post is published.
+export default function Navigation({ showBlog = false }: { showBlog?: boolean }) {
   const pathname = usePathname()
+  const items = showBlog
+    ? [...navigation.slice(0, 2), { href: '/blog', label: 'Blog' }, ...navigation.slice(2)]
+    : navigation
+  const isCurrent = (href: string) => pathname === href || (href === '/blog' && pathname.startsWith('/blog/'))
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
 
@@ -58,8 +63,8 @@ export default function Navigation() {
           </Link>
 
           <div className="hidden lg:flex items-center gap-2">
-            {navigation.map(({ href, label }) => (
-              <Link key={href} href={href} aria-current={pathname === href ? 'page' : undefined} className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${pathname === href ? 'bg-brand-soft text-brand' : 'text-gray-600 hover:bg-brand-wash hover:text-brand'}`}>
+            {items.map(({ href, label }) => (
+              <Link key={href} href={href} aria-current={isCurrent(href) ? 'page' : undefined} className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${isCurrent(href) ? 'bg-brand-soft text-brand' : 'text-gray-600 hover:bg-brand-wash hover:text-brand'}`}>
                 {label}
               </Link>
             ))}
@@ -85,8 +90,8 @@ export default function Navigation() {
         {isOpen && (
           <div id="mobile-navigation" className="lg:hidden pb-4">
             <div className="flex flex-col gap-1">
-              {navigation.map(({ href, label }) => (
-                <Link key={href} href={href} aria-current={pathname === href ? 'page' : undefined} onClick={() => setIsOpen(false)} className={`rounded-lg px-4 py-3 font-medium transition-colors ${pathname === href ? 'bg-brand-soft text-brand' : 'text-gray-600 hover:bg-brand-wash hover:text-brand'}`}>
+              {items.map(({ href, label }) => (
+                <Link key={href} href={href} aria-current={isCurrent(href) ? 'page' : undefined} onClick={() => setIsOpen(false)} className={`rounded-lg px-4 py-3 font-medium transition-colors ${isCurrent(href) ? 'bg-brand-soft text-brand' : 'text-gray-600 hover:bg-brand-wash hover:text-brand'}`}>
                   {label}
                 </Link>
               ))}

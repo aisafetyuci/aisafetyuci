@@ -51,7 +51,7 @@ export default async function CategoryPage({ params }: Props) {
     <main className="min-h-screen bg-brand-wash">
       {/* Same header and filter bar position as /blog, so switching categories feels like switching tabs. */}
       <div className="site-container pt-12 pb-2">
-        <div className="page-header">
+        <div className="page-header pb-6 sm:pb-6">
           <p className="page-title" aria-hidden="true">Blog</p>
           <h1 className="sr-only">{category} posts</h1>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-gray-600">
@@ -60,7 +60,7 @@ export default async function CategoryPage({ params }: Props) {
         </div>
       </div>
 
-      <div className="site-container pt-10 pb-16">
+      <div className="site-container pt-4 pb-16">
         <CategoryNav categories={usedCategories(allPosts)} current={category} />
         <ul className="mt-8 divide-y divide-gray-200 border-y border-gray-200">
           {posts.map((post) => <li key={post.slug}><PostCard post={post} /></li>)}

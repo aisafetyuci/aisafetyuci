@@ -37,7 +37,7 @@ export default function BlogIndex() {
   return (
     <main className="min-h-screen bg-brand-wash">
       <div className="site-container pt-12 pb-2">
-        <div className="page-header">
+        <div className="page-header pb-6 sm:pb-6">
           <h1 className="page-title">Blog</h1>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-gray-600">
             Writing from our members on AI safety
@@ -45,7 +45,7 @@ export default function BlogIndex() {
         </div>
       </div>
 
-      <div className="site-container pt-10 pb-16">
+      <div className="site-container pt-4 pb-16">
         {lead ? (
           <>
             <CategoryNav categories={usedCategories(posts)} />

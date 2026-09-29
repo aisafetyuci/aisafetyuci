@@ -1,7 +1,7 @@
 ---
 title: Editor test post (delete me)
 date: 2026-09-29
-summary: 'Test of the blog editor: write, preview, publish, edit.'
+summary: 'Test of the blog editor: write, preview, publish, edit. (Edited.)'
 authors:
   - Swaraag Sistla
 category: Announcement

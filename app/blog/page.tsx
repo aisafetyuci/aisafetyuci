@@ -31,8 +31,6 @@ export const metadata: Metadata = {
 
 export default function BlogIndex() {
   const posts = getAllPosts()
-  const lead = posts.find((post) => post.featured) ?? posts[0]
-  const rest = posts.filter((post) => post !== lead)
 
   return (
     <main className="min-h-screen bg-brand-wash">
@@ -46,24 +44,19 @@ export default function BlogIndex() {
       </div>
 
       <div className="site-container pt-10 pb-16">
-        {lead ? (
-          <>
+        {posts.length > 0 ? (
+          <div className="mx-auto max-w-3xl">
             <CategoryNav categories={usedCategories(posts)} />
-            <div className="mt-8">
-              <PostCard post={lead} featured />
-            </div>
-            {rest.length > 0 && (
-              <section aria-labelledby="more-posts-heading" className="mt-12">
-                <h2 id="more-posts-heading" className="sr-only">More posts</h2>
-                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                  {rest.map((post) => <PostCard key={post.slug} post={post} />)}
-                </div>
-              </section>
-            )}
+            <section aria-labelledby="posts-heading" className="mt-8">
+              <h2 id="posts-heading" className="sr-only">Posts</h2>
+              <ul className="divide-y divide-gray-200 border-y border-gray-200">
+                {posts.map((post) => <li key={post.slug}><PostCard post={post} /></li>)}
+              </ul>
+            </section>
             <div className="mt-16">
               <BlogCta />
             </div>
-          </>
+          </div>
         ) : (
           <div className="mx-auto max-w-3xl">
             <div className="surface-card p-8 text-center sm:p-10">

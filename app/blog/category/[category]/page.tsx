@@ -63,9 +63,11 @@ export default async function CategoryPage({ params }: Props) {
       </div>
 
       <div className="site-container pt-10 pb-16">
-        <CategoryNav categories={usedCategories(allPosts)} current={category} />
-        <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {posts.map((post) => <PostCard key={post.slug} post={post} />)}
+        <div className="mx-auto max-w-3xl">
+          <CategoryNav categories={usedCategories(allPosts)} current={category} />
+          <ul className="mt-8 divide-y divide-gray-200 border-y border-gray-200">
+            {posts.map((post) => <li key={post.slug}><PostCard post={post} /></li>)}
+          </ul>
         </div>
       </div>
     </main>

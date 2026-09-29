@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 300" width="800" height="300" role="img" aria-label="Sample placeholder diagram">
+  <rect width="800" height="300" fill="#f7f8fb"/>
+  <rect x="40" y="110" width="180" height="80" rx="16" fill="#fff" stroke="#dce1eb" stroke-width="2"/>
+  <rect x="310" y="110" width="180" height="80" rx="16" fill="#fff" stroke="#dce1eb" stroke-width="2"/>
+  <rect x="580" y="110" width="180" height="80" rx="16" fill="#18234e"/>
+  <path d="M220 150h86M490 150h86" stroke="#53688a" stroke-width="3" marker-end="url(#a)"/>
+  <defs><marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0l10 5-10 5z" fill="#53688a"/></marker></defs>
+  <g font-family="sans-serif" font-size="20" text-anchor="middle">
+    <text x="130" y="157" fill="#18234e">Read</text>
+    <text x="400" y="157" fill="#18234e">Discuss</text>
+    <text x="670" y="157" fill="#fff">Build</text>
+  </g>
+  <text x="400" y="60" font-family="sans-serif" font-size="16" fill="#65728a" text-anchor="middle">SAMPLE PLACEHOLDER IMAGE</text>
+</svg>

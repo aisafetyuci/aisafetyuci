@@ -1,0 +1,72 @@
+# Blog editor draft previews: Cloudflare builds every draft branch (cms/...) as a preview,
+# but only reports the preview address in a pull request comment, which the editor (Sveltia CMS)
+# can't read. This records the address as a GitHub deployment, so the editor's preview button
+# opens the draft's preview instead of the live site. It changes no files and deploys nothing.
+name: Blog draft preview link
+
+on:
+  push:
+    branches: ['cms/**']
+
+permissions:
+  contents: read
+  deployments: write
+  pull-requests: read
+  checks: read
+
+concurrency:
+  group: cms-preview-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  link:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Wait for the Cloudflare preview, then record its address
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          api() { curl -fsS -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" "$@"; }
+
+          # 1. Wait for Cloudflare's "Workers Builds" check on this commit to finish (up to ~12 min).
+          conclusion=""
+          for i in $(seq 1 72); do
+            run=$(api "https://api.github.com/repos/$REPO/commits/$SHA/check-runs" \
+              | jq -c '[.check_runs[] | select(.name | startswith("Workers Builds"))][0] // empty')
+            if [ -n "$run" ] && [ "$(echo "$run" | jq -r .status)" = "completed" ]; then
+              conclusion=$(echo "$run" | jq -r .conclusion); break
+            fi
+            sleep 10
+          done
+          echo "Cloudflare build: ${conclusion:-not finished}"
+          [ "$conclusion" = "success" ] || { echo "No finished preview to link."; exit 0; }
+
+          # 2. Work out the preview address: Cloudflare names it after the branch
+          #    (cms/blog/my-post -> cms-blog-my-post-aisafetyuci...). Check it answers;
+          #    otherwise take the address from Cloudflare's pull request comment.
+          alias=$(echo "$BRANCH" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+|-+$//g')
+          url="https://${alias}-aisafetyuci.aisafetyatuci.workers.dev"
+          if ! curl -fsS -o /dev/null --max-time 20 "$url/"; then
+            pr=$(api "https://api.github.com/repos/$REPO/pulls?state=open&head=${REPO%%/*}:$BRANCH" | jq -r '.[0].number // empty')
+            url=""
+            if [ -n "$pr" ]; then
+              url=$(api "https://api.github.com/repos/$REPO/issues/$pr/comments" \
+                | jq -r '[.[] | select(.user.login | startswith("cloudflare"))] | last | .body // ""' \
+                | grep -oE 'https://[a-z0-9-]+\.aisafetyatuci\.workers\.dev' | head -1 || true)
+            fi
+          fi
+          [ -n "$url" ] || { echo "Could not find the preview address."; exit 0; }
+          echo "Preview: $url"
+
+          # 3. Record it as a GitHub deployment for this commit (what the editor reads).
+          id=$(api -X POST "https://api.github.com/repos/$REPO/deployments" \
+            -d "$(jq -n --arg ref "$SHA" '{ref: $ref, environment: "Preview", auto_merge: false, required_contexts: [], transient_environment: true, production_environment: false, description: "Blog draft preview"}')" \
+            | jq -r .id)
+          api -X POST "https://api.github.com/repos/$REPO/deployments/$id/statuses" \
+            -d "$(jq -n --arg url "$url" '{state: "success", environment_url: $url, log_url: $url, auto_inactive: true}')" > /dev/null
+          echo "Recorded deployment $id -> $url"

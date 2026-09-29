@@ -21,7 +21,8 @@ site_url: https://aisafetyuci.org
 slug:
   encoding: ascii
   clean_accents: true
-  maxlength: 80
+  # Short enough that the draft preview address (cms-blog-<name>-aisafetyuci) stays under 63 characters.
+  maxlength: 42
 
 output:
   # Leave unfilled optional fields out of the file instead of writing empty values.

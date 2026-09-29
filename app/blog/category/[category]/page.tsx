@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { categoryFromSlug, categorySlug, emptyParamPlaceholder, getAllPosts, usedCategories } from '../../../lib/blog'
 import CategoryNav from '../../_components/CategoryNav'
@@ -50,25 +49,22 @@ export default async function CategoryPage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-brand-wash">
+      {/* Same header and filter bar position as /blog, so switching categories feels like switching tabs. */}
       <div className="site-container pt-12 pb-2">
         <div className="page-header">
-          <Link href="/blog" className="text-sm font-medium text-brand-accent hover:text-brand">
-            <span aria-hidden="true">←</span> All posts
-          </Link>
-          <h1 className="page-title mt-3">{category}</h1>
-          <p className="mt-4 text-lg text-gray-600">
-            {posts.length} {posts.length === 1 ? 'post' : 'posts'}
+          <p className="page-title" aria-hidden="true">Blog</p>
+          <h1 className="sr-only">{category} posts</h1>
+          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-gray-600">
+            Writing from our members on AI safety
           </p>
         </div>
       </div>
 
       <div className="site-container pt-10 pb-16">
-        <div className="mx-auto max-w-3xl">
-          <CategoryNav categories={usedCategories(allPosts)} current={category} />
-          <ul className="mt-8 divide-y divide-gray-200 border-y border-gray-200">
-            {posts.map((post) => <li key={post.slug}><PostCard post={post} /></li>)}
-          </ul>
-        </div>
+        <CategoryNav categories={usedCategories(allPosts)} current={category} />
+        <ul className="mt-8 divide-y divide-gray-200 border-y border-gray-200">
+          {posts.map((post) => <li key={post.slug}><PostCard post={post} /></li>)}
+        </ul>
       </div>
     </main>
   )

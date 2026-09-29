@@ -40,7 +40,7 @@ export default function BlogIndex() {
         <div className="page-header">
           <h1 className="page-title">Blog</h1>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-gray-600">
-            Writing from our members on AI safety: explainers, research notes, and what we&apos;ve been up to.
+            Writing from our members on AI safety
           </p>
         </div>
       </div>

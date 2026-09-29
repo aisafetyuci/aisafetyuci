@@ -9,7 +9,9 @@ backend:
   # Testing: drafts and publishes go to the admin-editor branch, not the live site. Switch to main to go live.
   branch: admin-editor
   # Login helper (Sveltia CMS Authenticator) on the club Cloudflare account.
-  base_url: https://REPLACE-WITH-AUTH-WORKER-URL
+  base_url: https://sveltia-cms-auth.aisafetyatuci.workers.dev
+  # The repo is public, so sign-in only asks for access to public repos, not private ones.
+  auth_scope: public_repo
 
 # Each draft is a pull request; Cloudflare builds it, and the editor links to that preview.
 publish_mode: editorial_workflow

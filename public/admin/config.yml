@@ -1,0 +1,87 @@
+# Blog editor (Sveltia CMS) at aisafetyuci.org/admin.
+# It edits content/blog/*.md by committing to GitHub; app/lib/blog.ts checks every post at build time,
+# so keep the fields below in step with that file.
+# Anyone with write access to the GitHub repo can sign in and publish.
+
+backend:
+  name: github
+  repo: aisafetyuci/aisafetyuci
+  # Testing: drafts and publishes go to the admin-editor branch, not the live site. Switch to main to go live.
+  branch: admin-editor
+  # Login helper (Sveltia CMS Authenticator) on the club Cloudflare account.
+  base_url: https://REPLACE-WITH-AUTH-WORKER-URL
+
+# Each draft is a pull request; Cloudflare builds it, and the editor links to that preview.
+publish_mode: editorial_workflow
+site_url: https://aisafetyuci.org
+
+# File names must be lowercase words joined by hyphens (checked in app/lib/blog.ts).
+slug:
+  encoding: ascii
+  clean_accents: true
+  maxlength: 80
+
+output:
+  # Leave unfilled optional fields out of the file instead of writing empty values.
+  omit_empty_optional_fields: true
+
+media_folder: public/images/blog
+public_folder: /images/blog
+media_libraries:
+  default:
+    config:
+      slugify_filename: true
+
+collections:
+  - name: blog
+    label: Blog posts
+    label_singular: Blog post
+    description: Posts appear at aisafetyuci.org/blog about 2 minutes after publishing.
+    folder: content/blog
+    extension: md
+    format: frontmatter
+    create: true
+    slug: '{{title}}'
+    preview_path: /blog/{{slug}}
+    sortable_fields: [date, title]
+    summary: '{{title}} ({{date}})'
+    fields:
+      - { name: title, label: Title, widget: string }
+      - { name: date, label: Date, widget: datetime, type: date, format: YYYY-MM-DD, default: '{{now}}' }
+      - name: summary
+        label: Summary
+        widget: text
+        hint: One or two sentences. Shown on the blog page, in link previews and in the RSS feed.
+      - name: authors
+        label: Authors
+        widget: list
+        min: 1
+        hint: One name per item. Use the name exactly as on the Team page to show their photo.
+      - name: category
+        label: Category
+        widget: select
+        options: [Explainer, Research, Recap, Opinion, Announcement]
+      - name: cover
+        label: Cover image
+        widget: image
+        required: false
+        hint: Optional. Shown on the post and in the blog list. Landscape works best (1200×630).
+      - name: coverAlt
+        label: Cover image description
+        widget: string
+        required: false
+        hint: Required if you add a cover image. Describe it for people who can't see it.
+      - name: featured
+        label: Feature at top of blog
+        widget: boolean
+        default: false
+        required: false
+        hint: The newest featured post gets the large card at the top of /blog. If none is featured, the newest post does.
+      - name: updated
+        label: Last updated
+        widget: datetime
+        type: date
+        format: YYYY-MM-DD
+        required: false
+        hint: Optional. Set this when you make a meaningful change after publishing.
+      - { name: body, label: Post, widget: markdown }

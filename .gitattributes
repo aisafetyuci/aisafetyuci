@@ -1,0 +1,2 @@
+# Keep the saved calendar byte-for-byte as Google sends it (CRLF line endings).
+content/events/calendar.ics -text

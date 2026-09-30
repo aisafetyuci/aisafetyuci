@@ -1,12 +1,12 @@
-// Builds the /events list from the club Google Calendar's public iCal feed, at build time.
-// Server-only: never import this from a client component.
+// Builds the /events list from content/events/calendar.ics, a saved copy of the club Google
+// Calendar's public iCal feed. Server-only: never import this from a client component.
 //
-// The site is static, so calendar edits appear after the next build: every push to main, plus the
-// daily scheduled rebuild in .github/workflows/deploy.yml. If the feed can't be fetched, the build
-// fails and the live site keeps its last good version rather than showing an empty page.
-import https from 'node:https'
+// .github/workflows/sync-calendar.yml refreshes that copy every few hours and commits it when the
+// calendar changed, which triggers a normal deploy. (Builds don't ask Google directly: Google
+// rate-limits the shared machines Cloudflare builds on.) Refresh it locally with `npm run sync-calendar`.
+import fs from 'node:fs'
+import path from 'node:path'
 import ICAL from 'ical.js'
-import { clubCalendar } from '../data/links'
 import { eventExtras } from '../data/eventExtras'
 import type { ClubEvent, EventCategory } from '../data/events'
 
@@ -111,34 +111,7 @@ function recurrenceLabel(recur: ICAL.Recur, firstDay: string) {
   return 'Repeats'
 }
 
-// Plain Node request instead of fetch(): Next.js saves fetch() results in its build cache, which
-// Cloudflare keeps between builds, so a later build could reuse an old copy of the calendar.
-function download(url: string, redirects = 3): Promise<string> {
-  return new Promise((resolve, reject) => {
-    https
-      .get(url, (response) => {
-        const { statusCode = 0, headers } = response
-        if (statusCode >= 300 && statusCode < 400 && headers.location && redirects > 0) {
-          response.resume()
-          resolve(download(new URL(headers.location, url).toString(), redirects - 1))
-        } else if (statusCode !== 200) {
-          response.resume()
-          reject(new Error(`[events] Couldn't fetch the club calendar feed (HTTP ${statusCode}). Is the Google Calendar still public?`))
-        } else {
-          let body = ''
-          response.setEncoding('utf8')
-          response.on('data', (chunk) => (body += chunk))
-          response.on('end', () => resolve(body))
-        }
-      })
-      .on('error', reject)
-      .setTimeout(30_000, function () {
-        this.destroy(new Error('[events] Timed out fetching the club calendar feed'))
-      })
-  })
-}
-
-type Parsed = { events: ClubEvent[]; ics: Map<string, string>; fetchedAt: string }
+type Parsed = { events: ClubEvent[]; ics: Map<string, string>; builtOn: string }
 let cache: Promise<Parsed> | undefined
 
 export function getCalendar() {
@@ -147,7 +120,8 @@ export function getCalendar() {
 }
 
 async function load(): Promise<Parsed> {
-  const root = new ICAL.Component(ICAL.parse(await download(clubCalendar.feed)))
+  const file = path.join(process.cwd(), 'content', 'events', 'calendar.ics')
+  const root = new ICAL.Component(ICAL.parse(await fs.promises.readFile(file, 'utf8')))
 
   const timezones = root.getAllSubcomponents('vtimezone')
   for (const tz of timezones) ICAL.TimezoneService.register(tz)
@@ -235,7 +209,12 @@ async function load(): Promise<Parsed> {
     single.updatePropertyWithValue('version', '2.0')
     single.updatePropertyWithValue('calscale', 'GREGORIAN')
     single.updatePropertyWithValue('method', 'PUBLISH')
-    for (const c of [...timezones, ...components]) single.addSubcomponent(new ICAL.Component(structuredClone(c.jCal)))
+    for (const c of [...timezones, ...components]) {
+      const copy = new ICAL.Component(structuredClone(c.jCal))
+      // The saved copy drops Google's DTSTAMP (see scripts/sync-calendar.mjs), but calendar apps expect one.
+      if (copy.name === 'vevent') copy.updatePropertyWithValue('dtstamp', ICAL.Time.now())
+      single.addSubcomponent(copy)
+    }
     ics.set(id, single.toString())
 
     events.push({
@@ -262,5 +241,5 @@ async function load(): Promise<Parsed> {
   }
 
   events.sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title))
-  return { events, ics, fetchedAt: today }
+  return { events, ics, builtOn: today }
 }

@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 }
 
 export default async function EventsPage() {
-  const { events, fetchedAt } = await getCalendar()
+  const { events, builtOn } = await getCalendar()
   return (
     <main className="min-h-screen bg-brand-wash">
       <div className="site-container pt-12 pb-2">
@@ -38,7 +38,7 @@ export default async function EventsPage() {
       </div>
       <div className="site-container pt-6 pb-16">
         {/* The build date is only a first guess; the browser re-sorts on load so past events never linger as "upcoming". */}
-        <EventsBrowser events={events} buildDay={fetchedAt} />
+        <EventsBrowser events={events} buildDay={builtOn} />
       </div>
     </main>
   )

@@ -99,8 +99,8 @@ export default function EventsBrowser({ events, buildDay }: { events: ClubEvent[
         Synced from our{' '}
         <a href={clubCalendar.google} target="_blank" rel="noopener noreferrer" className="underline decoration-brand-border underline-offset-2 hover:text-brand">
           Google Calendar
-        </a>{' '}
-        on {formatLongDate(buildDay)}.
+        </a>
+        . Changes there show up here within a few hours.
       </p>
     </>
   )

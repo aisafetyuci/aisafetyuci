@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build"
+    "build": "next build",
+    "sync-calendar": "node scripts/sync-calendar.mjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",

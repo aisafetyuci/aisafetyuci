@@ -62,10 +62,6 @@
   .button-outline-light {
     @apply border border-white/40 text-white hover:bg-white/10;
   }
-
-  .hero-photo-control {
-    @apply inline-flex h-11 w-11 sm:h-9 sm:w-9 items-center justify-center rounded-full text-sm text-brand transition-colors hover:bg-gray-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand;
-  }
 }
 
 .ai-progress-headline {
@@ -105,56 +101,6 @@
     transform: none;
     filter: none;
     transition: none;
-  }
-}
-
-.collaborator-marquee {
-  overflow: hidden;
-  mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
-}
-
-.collaborator-track {
-  display: flex;
-  width: max-content;
-  animation: collaborator-scroll 65s linear infinite;
-  will-change: transform;
-}
-
-.collaborator-group {
-  display: flex;
-  flex-shrink: 0;
-  gap: 2.5rem;
-  padding-inline: 1.25rem;
-}
-
-.collaborator-group > li {
-  width: 11rem;
-  flex-shrink: 0;
-}
-
-.collaborator-marquee:hover .collaborator-track,
-.collaborator-marquee:focus-within .collaborator-track {
-  animation-play-state: paused;
-}
-
-@keyframes collaborator-scroll {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-50%, 0, 0); }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .collaborator-marquee {
-    overflow-x: auto;
-    mask-image: none;
-  }
-
-  .collaborator-track {
-    animation: none;
-    will-change: auto;
-  }
-
-  .collaborator-group[aria-hidden='true'] {
-    display: none;
   }
 }
 

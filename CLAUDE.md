@@ -16,7 +16,7 @@ Guidance for Claude Code working in this repo. See `MAINTAINING.md` for the huma
 
 ## Where content lives (source of truth)
 - **Programs** + apply links/status badges: `app/data/programs.ts`
-- **Events page** (`/events`): one list in `app/data/events.ts`; the page sorts entries into upcoming/past in the browser, so nothing needs moving after an event ends. The homepage Google Calendar embed is separate.
+- **Events page** (`/events`): built from the club **Google Calendar** — add events there, not in code. `.github/workflows/sync-calendar.yml` saves the calendar's public iCal feed to `content/events/calendar.ics` every 3 hours and commits it to `main` when it changed (don't hand-edit that file; `npm run sync-calendar` refreshes it locally). Builds read that file, never Google directly: Google rate-limits Cloudflare's build machines (HTTP 429). Parsing is in `app/lib/events.ts`; categories are guessed from titles (or a `#talk`-style tag in the description). Photos, headcounts, highlights, category fixes and hidden events: `app/data/eventExtras.ts`, matched by title.
 - **External links** (Discord invite, coffee-chat bookings, email, Linktree): `app/data/links.ts` — all site code imports from here
 - **Technical Intro Fellowship** weekly schedule/readings: `app/tif/data.ts`; the single-page curriculum is rendered by `app/tif/WeekAccordion.tsx`. Old `app/tif/[week]` URLs redirect to `/tif#week-N`.
 - **Team/leadership:** `app/team/` + headshots in `public/images/team/` (jpg headshots; SVG placeholder for anyone without a photo yet)
@@ -34,7 +34,7 @@ Site code gets Discord/coffee/email links from `app/data/links.ts` and apply lin
 ## External integrations (separate accounts, not code)
 - **Applications → Airtable** (base `appKZNlVqsXmdMztH`).
 - **Mailing-list signups → Google Apps Script** (`app/components/MailingListForm.tsx`). It posts in **`no-cors`** mode, so the form **always** shows success even if the backend is down — never infer it works from the UI alone.
-- **Homepage events calendar → Google Calendar** (edited in Calendar, not in code).
+- **Events → Google Calendar** (edited in Calendar, not in code): embedded on the homepage and the source of `/events`.
 - Discord, Linktree, coffee-chat booking links.
 
 ## Design system (don't break)

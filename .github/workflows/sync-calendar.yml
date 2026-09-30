@@ -1,0 +1,55 @@
+# /events is built from content/events/calendar.ics, a saved copy of the club Google Calendar.
+# This refreshes that copy and commits it to main when the calendar changed, which deploys the site
+# like any other push. To pull in calendar edits right away: Actions tab → this workflow → Run workflow.
+name: Sync events from Google Calendar
+
+on:
+  schedule:
+    - cron: '23 */3 * * *' # every 3 hours
+  workflow_dispatch:
+
+permissions:
+  contents: write # commit the updated calendar
+  actions: write # start the GitHub Pages deploy
+
+concurrency:
+  group: calendar-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+
+      - name: Download the calendar
+        run: node scripts/sync-calendar.mjs
+
+      - name: Commit if the calendar changed
+        id: commit
+        run: |
+          if git diff --quiet -- content/events/calendar.ics; then
+            echo "No calendar changes."
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add content/events/calendar.ics
+          git commit -m 'Sync events from Google Calendar'
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      # Cloudflare (the live site) builds from the push on its own. Pushes made here don't start
+      # other workflows, though, so start the GitHub Pages backup deploy explicitly.
+      - name: Deploy the GitHub Pages backup
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run deploy.yml --ref main

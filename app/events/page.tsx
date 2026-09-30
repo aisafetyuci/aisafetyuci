@@ -1,5 +1,5 @@
 import { Metadata } from 'next'
-import { events, todayInIrvine } from '../data/events'
+import { getCalendar } from '../lib/events'
 import EventsBrowser from './EventsBrowser'
 
 const pageTitle = 'Events'
@@ -24,7 +24,8 @@ export const metadata: Metadata = {
   },
 }
 
-export default function EventsPage() {
+export default async function EventsPage() {
+  const { events, builtOn } = await getCalendar()
   return (
     <main className="min-h-screen bg-brand-wash">
       <div className="site-container pt-12 pb-2">
@@ -37,7 +38,7 @@ export default function EventsPage() {
       </div>
       <div className="site-container pt-6 pb-16">
         {/* The build date is only a first guess; the browser re-sorts on load so past events never linger as "upcoming". */}
-        <EventsBrowser events={events} buildDay={todayInIrvine()} />
+        <EventsBrowser events={events} buildDay={builtOn} />
       </div>
     </main>
   )

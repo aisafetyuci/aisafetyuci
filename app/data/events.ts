@@ -1,10 +1,8 @@
-import { meeting, memberMeeting } from './links'
-import { programsByKey } from './programs'
+// Shared event types and helpers for /events (safe to import from client components).
+// The events themselves come from the club Google Calendar at build time: see app/lib/events.ts.
+// Photos, headcounts and category fixes are added in app/data/eventExtras.ts.
 
-// Source of truth for /events. Add an entry here and redeploy; the page sorts entries into
-// Upcoming / Past by date in the visitor's browser, so nothing needs to move once an event ends.
-
-export const eventCategories = ['Programs', 'Talks', 'Workshops', 'Socials', 'Tabling', 'Deadlines'] as const
+export const eventCategories = ['Programs', 'Talks', 'Workshops', 'Socials', 'Co-working', 'Tabling', 'Deadlines', 'Other'] as const
 export type EventCategory = (typeof eventCategories)[number]
 
 // Badge colors — the only extra colors the design system allows beyond the brand palette.
@@ -13,50 +11,37 @@ export const eventCategoryColors: Record<EventCategory, string> = {
   Talks: 'bg-sky-100 text-sky-700',
   Workshops: 'bg-violet-100 text-violet-700',
   Socials: 'bg-emerald-100 text-emerald-800',
+  'Co-working': 'bg-teal-100 text-teal-800',
   Tabling: 'bg-orange-100 text-orange-800',
   Deadlines: 'bg-amber-100 text-amber-800',
+  Other: 'bg-gray-100 text-gray-600',
 }
 
 export type ClubEvent = {
+  id: string
   title: string
   category: EventCategory
-  /** YYYY-MM-DD in Pacific time. Leave out while the date is still TBD. */
-  date?: string
-  /** YYYY-MM-DD for multi-day events. */
+  /** YYYY-MM-DD in Pacific time. For a repeating event, the first meeting. */
+  date: string
+  /** YYYY-MM-DD, when the event (or a repeating event's last meeting) is on a later day. */
   endDate?: string
-  /** e.g. '5–7 PM'. Leave out for "Time TBD". */
+  /** e.g. '5–7 PM'. Missing for all-day events such as deadlines. */
   time?: string
-  /** UCI quarter, e.g. 'Fall 2026'. Worked out from `date` when there is one; required when there isn't. */
-  quarter?: string
   location?: { name: string; mapUrl?: string }
-  summary: string
-  link?: { href: string; label: string }
+  summary?: string
+  links: { href: string; label: string }[]
+  /** Repeating events (fellowship sections, weekly meetings) are one entry, not one per week. */
+  recurrence?: {
+    label: string // e.g. 'Weekly on Thursdays'
+    dates: string[] // every meeting date, YYYY-MM-DD (open-ended series: the next year)
+    ongoing: boolean // no end date set in the calendar
+  }
   image?: { src: string; alt: string; credit?: string }
-  /** Past events only: headcount, shown on the highlight cards. */
+  /** Past events: headcount, shown on the highlight cards. */
   attendance?: number
-  /** Past events only: feature in "Past event highlights". */
+  /** Past events: feature in the highlight cards at the top of the Past tab. */
   highlight?: boolean
 }
-
-export const events: ClubEvent[] = [
-  {
-    title: 'Intro Fellowship applications due',
-    category: 'Deadlines',
-    date: programsByKey.intro.applicationDeadline!.date,
-    summary: 'Last day to apply for the Fall 2026 Intro Fellowship, our 8-week technical AI safety reading group. No background in AI safety needed.',
-    link: { href: programsByKey.intro.applyHref, label: 'Apply now' },
-  },
-  {
-    title: 'Intro Fellowship, Fall 2026',
-    category: 'Programs',
-    quarter: 'Fall 2026',
-    time: `${meeting.day}, ${meeting.time}`,
-    location: { name: meeting.room, mapUrl: meeting.mapUrl },
-    summary: 'Eight weeks of readings and discussion on how modern AI systems work and what could go wrong. No work outside weekly meetings.',
-    link: { href: '/tif', label: 'See the curriculum' },
-  },
-
-]
 
 const monthDay = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
 const longDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
@@ -73,19 +58,17 @@ export function formatLongDate(date: string) {
   return longDate.format(utc(date))
 }
 
-export function formatDateRange(event: ClubEvent) {
-  if (!event.date) return null
-  if (!event.endDate || event.endDate === event.date) return formatMonthDay(event.date)
-  const [start, end] = [utc(event.date), utc(event.endDate)]
-  return start.getUTCMonth() === end.getUTCMonth()
-    ? `${formatMonthDay(event.date)}–${end.getUTCDate()}`
-    : `${formatMonthDay(event.date)}–${formatMonthDay(event.endDate)}`
+export function formatRange(start: string, end?: string) {
+  if (!end || end === start) return formatMonthDay(start)
+  const [a, b] = [utc(start), utc(end)]
+  return a.getUTCMonth() === b.getUTCMonth()
+    ? `${formatMonthDay(start)}–${b.getUTCDate()}`
+    : `${formatMonthDay(start)} – ${formatMonthDay(end)}`
 }
 
 // UCI's academic calendar: Winter Jan–Mar, Spring Apr–Jun, Summer Jul–Aug, Fall Sep–Dec.
-export function quarterOf(event: ClubEvent) {
-  if (event.quarter) return event.quarter
-  const [year, month] = event.date!.split('-').map(Number)
+export function quarterOf(date: string) {
+  const [year, month] = date.split('-').map(Number)
   const season = month <= 3 ? 'Winter' : month <= 6 ? 'Spring' : month <= 8 ? 'Summer' : 'Fall'
   return `${season} ${year}`
 }
@@ -101,8 +84,12 @@ export function todayInIrvine(now = new Date()) {
   return new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Los_Angeles' }).format(now)
 }
 
-/** Undated events stay upcoming until someone gives them a date. */
+/** A repeating event's next meeting on or after `today`. */
+export function nextMeeting(event: ClubEvent, today: string) {
+  return event.recurrence?.dates.find((date) => date >= today)
+}
+
 export function isUpcoming(event: ClubEvent, today: string) {
-  const last = event.endDate ?? event.date
-  return !last || last >= today
+  if (event.recurrence) return event.recurrence.ongoing || nextMeeting(event, today) !== undefined
+  return (event.endDate ?? event.date) >= today
 }

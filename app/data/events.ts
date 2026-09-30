@@ -36,7 +36,6 @@ export type ClubEvent = {
     dates: string[] // every meeting date, YYYY-MM-DD (open-ended series: the next year)
     ongoing: boolean // no end date set in the calendar
   }
-  addToCalendar: { google: string; ics: string }
   image?: { src: string; alt: string; credit?: string }
   /** Past events: headcount, shown on the highlight cards. */
   attendance?: number

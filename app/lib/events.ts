@@ -96,9 +96,6 @@ function addDays(day: string, days: number) {
   return date.toISOString().slice(0, 10)
 }
 
-const googleStamp = (time: ICAL.Time) =>
-  time.isDate ? time.toString().slice(0, 10).replace(/-/g, '') : time.toJSDate().toISOString().replace(/[-:]|\.\d{3}/g, '')
-
 function recurrenceLabel(recur: ICAL.Recur, firstDay: string) {
   const days = (recur.parts.BYDAY as string[] | undefined)?.map((d) => d.slice(-2))
   const names = days?.length
@@ -111,7 +108,7 @@ function recurrenceLabel(recur: ICAL.Recur, firstDay: string) {
   return 'Repeats'
 }
 
-type Parsed = { events: ClubEvent[]; ics: Map<string, string>; builtOn: string }
+type Parsed = { events: ClubEvent[]; builtOn: string }
 let cache: Promise<Parsed> | undefined
 
 export function getCalendar() {
@@ -136,7 +133,6 @@ async function load(): Promise<Parsed> {
   const today = dayFormat.format(new Date())
   const horizon = addDays(today, horizonDays)
   const events: ClubEvent[] = []
-  const ics = new Map<string, string>()
   const usedIds = new Set<string>()
 
   for (const components of byUid.values()) {
@@ -154,7 +150,6 @@ async function load(): Promise<Parsed> {
     let date = pacificDay(start)
     let endDate: string | undefined = allDay ? addDays(end.toString().slice(0, 10), -1) : dayFormat.format(new Date(end.toJSDate().getTime() - 1))
     let recurrence: ClubEvent['recurrence']
-    let recurLine: string | undefined
 
     if (event.isRecurring()) {
       const recur = master.getFirstPropertyValue('rrule') as ICAL.Recur
@@ -170,7 +165,6 @@ async function load(): Promise<Parsed> {
       date = dates[0]
       endDate = ongoing ? undefined : dates.at(-1)
       recurrence = { label: recurrenceLabel(recur, dates[0]), dates, ongoing }
-      recurLine = `RRULE:${recur.toString()}`
     }
     if (endDate && endDate <= date) endDate = undefined
 
@@ -193,30 +187,6 @@ async function load(): Promise<Parsed> {
     for (let n = 2; usedIds.has(id); n++) id = `${slugify(title)}-${date}-${n}`
     usedIds.add(id)
 
-    const google = new URL('https://calendar.google.com/calendar/render')
-    google.searchParams.set('action', 'TEMPLATE')
-    google.searchParams.set('text', title)
-    google.searchParams.set('dates', `${googleStamp(start)}/${googleStamp(end)}`)
-    google.searchParams.set('ctz', zone)
-    if (rawLocation) google.searchParams.set('location', rawLocation)
-    const details = [description.summary, ...links.map((l) => `${l.label}: ${l.href}`)].filter(Boolean).join('\n\n')
-    if (details) google.searchParams.set('details', details)
-    if (recurLine) google.searchParams.set('recur', recurLine)
-
-    // A one-event calendar file for Apple Calendar / Outlook, served at /events/ics/<id>.ics.
-    const single = new ICAL.Component(['vcalendar', [], []])
-    single.updatePropertyWithValue('prodid', '-//AI Safety Collective at Irvine//Events//EN')
-    single.updatePropertyWithValue('version', '2.0')
-    single.updatePropertyWithValue('calscale', 'GREGORIAN')
-    single.updatePropertyWithValue('method', 'PUBLISH')
-    for (const c of [...timezones, ...components]) {
-      const copy = new ICAL.Component(structuredClone(c.jCal))
-      // The saved copy drops Google's DTSTAMP (see scripts/sync-calendar.mjs), but calendar apps expect one.
-      if (copy.name === 'vevent') copy.updatePropertyWithValue('dtstamp', ICAL.Time.now())
-      single.addSubcomponent(copy)
-    }
-    ics.set(id, single.toString())
-
     events.push({
       id,
       title,
@@ -228,7 +198,6 @@ async function load(): Promise<Parsed> {
       ...(description.summary ? { summary: description.summary } : {}),
       links,
       ...(recurrence ? { recurrence } : {}),
-      addToCalendar: { google: google.toString(), ics: `/events/ics/${id}.ics` },
       ...(extra?.image ? { image: extra.image } : {}),
       ...(extra?.attendance ? { attendance: extra.attendance } : {}),
       ...(extra?.highlight ? { highlight: true } : {}),
@@ -241,5 +210,5 @@ async function load(): Promise<Parsed> {
   }
 
   events.sort((a, b) => a.date.localeCompare(b.date) || a.title.localeCompare(b.title))
-  return { events, ics, builtOn: today }
+  return { events, builtOn: today }
 }

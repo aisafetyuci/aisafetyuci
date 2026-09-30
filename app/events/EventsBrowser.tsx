@@ -303,6 +303,7 @@ function Location({ event }: { event: ClubEvent }) {
 }
 
 function Actions({ event }: { event: ClubEvent }) {
+  if (event.links.length === 0) return null
   return (
     <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm font-semibold">
       {event.links.map((link) => (
@@ -310,10 +311,6 @@ function Actions({ event }: { event: ClubEvent }) {
           {link.label} ↗
         </a>
       ))}
-      <Menu label="Add to calendar" align="left">
-        <MenuLink href={event.addToCalendar.google} external>Google Calendar</MenuLink>
-        <MenuLink href={event.addToCalendar.ics} download>Apple Calendar / Outlook (.ics)</MenuLink>
-      </Menu>
     </div>
   )
 }
@@ -321,7 +318,7 @@ function Actions({ event }: { event: ClubEvent }) {
 function SubscribeMenu() {
   const [copied, setCopied] = useState(false)
   return (
-    <Menu label="Subscribe to our calendar" align="right" strong>
+    <Menu label="Subscribe to our calendar">
       <p className="px-3 pb-2 pt-1 text-xs font-normal text-gray-500">New events show up in your calendar automatically.</p>
       <MenuLink href={clubCalendar.google} external>Google Calendar</MenuLink>
       <MenuLink href={clubCalendar.apple}>Apple Calendar</MenuLink>
@@ -337,7 +334,7 @@ function SubscribeMenu() {
   )
 }
 
-function Menu({ label, align, strong = false, children }: { label: string; align: 'left' | 'right'; strong?: boolean; children: React.ReactNode }) {
+function Menu({ label, children }: { label: string; children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -360,13 +357,13 @@ function Menu({ label, align, strong = false, children }: { label: string; align
         type="button"
         aria-expanded={open}
         onClick={() => setOpen(!open)}
-        className={`inline-flex items-center gap-1 text-sm font-semibold transition-colors ${strong ? 'min-h-10 rounded-lg border border-brand-border bg-white px-3 py-2 text-brand shadow-card hover:bg-brand-soft' : 'text-brand hover:text-brand-accent'}`}
+        className="inline-flex min-h-10 items-center gap-1 rounded-lg border border-brand-border bg-white px-3 py-2 text-sm font-semibold text-brand shadow-card transition-colors hover:bg-brand-soft"
       >
         {label}
         <span aria-hidden="true" className={`transition-transform ${open ? 'rotate-180' : ''}`}>▾</span>
       </button>
       {open && (
-        <div className={`absolute z-20 mt-2 w-64 rounded-xl border border-brand-border bg-white p-1.5 shadow-card-hover ${align === 'right' ? 'right-0' : 'left-0'}`}>
+        <div className="absolute left-0 z-20 mt-2 w-64 rounded-xl border border-brand-border bg-white p-1.5 shadow-card-hover sm:left-auto sm:right-0">
           {children}
         </div>
       )}
@@ -374,12 +371,11 @@ function Menu({ label, align, strong = false, children }: { label: string; align
   )
 }
 
-function MenuLink({ href, external = false, download = false, children }: { href: string; external?: boolean; download?: boolean; children: React.ReactNode }) {
+function MenuLink({ href, external = false, children }: { href: string; external?: boolean; children: React.ReactNode }) {
   return (
     <a
       href={href}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-      {...(download ? { download: '' } : {})}
       className="block rounded-md px-3 py-2 text-sm font-medium text-brand hover:bg-brand-soft"
     >
       {children}

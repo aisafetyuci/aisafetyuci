@@ -34,7 +34,7 @@ Site code gets Discord/coffee/email links from `app/data/links.ts` and apply lin
 ## External integrations (separate accounts, not code)
 - **Applications → Airtable** (base `appKZNlVqsXmdMztH`).
 - **Mailing-list signups → Google Apps Script** (`app/components/MailingListForm.tsx`). It posts in **`no-cors`** mode, so the form **always** shows success even if the backend is down — never infer it works from the UI alone.
-- **Events → Google Calendar** (edited in Calendar, not in code): embedded on the homepage and the source of `/events`.
+- **Events → Google Calendar** (edited in Calendar, not in code): the source of `/events` and the homepage "Coming up" section.
 - Discord, Linktree, coffee-chat booking links.
 
 ## Design system (don't break)

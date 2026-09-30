@@ -253,12 +253,14 @@ function PastView({ events, filtered }: { events: ClubEvent[]; filtered: boolean
 }
 
 function TimelineView({ events, today }: { events: ClubEvent[]; today: string }) {
-  const quarters = groupBy([...events].sort(byDate), (e) => quarterOf(e.date)).sort(([a], [b]) => quarterRank(b) - quarterRank(a))
+  // One-off events only: weekly meetings would repeat in every quarter and crowd out everything else.
+  const oneOffs = events.filter((e) => !e.recurrence)
+  const quarters = groupBy(oneOffs.sort(byDate), (e) => quarterOf(e.date)).sort(([a], [b]) => quarterRank(b) - quarterRank(a))
   return (
     <section aria-labelledby="timeline-heading">
       <h2 id="timeline-heading" className="text-3xl font-semibold text-brand">By quarter</h2>
-      <p className="mt-1 text-gray-500">Everything on our calendar, by UCI quarter.</p>
-      {events.length === 0 && <Empty>No events in this category.</Empty>}
+      <p className="mt-1 text-gray-500">Our events, by UCI quarter.</p>
+      {oneOffs.length === 0 && <Empty>No events in this category.</Empty>}
       <div className="mt-8 grid gap-6 lg:grid-cols-2">
         {quarters.map(([quarter, items]) => (
           <div key={quarter} className="surface-card p-6">
@@ -269,7 +271,7 @@ function TimelineView({ events, today }: { events: ClubEvent[]; today: string })
                 return (
                   <li key={event.id} className="flex items-baseline gap-4 text-sm">
                     <span className={`w-16 shrink-0 font-semibold ${done ? 'text-gray-400' : 'text-brand-accent'}`}>
-                      {event.recurrence ? 'Weekly' : formatRange(event.date, event.endDate)}
+                      {formatRange(event.date, event.endDate)}
                     </span>
                     <span className={`min-w-0 flex-1 ${done ? 'text-gray-500' : 'font-medium text-brand'}`}>{event.title}</span>
                     <Badge category={event.category} />

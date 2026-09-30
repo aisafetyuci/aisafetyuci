@@ -193,7 +193,7 @@ export default function GetInvolved() {
                             <li>We’re a UCI-recognized student group. Independent researchers and students from other universities are welcome.</li>
                             <li>New to AI safety? Start with the <a href="#intro-fellowship" className="font-medium text-brand underline underline-offset-4">Intro Fellowship</a> and our <Link href="/resources" className="font-medium text-brand underline underline-offset-4">resources</Link>. Fellowship alumni typically receive application priority.</li>
                             <li>Rolling admission; the board typically makes decisions monthly.</li>
-                            <li>Waiting on a response? Email <CopyEmail email={links.email} />.</li>
+                            <li>Waiting on a response? Email <CopyEmail />.</li>
                           </ul>
                         </div>
                       </div>

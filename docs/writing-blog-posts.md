@@ -17,7 +17,7 @@ You need a GitHub account with access to the `aisafetyuci/aisafetyuci` repositor
    - **Feature at top of blog** (optional): puts the post in the large card at the top of /blog.
    - **Post**: the body. The toolbar handles headings, bold, links, images, and code.
 3. Click **Save**. Your post is now a **draft**. Nothing is public on aisafetyuci.org yet.
-4. **Preview it**: about 2 minutes after saving, a **View Preview** button appears at the top of the editor. It opens your post on a preview copy of the site, exactly as it will look. The preview isn't listed anywhere, but anyone you send the link to can open it. Save again after changes, and the preview updates about 2 minutes later.
+4. **Preview it**: about 2 minutes after saving, a **View Preview** button appears at the top of the editor. It opens your post on a preview copy of the site, exactly as it will look. The preview isn't listed anywhere, but anyone you send the link to can open it. Save again after changes, and the preview updates about 2 minutes later. If the button still says **View on Live Site**, the preview isn't ready yet: wait a minute, reload the page, and open the post again.
 5. When it's ready, set **Status** (top right) to **Ready**, then click **Publish**. The post appears on aisafetyuci.org/blog about 2 minutes later.
 
 The **Editorial Workflow** page (third icon, top left) shows every draft as Drafts → In Review → Ready. Use **In Review** if you want someone else to read the post first.

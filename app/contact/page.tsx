@@ -1,5 +1,6 @@
 import { Metadata } from 'next'
 import DiscordIcon from '../components/DiscordIcon'
+import EmailLink from '../components/EmailLink'
 import MailingListForm from '../components/MailingListForm'
 import { links, coffeeChats } from '../data/links'
 
@@ -85,9 +86,7 @@ export default function Contact() {
               <div>
                 <p className="text-gray-700 leading-relaxed mb-4">
                   Email us at{' '}
-                  <a href={`mailto:${links.email}`} className="break-words text-brand font-semibold underline">
-                    {links.email}
-                  </a>, or find all our links in one place on Linktree.
+                  <EmailLink className="break-words text-brand font-semibold underline" />, or find all our links in one place on Linktree.
                 </p>
                 <a href={links.linktree} target="_blank" rel="noopener noreferrer" className="button-primary w-full">
                   <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">

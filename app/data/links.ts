@@ -2,7 +2,9 @@
 // NOTE: README.md and docs/discord-info-channel.md hardcode these too — update them manually.
 export const links = {
   discord: 'https://discord.gg/uENtNdDPPb',
-  email: 'aisafetyatuci@gmail.com',
+  // Kept in two pieces so the full address never appears in the page source or this repo,
+  // where spam bots look for it. Shown and linked by EmailLink / CopyEmail.
+  email: { user: 'aisafetyatuci', domain: 'gmail.com' },
   linktree: 'https://linktr.ee/aisafetyatuci',
 }
 

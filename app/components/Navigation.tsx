@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation'
 
 const navigation = [
   { href: '/get-involved', label: 'Get Involved' },
+  { href: '/events', label: 'Events' },
   { href: '/resources', label: 'Resources' },
   { href: '/contact', label: 'Contact' },
   { href: '/team', label: 'Team' },
@@ -16,7 +17,7 @@ const navigation = [
 export default function Navigation({ showBlog = false }: { showBlog?: boolean }) {
   const pathname = usePathname()
   const items = showBlog
-    ? [...navigation.slice(0, 2), { href: '/blog', label: 'Blog' }, ...navigation.slice(2)]
+    ? [...navigation.slice(0, 3), { href: '/blog', label: 'Blog' }, ...navigation.slice(3)]
     : navigation
   const isCurrent = (href: string) => pathname === href || (href === '/blog' && pathname.startsWith('/blog/'))
   const [isOpen, setIsOpen] = useState(false)

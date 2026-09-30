@@ -6,6 +6,8 @@ export const links = {
   // where spam bots look for it. Shown and linked by EmailLink / CopyEmail.
   email: { user: 'aisafetyatuci', domain: 'gmail.com' },
   linktree: 'https://linktr.ee/aisafetyatuci',
+  // Public "add this calendar" link for the club Google Calendar (the one embedded on the homepage).
+  googleCalendar: 'https://calendar.google.com/calendar/u/0?cid=NDg2OTI3NzUyZWFlYzI3OWNlNDk3MzRjYjVhMzVkZGE4MDMxNDBlMjVhYjBhZWJkM2EyMTRlZTJiZmFiMTU4ZUBncm91cC5jYWxlbmRhci5nb29nbGUuY29t',
 }
 
 // Coffee-chat booking links, one per director. Restated manually in

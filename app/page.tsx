@@ -123,7 +123,9 @@ export default function Home() {
                   className="hidden sm:block"
                 />
               </div>
-
+              <p className="mt-6 text-center">
+                <Link href="/events" className="text-sm font-semibold text-brand hover:text-brand-accent">See all events and past highlights →</Link>
+              </p>
             </div>
           </div>
         </div>

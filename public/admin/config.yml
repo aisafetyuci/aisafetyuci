@@ -6,8 +6,8 @@
 backend:
   name: github
   repo: aisafetyuci/aisafetyuci
-  # Testing: drafts and publishes go to the admin-editor branch, not the live site. Switch to main to go live.
-  branch: admin-editor
+  # Published posts go to main, which deploys the live site. Drafts live on cms/... branches until published.
+  branch: main
   # Login helper (Sveltia CMS Authenticator) on the club Cloudflare account.
   base_url: https://sveltia-cms-auth.aisafetyatuci.workers.dev
   # The repo is public, so sign-in only asks for access to public repos, not private ones.

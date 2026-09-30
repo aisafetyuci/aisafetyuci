@@ -252,35 +252,107 @@ function PastView({ events, filtered }: { events: ClubEvent[]; filtered: boolean
   )
 }
 
+// Each quarter reads as a roundup of what we ran, grouped by kind of event. Deadlines are left out
+// (they aren't gatherings), and a weekly series is listed once, in the quarter it started.
+const kindOrder: [EventCategory, string][] = [
+  ['Talks', 'Talks'],
+  ['Workshops', 'Workshops'],
+  ['Socials', 'Socials'],
+  ['Co-working', 'Study sessions'],
+  ['Tabling', 'Tabling'],
+  ['Programs', 'Programs'],
+  ['Other', 'Other events'],
+]
+const kindDots: Record<EventCategory, string> = {
+  Programs: 'bg-indigo-500',
+  Talks: 'bg-sky-500',
+  Workshops: 'bg-violet-500',
+  Socials: 'bg-emerald-500',
+  'Co-working': 'bg-teal-500',
+  Tabling: 'bg-orange-500',
+  Deadlines: 'bg-amber-500',
+  Other: 'bg-gray-400',
+}
+const sameTitle = (a: string, b: string) => a.toLowerCase().replace(/[^a-z0-9]/g, '') === b.toLowerCase().replace(/[^a-z0-9]/g, '')
+
 function TimelineView({ events, today }: { events: ClubEvent[]; today: string }) {
-  const quarters = groupBy([...events].sort(byDate), (e) => quarterOf(e.date)).sort(([a], [b]) => quarterRank(b) - quarterRank(a))
+  const shown = events.filter((e) => e.category !== 'Deadlines')
+  const quarters = groupBy([...shown].sort(byDate), (e) => quarterOf(e.date)).sort(([a], [b]) => quarterRank(b) - quarterRank(a))
   return (
     <section aria-labelledby="timeline-heading">
       <h2 id="timeline-heading" className="text-3xl font-semibold text-brand">By quarter</h2>
-      <p className="mt-1 text-gray-500">Everything on our calendar, by UCI quarter.</p>
-      {events.length === 0 && <Empty>No events in this category.</Empty>}
-      <div className="mt-8 grid gap-6 lg:grid-cols-2">
-        {quarters.map(([quarter, items]) => (
-          <div key={quarter} className="surface-card p-6">
-            <h3 className="text-xl font-semibold text-brand">{quarter}</h3>
-            <ul className="mt-4 space-y-3">
-              {items.map((event) => {
-                const done = !isUpcoming(event, today)
-                return (
-                  <li key={event.id} className="flex items-baseline gap-4 text-sm">
-                    <span className={`w-16 shrink-0 font-semibold ${done ? 'text-gray-400' : 'text-brand-accent'}`}>
-                      {event.recurrence ? 'Weekly' : formatRange(event.date, event.endDate)}
-                    </span>
-                    <span className={`min-w-0 flex-1 ${done ? 'text-gray-500' : 'font-medium text-brand'}`}>{event.title}</span>
-                    <Badge category={event.category} />
-                  </li>
-                )
-              })}
-            </ul>
-          </div>
-        ))}
+      <p className="mt-1 text-gray-500">Our events, by UCI quarter.</p>
+      {shown.length === 0 && <Empty>No events in this category.</Empty>}
+      <div className="mt-10 grid gap-14">
+        {quarters.map(([quarter, items]) => {
+          const oneOffs = items.filter((e) => !e.recurrence)
+          const weekly = items.filter((e) => e.recurrence)
+          // Repeats of the same event (e.g. several finals lock-ins) collapse into one line.
+          const groups = kindOrder
+            .map(([category, label]) => {
+              const merged: { title: string; events: ClubEvent[] }[] = []
+              for (const event of oneOffs.filter((e) => e.category === category)) {
+                const same = merged.find((m) => sameTitle(m.title, event.title))
+                if (same) same.events.push(event)
+                else merged.push({ title: event.title, events: [event] })
+              }
+              return { category, label, merged }
+            })
+            .filter((g) => g.merged.length > 0)
+          const summary = [
+            oneOffs.length ? `${oneOffs.length} ${oneOffs.length === 1 ? 'event' : 'events'}` : '',
+            weekly.length ? `${weekly.length} weekly ${weekly.length === 1 ? 'meeting' : 'meetings'}` : '',
+          ].filter(Boolean).join(' · ')
+          return (
+            <section key={quarter} aria-labelledby={`quarter-${quarter.replace(' ', '-')}`}>
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-brand-border pb-3.5">
+                <h3 id={`quarter-${quarter.replace(' ', '-')}`} className="text-2xl font-semibold text-brand">{quarter}</h3>
+                <span className="text-sm text-gray-400">{summary}</span>
+              </div>
+              <div className="divide-y divide-brand-border">
+                {groups.map(({ category, label, merged }) => (
+                  <KindRow key={category} category={category} label={label}>
+                    {merged.map(({ title, events: repeats }) => {
+                      const first = repeats[0]
+                      const last = repeats[repeats.length - 1]
+                      const when = repeats.length > 1
+                        ? `${formatMonthDay(first.date)} – ${formatMonthDay(last.endDate ?? last.date)} · ${repeats.length} sessions`
+                        : formatRange(first.date, first.endDate)
+                      return (
+                        <li key={first.id} className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+                          <span className="text-[1.05rem] font-medium text-brand">{title}</span>
+                          <span className="text-sm tabular-nums text-gray-400">{when}</span>
+                          {isUpcoming(last, today) && <span className="rounded-full bg-brand-soft px-2 py-px text-xs font-semibold text-brand">Coming up</span>}
+                        </li>
+                      )
+                    })}
+                  </KindRow>
+                ))}
+                {weekly.length > 0 && (
+                  <KindRow category="Programs" label="Every week">
+                    {weekly.map((event) => (
+                      <li key={event.id} className="text-[1.05rem] font-medium text-brand">{event.title}</li>
+                    ))}
+                  </KindRow>
+                )}
+              </div>
+            </section>
+          )
+        })}
       </div>
     </section>
+  )
+}
+
+function KindRow({ category, label, children }: { category: EventCategory; label: string; children: React.ReactNode }) {
+  return (
+    <div className="grid gap-2.5 py-[1.125rem] sm:grid-cols-[10rem_minmax(0,1fr)] sm:gap-6">
+      <h4 className="flex items-center gap-2.5 self-start pt-1 text-xs font-semibold uppercase tracking-wider text-gray-500">
+        <span aria-hidden="true" className={`h-2 w-2 shrink-0 rounded-full ${kindDots[category]}`} />
+        {label}
+      </h4>
+      <ul className="grid gap-2">{children}</ul>
+    </div>
   )
 }
 

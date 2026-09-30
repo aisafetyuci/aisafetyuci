@@ -3,9 +3,6 @@ import { programsByKey } from './programs'
 
 // Source of truth for /events. Add an entry here and redeploy; the page sorts entries into
 // Upcoming / Past by date in the visitor's browser, so nothing needs to move once an event ends.
-//
-// PROOF OF CONCEPT: entries marked `sample: true` are placeholders to show the layout,
-// not real AISCI events. Replace or delete them before shipping.
 
 export const eventCategories = ['Programs', 'Talks', 'Workshops', 'Socials', 'Tabling', 'Deadlines'] as const
 export type EventCategory = (typeof eventCategories)[number]
@@ -39,11 +36,9 @@ export type ClubEvent = {
   attendance?: number
   /** Past events only: feature in "Past event highlights". */
   highlight?: boolean
-  sample?: boolean
 }
 
 export const events: ClubEvent[] = [
-  // ——— Upcoming ———
   {
     title: 'Intro Fellowship applications due',
     category: 'Deadlines',
@@ -60,109 +55,7 @@ export const events: ClubEvent[] = [
     summary: 'Eight weeks of readings and discussion on how modern AI systems work and what could go wrong. No work outside weekly meetings.',
     link: { href: '/tif', label: 'See the curriculum' },
   },
-  {
-    title: 'Anteater Involvement Fair',
-    category: 'Tabling',
-    date: '2026-10-01',
-    time: '11 AM–3 PM',
-    location: { name: 'Ring Road' },
-    summary: 'Come find our table, meet the board, and ask anything about AI safety or getting involved.',
-    sample: true,
-  },
-  {
-    title: 'Fall kickoff & info session',
-    category: 'Socials',
-    date: '2026-10-08',
-    time: '6–7:30 PM',
-    location: { name: memberMeeting.room, mapUrl: memberMeeting.mapUrl },
-    summary: 'Meet the club, hear what we are running this quarter, and stay for food. Open to everyone.',
-    sample: true,
-  },
-  {
-    title: 'Talk: Evaluating dangerous capabilities in frontier models',
-    category: 'Talks',
-    date: '2026-10-22',
-    time: '5–6:30 PM',
-    location: { name: memberMeeting.room, mapUrl: memberMeeting.mapUrl },
-    summary: 'A researcher walks through how labs test models for risky capabilities, and where current evaluations fall short. Q&A after.',
-    image: { src: '/images/community/discussion.webp', alt: 'Students listening to a presentation and discussion in a classroom' },
-    sample: true,
-  },
-  {
-    title: 'Mechanistic interpretability workshop',
-    category: 'Workshops',
-    date: '2026-11-07',
-    time: '1–5 PM',
-    location: { name: 'DBH 6011' },
-    summary: 'A hands-on afternoon poking at the internals of a small transformer. Bring a laptop; we provide notebooks and GPUs.',
-    sample: true,
-  },
-  {
-    title: 'AI safety research hackathon',
-    category: 'Workshops',
-    quarter: 'Winter 2027',
-    summary: 'A weekend of small-team projects on evaluations, interpretability, and governance, with mentors on hand. Date and details TBD.',
-    sample: true,
-  },
 
-  // ——— Past ———
-  {
-    title: 'Movie night: AI safety documentary screening',
-    category: 'Socials',
-    date: '2026-05-21',
-    time: '7–9 PM',
-    summary: 'We watched and discussed a documentary on the race to build advanced AI.',
-    image: { src: '/images/community/screening.webp', alt: 'Students watching an AI safety video together in a classroom' },
-    attendance: 45,
-    highlight: true,
-    sample: true,
-  },
-  {
-    title: 'Spring picnic',
-    category: 'Socials',
-    date: '2026-05-09',
-    summary: 'End-of-year picnic for fellows and members.',
-    image: { src: '/images/community/picnic.webp', alt: 'Students sharing a picnic on a sunny campus lawn' },
-    attendance: 30,
-    highlight: true,
-    sample: true,
-  },
-  {
-    title: 'Winter bonfire',
-    category: 'Socials',
-    date: '2026-02-13',
-    summary: 'An evening at the fire pits to close out the Winter fellowship cohort.',
-    image: { src: '/images/community/bonfire.webp', alt: 'Students gathered around a bonfire in the evening' },
-    attendance: 25,
-    highlight: true,
-    sample: true,
-  },
-  {
-    title: 'Member meeting: AI 2027 discussion',
-    category: 'Talks',
-    date: '2026-01-29',
-    location: { name: memberMeeting.room, mapUrl: memberMeeting.mapUrl },
-    summary: 'Members debated which parts of the AI 2027 scenario hold up.',
-    image: { src: '/images/community/meeting.webp', alt: 'A room of students taking part in an AISCI meeting' },
-    attendance: 40,
-    highlight: true,
-    sample: true,
-  },
-  {
-    title: 'Winter Intro Fellowship applications due',
-    category: 'Deadlines',
-    date: '2026-01-09',
-    summary: 'Applications closed for the Winter 2026 cohort.',
-    sample: true,
-  },
-  {
-    title: 'Fall 2025 kickoff',
-    category: 'Socials',
-    date: '2025-10-09',
-    summary: 'Our first general meeting of the 2025–26 year.',
-    image: { src: '/images/community/group.webp', alt: 'AISCI members posing together at the front of a classroom' },
-    sample: true,
-  },
 ]
 
 const monthDay = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })

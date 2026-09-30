@@ -57,12 +57,6 @@ export default function EventsBrowser({ events, buildDay }: { events: ClubEvent[
 
   return (
     <>
-      {events.some((e) => e.sample) && (
-        <p className="mb-6 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-          <strong>Proof of concept:</strong>{' '}events marked &ldquo;Sample&rdquo; are placeholders to show the layout.
-        </p>
-      )}
-
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <label className="flex items-center gap-3 text-sm font-medium text-brand">
           Category
@@ -192,7 +186,6 @@ function PastView({ events, filtered }: { events: ClubEvent[]; filtered: boolean
                     </p>
                   )}
                   <p className="mt-2 font-semibold leading-snug text-brand">{event.title}</p>
-                  {event.sample && <div className="mt-2"><SampleBadge /></div>}
                 </div>
               </li>
             ))}
@@ -258,16 +251,7 @@ function TimelineView({ events, today }: { events: ClubEvent[]; today: string })
 }
 
 function Badges({ event }: { event: ClubEvent }) {
-  return (
-    <span className="inline-flex flex-wrap gap-2">
-      <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${eventCategoryColors[event.category]}`}>{event.category}</span>
-      {event.sample && <SampleBadge />}
-    </span>
-  )
-}
-
-function SampleBadge() {
-  return <span className="inline-block rounded-full border border-dashed border-gray-300 px-2 py-0.5 text-xs font-medium text-gray-500">Sample</span>
+  return <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${eventCategoryColors[event.category]}`}>{event.category}</span>
 }
 
 function EventLink({ link }: { link: NonNullable<ClubEvent['link']> }) {

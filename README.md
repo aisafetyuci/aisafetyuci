@@ -29,3 +29,14 @@ The domain is registered and its DNS is managed on Cloudflare (club account). Ev
 - **GitHub Pages** (backup): `.github/workflows/deploy.yml` still publishes the same build. `www.aisafetyuci.org` is a CNAME to GitHub Pages, which redirects it to `aisafetyuci.org`.
 
 **To switch back to GitHub Pages:** in Cloudflare, remove the custom domain from the `aisafetyuci` Worker (Domains tab), then add four proxied `A` records for `aisafetyuci.org` pointing to `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, and `185.199.111.153`. Before ever turning GitHub Pages off, add a Cloudflare redirect rule from `www` to the root domain.
+
+## Blog
+
+Posts are Markdown files in `content/blog/`, checked at build time by `app/lib/blog.ts`; a post that fails a check fails the build, so the live site keeps the last good version. Officers write posts in a web editor at [aisafetyuci.org/admin](https://aisafetyuci.org/admin) — see [`docs/writing-blog-posts.md`](docs/writing-blog-posts.md).
+
+- **Editor**: [Sveltia CMS](https://sveltiacms.app), configured in `public/admin/config.yml` (keep its fields in step with `app/lib/blog.ts`) and loaded at a pinned version in `public/admin/index.html`. Each draft is a pull request on a `cms/blog/<post>` branch; publishing merges it into `main`.
+- **Who can post**: anyone with write access to this repo. Add or remove people in the GitHub organization's settings.
+- **Login**: a GitHub OAuth app ("AISCI blog editor", in the organization's Developer settings) plus a small login helper, the `sveltia-cms-auth` Worker on the club Cloudflare account ([source](https://github.com/sveltia/sveltia-cms-auth)). The Worker holds `GITHUB_CLIENT_ID` and `GITHUB_CLIENT_SECRET` as secrets and only accepts logins from `aisafetyuci.org` and `*.aisafetyatuci.workers.dev`.
+- **Draft previews**: Cloudflare builds every draft branch at `https://cms-blog-<post>-aisafetyuci.aisafetyatuci.workers.dev`. `.github/workflows/cms-preview-link.yml` records that address on GitHub so the editor's **View Preview** button can find it. Previews are public to anyone with the link.
+
+**To remove the editor:** delete `public/admin/` and `.github/workflows/cms-preview-link.yml`, then delete the `sveltia-cms-auth` Worker and the OAuth app. Posts stay as plain files.

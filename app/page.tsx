@@ -102,6 +102,9 @@ export default async function Home() {
                         {applyLabels[program.key]}
                       </a>
                     )}
+                    {!open && lead && (
+                      <Link href="/tif" className="button-secondary">View the syllabus</Link>
+                    )}
                     {open && program.applicationDeadline && (
                       <span className="text-sm font-semibold text-brand">Due {formatMonthDay(program.applicationDeadline.date)}</span>
                     )}

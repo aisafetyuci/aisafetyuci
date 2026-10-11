@@ -70,7 +70,7 @@ const faqs = [
   },
   {
     q: 'When does the Intro Fellowship run?',
-    a: `Every quarter. For Fall 2026, sessions meet ${meeting.day} ${meeting.time} in ${meeting.room} (Donald Bren Hall) at UC Irvine, with dinner provided. Applications open roughly a month before each quarter starts. The Fall 2026 application deadline is ${programsByKey.intro.applicationDeadline?.label}.`,
+    a: `Every quarter. For Fall 2026, sessions meet ${meeting.day} ${meeting.time} in ${meeting.room} (Donald Bren Hall) at UC Irvine, with dinner provided. Applications open roughly a month before each quarter starts; Fall 2026 applications are now closed.`,
   },
   {
     q: 'Is AISCI part of UC Irvine?',
@@ -142,10 +142,12 @@ export default function GetInvolved() {
                     </div>
                   </details>
                   <div className="mt-7 flex flex-wrap items-center gap-3">
-                    <a href={intro.applyHref} target="_blank" rel="noopener noreferrer" className="button-primary w-full sm:w-auto">
-                      Apply to the fellowship <span aria-hidden="true">↗</span>
-                    </a>
-                    <Link href="/tif" className="button-secondary w-full sm:w-auto">View the syllabus</Link>
+                    {intro.status.tone === 'open' && (
+                      <a href={intro.applyHref} target="_blank" rel="noopener noreferrer" className="button-primary w-full sm:w-auto">
+                        Apply to the fellowship <span aria-hidden="true">↗</span>
+                      </a>
+                    )}
+                    <Link href="/tif" className={`${intro.status.tone === 'open' ? 'button-secondary' : 'button-primary'} w-full sm:w-auto`}>View the syllabus</Link>
                   </div>
                 </div>
               </section>

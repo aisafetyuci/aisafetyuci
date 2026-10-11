@@ -79,6 +79,13 @@ export const weeks: Week[] = [
     ],
     core: [
       {
+        title: 'Why "Scout Mindset" Is Crucial to Good Judgment',
+        author: 'Julia Galef / TEDxPSU',
+        year: 2016,
+        url: 'https://www.youtube.com/watch?v=3MYEtQ5Zdn8',
+        type: 'video',
+      },
+      {
         title: 'Epoch AI Trends Page',
         author: 'Epoch AI',
         year: 2025,

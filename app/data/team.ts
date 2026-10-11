@@ -85,6 +85,7 @@ export const organizers: TeamMember[] = [
   {
     name: 'Avanish Davuluri',
     role: 'Organizer',
+    image: '/images/team/avanish-davuluri.jpg',
     website: 'https://www.linkedin.com/in/avanish-davuluri-710a422a7/',
   },
   {

@@ -227,9 +227,10 @@ function quote(value: string) {
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 const retryDelays = [300, 1000]
 // Airtable allows 5 requests a second per base and, once exceeded, refuses everything for
-// 30 seconds. Applicants get two short retries; the background rollback waits the 30 seconds out.
+// 30 seconds. Applicants get two short retries. The background rollback must finish within the
+// 30 seconds Cloudflare allows after the response (waitUntil), so it waits about 27 of them (the lockout began before the response went out).
 const rateLimitDelays = [1000, 3000]
-const rollbackRateLimitDelays = [1000, 5000, 31000]
+const rollbackRateLimitDelays = [1000, 26000]
 
 // Reads and deletes are retried on network errors and 5xx. Creates are not: a failed POST may
 // still have been saved, and a retry would duplicate it. A 429 (rate limit) means nothing was
@@ -263,8 +264,9 @@ async function airtable(env: Env, table: string, method: string, query = '', bod
       console.error(`Airtable ${method} ${table} still rate-limited after ${rateLimitRetries} retries`)
       throw new Rejection(503, "We're getting a lot of applications right now. Please wait a minute and submit again.")
     }
-    // A retried DELETE whose first try went through finds nothing left to delete.
-    if (response.status === 404 && method === 'DELETE' && retries > 0) return {}
+    // A retried DELETE whose first try went through finds nothing left to delete; the caller
+    // checks which records really remain (a 404 can also mean a renamed table).
+    if (response.status === 404 && method === 'DELETE' && retries > 0) return { notFoundOnRetry: true }
     if (response.status >= 500 && idempotent && retries < retryDelays.length) {
       await sleep(retryDelays[retries++])
       continue
@@ -307,24 +309,28 @@ async function deleteRecords(env: Env, table: string, ids: string[]) {
   for (let i = 0; i < ids.length; i += 10) {
     const params = new URLSearchParams()
     for (const id of ids.slice(i, i + 10)) params.append('records[]', id)
-    await airtable(env, table, 'DELETE', params.toString(), undefined, rollbackRateLimitDelays)
+    const result = await airtable(env, table, 'DELETE', params.toString(), undefined, rollbackRateLimitDelays)
+    if (result.notFoundOnRetry) {
+      const batch = ids.slice(i, i + 10)
+      const left = await findRecords(env, table, `OR(${batch.map((id) => `RECORD_ID()=${quote(id)}`).join(',')})`)
+      if (left.length) throw new Error(`${left.length} of ${batch.length} ${table} records still there after a retried delete`)
+    }
   }
 }
 
 // Airtable has no transactions. If an application fails halfway, remove what was saved so the
 // applicant's retry starts clean (and isn't flagged as their own duplicate). Best effort: if
 // this fails too, the log names the rows to delete by hand. Runs after the applicant has their
-// answer (waitUntil), so it can wait out a rate limit.
+// answer (waitUntil), which Cloudflare cancels after 30 seconds without running any more code,
+// so the rows are logged first: with no "Rolled back" line after it, delete them by hand.
 async function rollBack(env: Env, email: string, applicantId: string, applicationIds: string[]) {
-  const left: string[] = []
-  for (const [table, ids] of [['Applications', applicationIds], ['Applicants', [applicantId]]] as const) {
-    try {
-      await deleteRecords(env, table, [...ids])
-    } catch (error) {
-      left.push(`${table} ${JSON.stringify(ids)}`)
-      console.error(`Rollback of ${table} failed:`, error instanceof Error ? error.message : String(error))
-    }
-  }
+  console.error(`Rolling back a failed application from ${email}: Applicants ["${applicantId}"]; Applications ${JSON.stringify(applicationIds)}`)
+  const tables = [['Applications', applicationIds], ['Applicants', [applicantId]]] as const
+  const results = await Promise.allSettled(tables.map(([table, ids]) => deleteRecords(env, table, [...ids])))
+  const left = tables.filter((_, i) => results[i].status === 'rejected').map(([table, ids]) => `${table} ${JSON.stringify(ids)}`)
+  results.forEach((result, i) => {
+    if (result.status === 'rejected') console.error(`Rollback of ${tables[i][0]} failed:`, String(result.reason))
+  })
   if (left.length) console.error(`Rollback failed; delete by hand. Email ${email}: ${left.join('; ')}`)
   else console.error(`Rolled back a failed application from ${email} (Applicants ${applicantId}, ${applicationIds.length} Applications)`)
 }

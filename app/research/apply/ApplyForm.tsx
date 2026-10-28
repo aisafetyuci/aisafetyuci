@@ -202,6 +202,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
     const render = () => {
       const el = turnstileRef.current // the element on screen now, not one from an earlier visit
       if (!active || !el || !window.turnstile || turnstileId.current) return
+      setTurnstileFailed(false) // it loaded after all (slow connection past the timeout)
       turnstileId.current = window.turnstile.render(el, {
         sitekey: researchApply.turnstileSiteKey,
         theme: 'light', // the site has no dark mode
@@ -217,7 +218,6 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
         'expired-callback': () => setTurnstileToken(''),
         'error-callback': fail,
       })
-      setTurnstileFailed(false) // it loaded after all (slow connection past the timeout)
     }
     let script = document.getElementById('turnstile-script') as HTMLScriptElement | null
     const failedToLoad = () => {

@@ -51,9 +51,10 @@ export interface Post {
 
 const postsDir = path.join(process.cwd(), 'content', 'blog')
 const publicDir = path.join(process.cwd(), 'public')
-// The CMS can leave an underscore or a trailing hyphen in a file name (it cuts titles at 42
-// characters); accept those and tidy them in the slug rather than failing the whole site build.
-const fileNamePattern = /^[a-z0-9]+([-_][a-z0-9]+)*-?\.md$/
+// The CMS keeps _ and ~ from titles in file names; accept runs of - _ ~ anywhere and tidy them into
+// single hyphens in the slug, rather than failing the whole site build.
+const fileNamePattern = /^[a-z0-9_~-]*[a-z0-9][a-z0-9_~-]*\.md$/
+const slugFromFile = (file: string) => file.replace(/\.md$/, '').replace(/[-_~]+/g, '-').replace(/^-|-$/g, '')
 const datePattern = /^\d{4}-\d{2}-\d{2}$/
 
 function fail(file: string, field: string, problem: string): never {
@@ -137,6 +138,10 @@ function readingTimeOf(html: string) {
 }
 
 function loadPost(file: string): Post {
+  // /blog/category/ is taken by the category pages.
+  if (fileNamePattern.test(file) && slugFromFile(file) === 'category') {
+    throw new Error(`[blog] content/blog/${file}: this file name is reserved; rename the post`)
+  }
   if (!fileNamePattern.test(file)) {
     throw new Error(`[blog] content/blog/${file}: file name must be lowercase words joined by hyphens, ending in .md (e.g. "my-first-post.md")`)
   }
@@ -151,10 +156,11 @@ function loadPost(file: string): Post {
 
   const rawAuthors = data.authors
   if (!Array.isArray(rawAuthors) || rawAuthors.length === 0) fail(file, 'authors', 'is required and must be a list of names')
-  const authors = rawAuthors.map((author) => {
+  const authors = rawAuthors.filter((author) => !(typeof author === 'string' && author.trim() === '')).map((author) => {
     if (typeof author !== 'string' || author.trim() === '') fail(file, 'authors', 'must only contain names (non-empty text)')
     return author.trim()
   })
+  if (authors.length === 0) fail(file, 'authors', 'is required and must be a list of names')
 
   const rawCategory = requireString(data, file, 'category')
   const category = categories.find((c) => c === rawCategory)
@@ -181,7 +187,7 @@ function loadPost(file: string): Post {
   const html = String(processor.processSync(content))
 
   return {
-    slug: file.replace(/-?\.md$/, '').replace(/_/g, '-'),
+    slug: slugFromFile(file),
     title,
     date,
     updated,

@@ -34,9 +34,10 @@ export interface Project {
 }
 
 const projectsDir = path.join(process.cwd(), 'content', 'research')
-// The CMS can leave an underscore or a trailing hyphen in a file name (it cuts titles at 42
-// characters); accept those and tidy them in the slug rather than failing the whole site build.
-const fileNamePattern = /^[a-z0-9]+([-_][a-z0-9]+)*-?\.md$/
+// The CMS keeps _ and ~ from titles in file names; accept runs of - _ ~ anywhere and tidy them into
+// single hyphens in the slug, rather than failing the whole site build.
+const fileNamePattern = /^[a-z0-9_~-]*[a-z0-9][a-z0-9_~-]*\.md$/
+const slugFromFile = (file: string) => file.replace(/\.md$/, '').replace(/[-_~]+/g, '-').replace(/^-|-$/g, '')
 // Every front-matter field a project may have (kept in step with public/admin/config.yml).
 // Anything else is almost certainly a typo, e.g. `lead:` for `leads:`, and would be silently ignored.
 const knownFields = new Set(['title', 'summary', 'status', 'duration', 'team', 'skills', 'commitment', 'format', 'leads', 'constraints', 'onePagerUrl', 'extraQuestion', 'draft'])
@@ -129,7 +130,7 @@ function loadProject(file: string): Project {
     throw new Error(`[research] content/research/${file}: file name must be lowercase words joined by hyphens, ending in .md`)
   }
   // These names are taken by /research/apply and /research/projects.json.
-  const slug = file.replace(/-?\.md$/, '').replace(/_/g, '-')
+  const slug = slugFromFile(file)
   if (slug === 'apply' || slug === 'projects') {
     throw new Error(`[research] content/research/${file}: this file name is reserved; rename the project`)
   }

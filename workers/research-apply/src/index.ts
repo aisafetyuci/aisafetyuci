@@ -150,10 +150,11 @@ function validate(body: Record<string, unknown>) {
 
 // ---- Outside services ------------------------------------------------------------------
 
-async function verifyTurnstile(token: string, ip: string | null, env: Env) {
+// Returns the hostname of the page the token was issued on.
+async function verifyTurnstile(token: string, ip: string | null, env: Env): Promise<string> {
   const form = new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token })
   if (ip) form.set('remoteip', ip)
-  let result: { success?: boolean; 'error-codes'?: string[] }
+  let result: { success?: boolean; hostname?: string; 'error-codes'?: string[] }
   try {
     const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: form })
     if (!response.ok) throw new Error(`status ${response.status}`)
@@ -166,16 +167,13 @@ async function verifyTurnstile(token: string, ip: string | null, env: Env) {
     console.error('Turnstile rejected a submission:', JSON.stringify(result['error-codes'] ?? []))
     throw new Rejection(403, "We couldn't confirm you're not a bot. Please reload the page and try again.")
   }
+  return result.hostname ?? ''
 }
 
-// Slug → title for every project currently taking applications, read from the site that sent the
-// form, so a Cloudflare preview of the site is checked against its own projects. Origins are
-// allow-listed before this runs; localhost can't be fetched from Cloudflare, so it uses SITE_URL.
-// Cached at the edge so a burst of submissions doesn't refetch it, while closing a project
-// takes effect within minutes.
-async function openProjects(env: Env, origin: string): Promise<Map<string, string>> {
-  const site = origin.startsWith('https://') ? origin : env.SITE_URL.replace(/\/+$/, '')
-  const url = `${site}/research/projects.json`
+// Slug → title for every project currently taking applications. Cached at the edge so a
+// burst of submissions doesn't refetch it, while closing a project takes effect within minutes.
+async function openProjects(env: Env): Promise<Map<string, string>> {
+  const url = `${env.SITE_URL.replace(/\/+$/, '')}/research/projects.json`
   try {
     const response = await fetch(url, { cf: { cacheTtl: 300, cacheEverything: true } } as RequestInit)
     if (!response.ok) throw new Error(`status ${response.status}`)
@@ -267,9 +265,22 @@ async function handle(request: Request, env: Env) {
 
   // Validate before Turnstile so a typo doesn't burn the applicant's single-use token.
   const { turnstileToken, applicant, applications } = validate(body)
-  await verifyTurnstile(turnstileToken, request.headers.get('CF-Connecting-IP'), env)
+  const tokenHost = await verifyTurnstile(turnstileToken, request.headers.get('CF-Connecting-IP'), env)
 
-  const open = await openProjects(env, request.headers.get('Origin') ?? '')
+  // Cloudflare won't let this Worker fetch another workers.dev Worker on the same account, so a
+  // branch preview's projects.json is unreachable. For previews, accept any well-formed slug
+  // instead, but only with a bot-check token issued on that same preview page (so a forged
+  // Origin header alone isn't enough). Titles are then just the slugs.
+  const origin = request.headers.get('Origin') ?? ''
+  let open: Map<string, string>
+  if (previewOrigin.test(origin)) {
+    if (tokenHost !== new URL(origin).hostname) {
+      throw new Rejection(403, "We couldn't confirm you're not a bot. Please reload the page and try again.")
+    }
+    open = new Map(applications.filter((app) => /^[a-z0-9]+(-[a-z0-9]+)*$/.test(app.project)).map((app) => [app.project, app.project]))
+  } else {
+    open = await openProjects(env)
+  }
   for (const app of applications) {
     if (!open.has(app.project)) bad(`The project "${app.project}" is no longer accepting applications. Please remove it and submit again.`)
   }

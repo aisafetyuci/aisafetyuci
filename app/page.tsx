@@ -5,6 +5,7 @@ import MailingListForm from './components/MailingListForm'
 import MissionStatement from './components/MissionStatement'
 import MemberCollaborations from './components/MemberCollaborations'
 import HomeHero from './components/HomeHero'
+import ResearchBanner from './components/ResearchBanner'
 import HomeEvents from './components/HomeEvents'
 import { formatMonthDay, isUpcoming } from './data/events'
 import { meeting } from './data/links'
@@ -53,6 +54,7 @@ export default async function Home() {
 
   return (
     <main className="min-h-screen bg-white">
+      <ResearchBanner />
       <HomeHero />
 
       <section id="events" aria-labelledby="events-heading" className="scroll-mt-16 py-16 sm:py-20">

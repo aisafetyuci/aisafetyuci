@@ -33,3 +33,12 @@ export const memberMeeting = {
   room: 'DBH 1423',
   mapUrl: dbhMapUrl,
 }
+
+// Research project applications (/research/apply) go to a Cloudflare Worker that saves them to
+// Airtable (workers/research-apply). Leave endpoint empty until the Worker is deployed: in
+// `npm run dev` the form then fakes a successful submit; on the live site it shows an error.
+// The Turnstile site key is public by design (the secret key lives only in the Worker).
+export const researchApply = {
+  endpoint: 'https://aisci-research-apply.aisafetyatuci.workers.dev',
+  turnstileSiteKey: '0x4AAAAAAFpEyLnyyYS4vNe0',
+}

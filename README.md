@@ -40,3 +40,10 @@ Posts are Markdown files in `content/blog/`, checked at build time by `app/lib/b
 - **Draft previews**: Cloudflare builds every draft branch at `https://cms-blog-<post>-aisafetyuci.aisafetyatuci.workers.dev`. `.github/workflows/cms-preview-link.yml` records that address on GitHub so the editor's **View Preview** button can find it. Previews are public to anyone with the link.
 
 **To remove the editor:** delete `public/admin/` and `.github/workflows/cms-preview-link.yml`, then delete the `sveltia-cms-auth` Worker and the OAuth app. Posts stay as plain files.
+
+## Research projects
+
+Each open project is a Markdown file in `content/research/` (its front matter drives the cards and the form; its body is the one-pager), checked at build time by `app/lib/research.ts`. Officers add and close projects in the same editor at [aisafetyuci.org/admin](https://aisafetyuci.org/admin) — see [`docs/writing-research-projects.md`](docs/writing-research-projects.md).
+
+- **Pages**: `/research` (open projects), `/research/<project>` (one-pagers), `/research/apply` (the application, `app/research/apply/ApplyForm.tsx`), and `/research/projects.json` (open projects, read by the Worker).
+- **Submissions**: the form posts to the `aisci-research-apply` Worker ([`workers/research-apply/`](workers/research-apply/README.md)), which checks a Cloudflare Turnstile bot test and saves to the **AISCI Research** Airtable base. Its URL and the Turnstile site key go in `researchApply` in `app/data/links.ts`. Unlike the mailing list form, a failed save shows the applicant an error.

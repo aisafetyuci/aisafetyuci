@@ -88,3 +88,55 @@ collections:
         required: false
         hint: Optional. Set this when you make a meaningful change after publishing.
       - { name: body, label: Post, widget: markdown }
+
+  # Research projects: one file per project in content/research/*.md, checked by app/lib/research.ts.
+  # Open projects appear at /research and in the application form at /research/apply.
+  - name: research
+    label: Research projects
+    label_singular: Research project
+    description: Open projects appear at aisafetyuci.org/research and in the application form about 2 minutes after publishing.
+    folder: content/research
+    extension: md
+    format: frontmatter
+    create: true
+    slug: '{{title}}'
+    preview_path: /research/{{slug}}
+    summary: '{{title}} ({{status}})'
+    fields:
+      - { name: title, label: Title, widget: string }
+      - name: summary
+        label: Summary
+        widget: text
+        hint: One or two sentences. Shown on the project card and in the application form.
+      - name: status
+        label: Status
+        widget: select
+        options: [open, closed]
+        default: open
+        hint: Closed projects leave the application form but keep their page.
+      - { name: duration, label: Duration, widget: string, hint: 'For example "2–3 weeks".' }
+      - { name: team, label: Team size, widget: string, required: false, hint: 'For example "2–3 people".' }
+      - { name: skills, label: Skills needed, widget: string, required: false, hint: 'For example "Python and API calls".' }
+      - { name: commitment, label: Time commitment, widget: string, required: false, hint: 'For example "4–6 hrs/week".' }
+      - name: format
+        label: Format
+        widget: select
+        options: [In person, Online, Hybrid]
+        required: false
+      - name: leads
+        label: Project leads
+        widget: list
+        required: false
+        hint: One name per item. Leave empty until leads are chosen.
+      - name: constraints
+        label: Constraints or notes for applicants
+        widget: list
+        required: false
+      - { name: onePagerUrl, label: Link to a longer one-pager, widget: string, required: false, hint: 'Optional full https:// link, e.g. a Google Doc.' }
+      - name: extraQuestion
+        label: Extra application question
+        widget: string
+        required: false
+        hint: Optional. Asked only of people applying to this project, after the two standard questions.
+      - { name: draft, label: Draft (hide from the live site), widget: boolean, default: false, required: false }
+      - { name: body, label: One-pager, widget: markdown }

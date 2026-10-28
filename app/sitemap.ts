@@ -1,11 +1,13 @@
 import { MetadataRoute } from 'next'
 import { getAllPosts } from './lib/blog'
+import { getAllProjects } from './lib/research'
 
 export const dynamic = 'force-static'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://aisafetyuci.org'
   const posts = getAllPosts()
+  const projects = getAllProjects()
   // Real post dates, not build time: a post's last change is `updated` if set, else `date`.
   const postDates = posts.map((post) => post.updated ?? post.date).sort()
 
@@ -58,6 +60,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.7,
     },
+    {
+      url: `${baseUrl}/research`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.7,
+    },
+    ...projects.map((project) => ({
+      url: `${baseUrl}/research/${project.slug}`,
+      lastModified: new Date(),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    })),
     ...posts.map((post) => ({
       url: `${baseUrl}/blog/${post.slug}`,
       lastModified: post.updated ?? post.date,

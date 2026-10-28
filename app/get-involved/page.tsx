@@ -219,6 +219,7 @@ export default function GetInvolved() {
                   <div className="border-t border-white/20 pt-4">
                     <h3 className="font-semibold">Research</h3>
                     <p className="mt-2 text-sm leading-relaxed text-white/75">Build technical skills through projects to understand, evaluate, and control AI systems.</p>
+                    <Link href="/research" className="mt-3 inline-block text-sm font-medium text-white underline decoration-white/40 underline-offset-4 hover:decoration-white">See open research projects <span aria-hidden="true">→</span></Link>
                   </div>
                   <div className="border-t border-white/20 pt-4">
                     <h3 className="font-semibold">Policy &amp; governance</h3>

@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { emptyParamPlaceholder } from '../../lib/blog'
 import { getAllProjects, getProject } from '../../lib/research'
+import { upcomingResearchDeadline } from '../../data/research'
 import ProjectFacts from '../_components/ProjectFacts'
 
 // Static export: every project is prerendered; unknown slugs 404.
@@ -30,12 +31,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'article',
       images: ['/images/asinglenet-og.png'],
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: project.title,
+      description: project.summary,
+      images: ['/images/asinglenet-og.png'],
+    },
   }
 }
 
 export default async function ProjectPage({ params }: Props) {
   const project = getProject((await params).slug)
   if (!project) notFound()
+  const deadline = upcomingResearchDeadline()
 
   return (
     <main className="min-h-screen bg-brand-wash">
@@ -79,6 +87,7 @@ export default async function ProjectPage({ params }: Props) {
               <h2 className="text-xl font-semibold text-brand">Interested?</h2>
               <p className="mt-2 leading-relaxed text-gray-600">
                 No research experience needed. Tell us what draws you to this project and where you&apos;d start.
+                {deadline && <> Apply by <time dateTime={deadline.date} className="font-semibold text-brand">{deadline.label}</time>.</>}
               </p>
               <Link href={`/research/apply?project=${project.slug}`} className="button-primary mt-5 w-full sm:w-auto">
                 Apply to this project <span aria-hidden="true">→</span>

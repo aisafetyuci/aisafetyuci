@@ -4,8 +4,9 @@ summary: Researchers found a direction inside models that runs from "helpful ass
 status: open
 duration: 2–3 weeks
 team: 2–3 people
-skills: PyTorch and rented GPUs (the club pays for GPU time)
+skills: PyTorch and running jobs on rented cloud GPUs
 constraints:
+  - The club pays for GPU time.
   - Higher risk. The first days check that the pipeline and model work before any GPU time is spent.
 ---
 

@@ -13,10 +13,17 @@
   "workers_dev": true,
   "preview_urls": false,
   "compatibility_date": "2026-09-01",
+  // Keeps console logs in the dashboard (Workers & Pages → aisci-research-apply → Logs),
+  // so failed applications can be found after the fact, not only with `wrangler tail`.
+  "observability": { "enabled": true },
+  // The site Worker (repo-root wrangler.jsonc), used to read /research/projects.json:
+  // Cloudflare may refuse a plain fetch between two of the account's Workers.
+  "services": [{ "binding": "SITE", "service": "aisafetyuci" }],
   "vars": {
-    // Replace with the real base ID (starts with "app"; it's in the base's URL).
+    // The "AISCI Research" Airtable base (the ID is in the base's URL).
     "AIRTABLE_BASE_ID": "appfUAuZPmRRCXks8",
     // Where the open-projects list is read from: ${SITE_URL}/research/projects.json
+    // (through the SITE binding first, then this public URL)
     "SITE_URL": "https://aisafetyuci.org"
   }
 }

@@ -43,7 +43,7 @@ Posts are Markdown files in `content/blog/`, checked at build time by `app/lib/b
 
 ## Research projects
 
-Each open project is a Markdown file in `content/research/` (its front matter drives the cards and the form; its body is the one-pager), checked at build time by `app/lib/research.ts`. Officers add and close projects in the same editor at [aisafetyuci.org/admin](https://aisafetyuci.org/admin) — see [`docs/writing-research-projects.md`](docs/writing-research-projects.md).
+Each open project is a Markdown file in `content/research/` (its front matter drives the cards and the form; its body is the one-pager), checked at build time by `app/lib/research.ts`. The application deadline is set once in `app/data/research.ts` (also restated in `docs/discord-info-channel.md`). Officers add and close projects in the same editor at [aisafetyuci.org/admin](https://aisafetyuci.org/admin) — see [`docs/writing-research-projects.md`](docs/writing-research-projects.md).
 
 - **Pages**: `/research` (open projects), `/research/<project>` (one-pagers), `/research/apply` (the application, `app/research/apply/ApplyForm.tsx`), and `/research/projects.json` (open projects, read by the Worker).
 - **Submissions**: the form posts to the `aisci-research-apply` Worker ([`workers/research-apply/`](workers/research-apply/README.md)), which checks a Cloudflare Turnstile bot test and saves to the **AISCI Research** Airtable base. Its URL and the Turnstile site key go in `researchApply` in `app/data/links.ts`. Unlike the mailing list form, a failed save shows the applicant an error.

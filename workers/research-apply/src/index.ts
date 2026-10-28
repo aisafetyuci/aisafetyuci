@@ -7,6 +7,8 @@ interface Env {
   AIRTABLE_TOKEN: string // secret
   TURNSTILE_SECRET: string // secret
   SITE_URL: string
+  // Service binding to the site Worker (wrangler.jsonc). Optional: without it the public URL is used.
+  SITE?: { fetch(input: string, init?: RequestInit): Promise<Response> }
 }
 
 interface Applicant {
@@ -43,7 +45,8 @@ const memberAnswers = ['Yes', 'No', 'Not sure']
 const hoursOptions = ['1–3', '3–6', '6–10', '10+']
 const formatOptions = ['In person', 'Online', 'Either']
 
-const maxBodyBytes = 100 * 1024
+// Well above any real application (non-Latin answers take up to 3 bytes per character).
+const maxBodyBytes = 400_000
 const shortMax = 200
 const longMax = 3000
 const maxApplications = 20
@@ -164,25 +167,49 @@ async function verifyTurnstile(token: string, ip: string | null, env: Env): Prom
     throw new Rejection(502, `We couldn't run the bot check just now. ${tryAgain}`)
   }
   if (!result.success) {
-    console.error('Turnstile rejected a submission:', JSON.stringify(result['error-codes'] ?? []))
+    const codes = result['error-codes'] ?? []
+    // A missing or wrong secret is our misconfiguration, not the applicant's fault.
+    if (codes.includes('missing-input-secret') || codes.includes('invalid-input-secret')) {
+      console.error('Turnstile config error (check the TURNSTILE_SECRET secret):', JSON.stringify(codes))
+      throw new Rejection(502, `We couldn't run the bot check just now. ${tryAgain}`)
+    }
+    console.error('Turnstile rejected a submission:', JSON.stringify(codes))
     throw new Rejection(403, "We couldn't confirm you're not a bot. Please reload the page and try again.")
   }
   return result.hostname ?? ''
 }
 
-// Slug → title for every project currently taking applications. Cached at the edge so a
-// burst of submissions doesn't refetch it, while closing a project takes effect within minutes.
-async function openProjects(env: Env): Promise<Map<string, string>> {
+type ProjectList =
+  | { open: Map<string, string>; source: 'binding' | 'url' }
+  | { open: null; source: null; error: string }
+
+async function parseProjects(response: Response): Promise<Map<string, string>> {
+  if (!response.ok) throw new Error(`status ${response.status}`)
+  const data: { open?: { slug: string; title: string }[] } = await response.json()
+  if (!Array.isArray(data.open)) throw new Error('missing "open" list')
+  return new Map(data.open.filter((project) => typeof project?.slug === 'string').map((project) => [project.slug, project.title]))
+}
+
+// Slug → title for every project currently taking applications. Read through the SITE service
+// binding first, since Cloudflare may refuse a plain fetch from one of the account's Workers to
+// another; the public URL is the fallback. The URL fetch is cached at the edge so a burst of
+// submissions doesn't refetch it, while closing a project takes effect within minutes.
+// Never throws: on failure it logs and returns the last error (safe to show on /health).
+async function openProjects(env: Env): Promise<ProjectList> {
   const url = `${env.SITE_URL.replace(/\/+$/, '')}/research/projects.json`
+  if (env.SITE) {
+    try {
+      return { open: await parseProjects(await env.SITE.fetch(url)), source: 'binding' }
+    } catch (error) {
+      console.error(`Reading ${url} through the SITE binding failed:`, String(error))
+    }
+  }
   try {
     const response = await fetch(url, { cf: { cacheTtl: 300, cacheEverything: true } } as RequestInit)
-    if (!response.ok) throw new Error(`status ${response.status}`)
-    const data: { open?: { slug: string; title: string }[] } = await response.json()
-    if (!Array.isArray(data.open)) throw new Error('missing "open" list')
-    return new Map(data.open.map((project) => [project.slug, project.title]))
+    return { open: await parseProjects(response), source: 'url' }
   } catch (error) {
     console.error(`Fetching ${url} failed:`, String(error))
-    throw new Rejection(502, `We couldn't load the list of open projects. ${tryAgain}`)
+    return { open: null, source: null, error: String(error) }
   }
 }
 
@@ -191,24 +218,48 @@ function quote(value: string) {
   return `'${value.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`
 }
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+const retryDelays = [300, 1000]
+
+// Reads and deletes are retried on network errors and 5xx. Creates are not: a failed POST may
+// still have been saved, and a retry would duplicate it. A 429 (rate limit) means nothing was
+// done, so any request gets one more try after a second.
 async function airtable(env: Env, table: string, method: string, query = '', body?: unknown) {
   const url = `https://api.airtable.com/v0/${env.AIRTABLE_BASE_ID}/${encodeURIComponent(table)}${query && `?${query}`}`
-  let response: Response
-  try {
-    response = await fetch(url, {
-      method,
-      headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, 'Content-Type': 'application/json' },
-      body: body === undefined ? undefined : JSON.stringify(body),
-    })
-  } catch (error) {
-    console.error(`Airtable ${method} ${table} failed to connect:`, String(error))
-    throw new Rejection(502, `We couldn't save your application. ${tryAgain}`)
+  const idempotent = method === 'GET' || method === 'DELETE'
+  let retries = 0
+  let rateLimited = false
+  while (true) {
+    let response: Response
+    try {
+      response = await fetch(url, {
+        method,
+        headers: { Authorization: `Bearer ${env.AIRTABLE_TOKEN}`, 'Content-Type': 'application/json' },
+        body: body === undefined ? undefined : JSON.stringify(body),
+      })
+    } catch (error) {
+      if (idempotent && retries < retryDelays.length) {
+        await sleep(retryDelays[retries++])
+        continue
+      }
+      console.error(`Airtable ${method} ${table} failed to connect:`, String(error))
+      throw new Rejection(502, `We couldn't save your application. ${tryAgain}`)
+    }
+    if (response.status === 429 && !rateLimited) {
+      rateLimited = true
+      await sleep(1000)
+      continue
+    }
+    if (response.status >= 500 && idempotent && retries < retryDelays.length) {
+      await sleep(retryDelays[retries++])
+      continue
+    }
+    if (!response.ok) {
+      console.error(`Airtable ${method} ${table} returned ${response.status}:`, await response.text())
+      throw new Rejection(502, `We couldn't save your application. ${tryAgain}`)
+    }
+    return response.json()
   }
-  if (!response.ok) {
-    console.error(`Airtable ${method} ${table} returned ${response.status}:`, await response.text())
-    throw new Rejection(502, `We couldn't save your application. ${tryAgain}`)
-  }
-  return response.json()
 }
 
 async function findRecords(env: Env, table: string, formula: string, extra: Record<string, string> = {}) {
@@ -224,9 +275,9 @@ async function findRecords(env: Env, table: string, formula: string, extra: Reco
   return records
 }
 
-// Airtable creates at most 10 records per call. Returns the new IDs in input order.
-async function createRecords(env: Env, table: string, rows: Record<string, unknown>[]) {
-  const ids: string[] = []
+// Airtable creates at most 10 records per call. Returns the new IDs in input order; pass `ids`
+// to see the ones already created if a later batch fails.
+async function createRecords(env: Env, table: string, rows: Record<string, unknown>[], ids: string[] = []) {
   for (let i = 0; i < rows.length; i += 10) {
     const records = rows.slice(i, i + 10).map((fields) => ({ fields: withoutEmpty(fields) }))
     // typecast lets Airtable add new single-select options instead of rejecting the write.
@@ -234,6 +285,30 @@ async function createRecords(env: Env, table: string, rows: Record<string, unkno
     ids.push(...result.records.map((record: AirtableRecord) => record.id))
   }
   return ids
+}
+
+// Airtable deletes at most 10 records per call too.
+async function deleteRecords(env: Env, table: string, ids: string[]) {
+  for (let i = 0; i < ids.length; i += 10) {
+    const params = new URLSearchParams()
+    for (const id of ids.slice(i, i + 10)) params.append('records[]', id)
+    await airtable(env, table, 'DELETE', params.toString())
+  }
+}
+
+// Airtable has no transactions. If an application fails halfway, remove what was saved so the
+// applicant's retry starts clean (and isn't flagged as their own duplicate). Best effort: if
+// this fails too, the log names the rows to delete by hand.
+async function rollBack(env: Env, email: string, applicantId: string, applicationIds: string[]) {
+  try {
+    await deleteRecords(env, 'Applications', applicationIds)
+    await deleteRecords(env, 'Applicants', [applicantId])
+    console.error(`Rolled back a failed application from ${email} (Applicants ${applicantId}, ${applicationIds.length} Applications)`)
+  } catch {
+    console.error(
+      `Rollback failed; delete by hand. Email ${email}, Applicants ${applicantId}, Applications ${JSON.stringify(applicationIds)}`,
+    )
+  }
 }
 
 // Blank optional answers are left out so Airtable cells stay empty rather than "".
@@ -261,25 +336,35 @@ async function handle(request: Request, env: Env) {
   if (!isObject(body)) bad('Something went wrong sending your application. Please reload the page and try again.')
 
   // Honeypot: people never see this field, so anything in it means a bot. Pretend it worked.
-  if (typeof body.website === 'string' && body.website.trim() !== '') return
+  // Logged so a real applicant dropped by mistake (e.g. a password manager filling it) can be found.
+  if (typeof body.website === 'string' && body.website.trim() !== '') {
+    const email = isObject(body.applicant) && typeof body.applicant.email === 'string' ? body.applicant.email.slice(0, shortMax) : null
+    console.log('Dropped a honeypot submission:', JSON.stringify({ email, ip: request.headers.get('CF-Connecting-IP') }))
+    return
+  }
 
   // Validate before Turnstile so a typo doesn't burn the applicant's single-use token.
   const { turnstileToken, applicant, applications } = validate(body)
   const tokenHost = await verifyTurnstile(turnstileToken, request.headers.get('CF-Connecting-IP'), env)
 
-  // Cloudflare won't let this Worker fetch another workers.dev Worker on the same account, so a
-  // branch preview's projects.json is unreachable. For previews, accept any well-formed slug
-  // instead, but only with a bot-check token issued on that same preview page (so a forged
-  // Origin header alone isn't enough). Titles are then just the slugs.
+  // The bot check must have been solved on the page that sent the form, so a token from one
+  // allowed site can't be replayed with another site's Origin. Local dev is exempt.
   const origin = request.headers.get('Origin') ?? ''
+  if (!origin.startsWith('http://localhost:') && tokenHost !== new URL(origin).hostname) {
+    throw new Rejection(403, "We couldn't confirm you're not a bot. Please reload the page and try again.")
+  }
+
+  // Previews are checked against the live site's list too. Only if that list can't be loaded
+  // (before the research pages reach main) does a preview accept any well-formed slug, titled
+  // with the slug itself; once main serves projects.json that fallback is effectively unused.
+  const projects = await openProjects(env)
   let open: Map<string, string>
-  if (previewOrigin.test(origin)) {
-    if (tokenHost !== new URL(origin).hostname) {
-      throw new Rejection(403, "We couldn't confirm you're not a bot. Please reload the page and try again.")
-    }
+  if (projects.open) {
+    open = projects.open
+  } else if (previewOrigin.test(origin)) {
     open = new Map(applications.filter((app) => /^[a-z0-9]+(-[a-z0-9]+)*$/.test(app.project)).map((app) => [app.project, app.project]))
   } else {
-    open = await openProjects(env)
+    throw new Rejection(502, `We couldn't load the list of open projects. ${tryAgain}`)
   }
   for (const app of applications) {
     if (!open.has(app.project)) bad(`The project "${app.project}" is no longer accepting applications. Please remove it and submit again.`)
@@ -318,20 +403,38 @@ async function handle(request: Request, env: Env) {
     },
   ])
 
-  await createRecords(
-    env,
-    'Applications',
-    applications.map((app) => ({
-      Summary: `${applicant.name} → ${open.get(app.project)}`,
-      Applicant: [applicantId],
-      Project: [projectIds.get(app.project)],
-      Rank: app.rank,
-      Interest: app.interest,
-      'First to explore': app.explore,
-      'Extra answer': app.extra,
-      'Review status': 'New',
-    })),
-  )
+  const applicationIds: string[] = []
+  try {
+    await createRecords(
+      env,
+      'Applications',
+      applications.map((app) => ({
+        Summary: `${applicant.name} → ${open.get(app.project)}`,
+        Applicant: [applicantId],
+        Project: [projectIds.get(app.project)],
+        Rank: app.rank,
+        Interest: app.interest,
+        'First to explore': app.explore,
+        'Extra answer': app.extra,
+        'Review status': 'New',
+      })),
+      applicationIds,
+    )
+  } catch (error) {
+    // Projects rows are left: they're harmless and reused by the next submission.
+    await rollBack(env, applicant.email, applicantId, applicationIds)
+    throw error
+  }
+}
+
+// GET /health: can the Worker read the open-projects list, and by which path? Touches no
+// Airtable data and no secrets, so it's safe to open in a browser as a smoke test.
+async function health(env: Env) {
+  const projects = await openProjects(env)
+  const result = projects.open
+    ? { ok: true, projects: projects.open.size, source: projects.source }
+    : { ok: false, projects: null, source: null, error: projects.error }
+  return json(result, projects.open ? 200 : 503, { 'Cache-Control': 'no-store' })
 }
 
 function originAllowed(origin: string) {
@@ -344,6 +447,8 @@ function json(data: unknown, status: number, headers: Record<string, string> = {
 
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
+    if (request.method === 'GET' && new URL(request.url).pathname === '/health') return health(env)
+
     const origin = request.headers.get('Origin') ?? ''
     // No CORS headers on purpose: the browser then refuses to hand the response to the page.
     if (!originAllowed(origin)) return json({ ok: false, error: 'Applications can only be sent from aisafetyuci.org.' }, 403)

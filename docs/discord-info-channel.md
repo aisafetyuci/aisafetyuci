@@ -7,7 +7,7 @@ Experts broadly expect rapid progress in AI to continue, potentially surpassing 
 ## We provide opportunities to upskill and contribute to AI safety:
 - Technical Intro Fellowship — An 8-week reading group covering landmark AI safety papers and key concepts. Open to all UCI students, no outside work required. We run it every quarter. Fall 2026 applications are closed; applications reopen about a month before each quarter.
 - Membership — Join weekly reading groups, small-group discussions with researchers, workshops, and socials. Members get compute access and a Claude Pro subscription (if you're doing research), as well as connections with researchers and others working in AI safety.
-- Research projects — Small teams of 2–3 working for 2–3 weeks on open questions in technical AI safety, ending in a blog post. The club covers compute costs, and no research experience is needed. See open projects and apply: https://aisafetyuci.org/research
+- Research projects — Small teams of 2–3 working for 2–3 weeks on open questions in technical AI safety, ending in a blog post. The club covers compute costs, and no research experience is needed. Applications close Nov 10. See open projects and apply: https://aisafetyuci.org/research
 ## Get involved:
 - Book a coffee chat with Dominic: https://cal.com/dominicmascetti/coffee
 - Book a coffee chat with Ivan: https://cal.com/ivanshishkin/quick-chat

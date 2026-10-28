@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { getAllProjects } from '../lib/research'
+import { upcomingResearchDeadline } from '../data/research'
 import ProjectFacts from './_components/ProjectFacts'
 
 const pageTitle = 'Research Projects'
@@ -29,6 +30,7 @@ export default function ResearchIndex() {
   const projects = getAllProjects()
   const open = projects.filter((project) => project.open)
   const closed = projects.filter((project) => !project.open)
+  const deadline = upcomingResearchDeadline()
 
   return (
     <main className="min-h-screen bg-brand-wash">
@@ -40,8 +42,11 @@ export default function ResearchIndex() {
             No research experience needed: we care most about your interest and how you think about the problem.
           </p>
           {open.length > 0 && (
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
               <Link href="/research/apply" className="button-primary w-full sm:w-auto">Apply to projects <span aria-hidden="true">→</span></Link>
+              {deadline && (
+                <p className="text-sm text-gray-600">Apply by <time dateTime={deadline.date} className="font-semibold text-brand">{deadline.label}</time></p>
+              )}
             </div>
           )}
         </div>

@@ -1,6 +1,6 @@
 ---
 title: Do models go easy on their own cheating?
-summary: On coding tasks where the only way to pass is to cheat, we measure how often this autumn's models cheat, and whether they admit it less when reviewing their own conversation than a fresh copy of it.
+summary: On coding tasks where the only way to pass is to cheat, we measure how often fall 2026 models cheat, and whether they admit it less when reviewing their own conversation than a fresh copy of it.
 status: open
 duration: 2–3 weeks
 team: 2 people
@@ -11,7 +11,7 @@ skills: Python and API calls
 
 ImpossibleBench is a set of coding tasks where the specification and the unit tests contradict each other, so any pass is a measurable reward hack (editing tests, special-casing them).
 
-1. How often do this autumn's models cheat on ImpossibleBench?
+1. How often do fall 2026 models cheat on ImpossibleBench?
 2. When asked about the hack in the **same conversation**, does a model admit it less often than when it reviews the same transcript in a **fresh context**?
 
 Goodfire (October 2026) found open-weight models substantially under-report their own hacks compared with an external monitor, but that monitor was a different model, so the gap mixes self-attribution with capability. Question 2 is the clean control: same model, same transcript, same-context vs fresh-context review. It extends the self-attribution bias design to the multi-turn agentic setting its authors say they did not study.

@@ -4,11 +4,15 @@ Projects are edited in the same editor as the blog: **aisafetyuci.org/admin → 
 
 ## Add a project
 
-1. **New Research project.** Fill in the title, a one- or two-sentence summary, and the duration.
+1. **New Research project.** Fill in the title, a one- or two-sentence summary, and the duration. The title becomes the file name and the page address (`/research/<title-in-lowercase-with-hyphens>`), so avoid underscores (`_`) and `~` in it, and don't title a project just "Apply" or "Projects" (those addresses are taken). Any of these stops the site from updating until the file is renamed.
 2. Fill in whatever else is known: team size, skills needed, time commitment, format, and leads. Empty fields are simply hidden on the site.
 3. Write the one-pager in the body. Write it for applicants: the question, why it matters, what's been done, what they'd do week by week, and links to start from. Leave out internal planning (budgets, kill conditions, people to email).
 4. Optionally add an **extra application question**. It's asked only of people applying to this project, after the two standard questions.
 5. **Save**, check the preview, then **Publish**. The project appears at `/research` and in the application form about 2 minutes later.
+
+## The application deadline
+
+The deadline is set once in `app/data/research.ts` (a code change, not in the editor). It appears in the homepage banner, at the top of `/research`, and in each open project's apply box, and it's restated by hand in `docs/discord-info-channel.md`. Once it has passed, the banner and the deadline disappear the next time the site rebuilds (any change published to `main`). They don't disappear by themselves at midnight, so close the projects too.
 
 ## Close a project
 

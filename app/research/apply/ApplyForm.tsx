@@ -6,6 +6,7 @@
 import Link from 'next/link'
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
 import { researchApply } from '../../data/links'
+import EmailLink from '../../components/EmailLink'
 import type { Project } from '../../lib/research'
 import ProjectFacts from '../_components/ProjectFacts'
 
@@ -18,7 +19,18 @@ const formatOptions = ['In person', 'Online', 'Either'] as const
 
 const answerLimit = 3000
 const shortLimit = 200
+const maxProjects = 20 // the Worker's limit
 const storageKey = 'aisci-research-apply-v1'
+const turnstileTimeoutMs = 10_000
+
+const isOption = (options: readonly string[], value: string) => options.includes(value)
+
+// End a message with punctuation so the sentence that follows it reads properly.
+const asSentence = (text: string) => (/[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`)
+
+// Space-separated ids of a field's hint and error, for aria-describedby.
+const describedBy = (id: string, hint?: unknown, error?: string) =>
+  [hint ? `${id}-hint` : '', error ? `${id}-error` : ''].filter(Boolean).join(' ') || undefined
 
 type Applicant = {
   name: string
@@ -53,8 +65,9 @@ type Errors = Record<string, string>
 declare global {
   interface Window {
     turnstile?: {
-      render: (el: HTMLElement, options: { sitekey: string; theme?: 'light' | 'dark' | 'auto'; callback: (token: string) => void; 'expired-callback'?: () => void }) => string
+      render: (el: HTMLElement, options: { sitekey: string; theme?: 'light' | 'dark' | 'auto'; callback: (token: string) => void; 'expired-callback'?: () => void; 'error-callback'?: () => void }) => string
       reset: (id?: string) => void
+      remove: (id: string) => void
     }
   }
 }
@@ -78,9 +91,9 @@ function Field({ id, label, hint, error, optional, children }: { id: string; lab
 
 function Choice({ id, legend, options, value, onChange, error, hint }: { id: string; legend: string; options: readonly string[]; value: string; onChange: (value: string) => void; error?: string; hint?: string }) {
   return (
-    <fieldset id={id} tabIndex={-1} aria-describedby={error ? `${id}-error` : undefined}>
+    <fieldset id={id} tabIndex={-1} aria-describedby={describedBy(id, hint, error)}>
       <legend className="font-medium text-brand">{legend}</legend>
-      {hint && <p className="mt-1 text-sm text-gray-500">{hint}</p>}
+      {hint && <p id={`${id}-hint`} className="mt-1 text-sm text-gray-500">{hint}</p>}
       <div className="mt-2 flex flex-wrap gap-2">
         {options.map((option) => (
           <label
@@ -99,7 +112,7 @@ function Choice({ id, legend, options, value, onChange, error, hint }: { id: str
   )
 }
 
-function TextArea({ id, value, onChange, error, rows = 5 }: { id: string; value: string; onChange: (value: string) => void; error?: string; rows?: number }) {
+function TextArea({ id, value, onChange, error, hint, rows = 5 }: { id: string; value: string; onChange: (value: string) => void; error?: string; hint?: boolean; rows?: number }) {
   return (
     <>
       <textarea
@@ -109,7 +122,7 @@ function TextArea({ id, value, onChange, error, rows = 5 }: { id: string; value:
         value={value}
         onChange={(e) => onChange(e.target.value)}
         aria-invalid={error ? true : undefined}
-        aria-describedby={error ? `${id}-error` : undefined}
+        aria-describedby={describedBy(id, hint, error)}
         className={`${inputClass} leading-relaxed`}
       />
       <p className="mt-1 text-right text-xs text-gray-400" aria-hidden="true">{value.length} / {answerLimit}</p>
@@ -128,19 +141,24 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
   const [submitError, setSubmitError] = useState('')
   const [honeypot, setHoneypot] = useState('')
   const [turnstileToken, setTurnstileToken] = useState('')
+  const [turnstileFailed, setTurnstileFailed] = useState(false)
   const [panelSlug, setPanelSlug] = useState<string | null>(null)
   const [dragSlug, setDragSlug] = useState<string | null>(null)
+  const [rankNotice, setRankNotice] = useState('') // read out by screen readers after a reorder
 
   const headingRef = useRef<HTMLHeadingElement>(null)
   const dialogRef = useRef<HTMLDialogElement>(null)
   const turnstileRef = useRef<HTMLDivElement>(null)
   const turnstileId = useRef<string | null>(null)
+  const submitting = useRef(false) // blocks a second submit before the button re-renders as disabled
+  const awaitingCheck = useRef(false) // the shown error is only "bot check not done yet"
 
   const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]))
   const chosen = selected.map((slug) => bySlug[slug]).filter(Boolean)
   const stepIds = steps.map((_, i) => i).filter((i) => !(i === 4 && chosen.length < 2))
 
-  // Restore a saved draft (dropping projects that have since closed), then apply ?project=.
+  // Restore a saved draft (dropping projects that have since closed, and choices that are no
+  // longer offered), then apply ?project=.
   useEffect(() => {
     let draft: Saved | undefined
     try {
@@ -150,11 +168,19 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
     const open = new Set(projects.map((p) => p.slug))
     let nextSelected = (draft?.selected ?? []).filter((slug) => open.has(slug))
     const fromLink = new URLSearchParams(window.location.search).get('project')
-    if (fromLink && open.has(fromLink) && !nextSelected.includes(fromLink)) nextSelected = [...nextSelected, fromLink]
+    const linkAdds = !!fromLink && open.has(fromLink) && !nextSelected.includes(fromLink)
+    if (linkAdds) nextSelected = [...nextSelected, fromLink]
     if (draft) {
-      setApplicant({ ...emptyApplicant, ...draft.applicant })
+      const restored = { ...emptyApplicant, ...draft.applicant }
+      if (!isOption(affiliations, restored.affiliation)) restored.affiliation = ''
+      if (!isOption(memberOptions, restored.member)) restored.member = ''
+      if (!isOption(hourOptions, restored.hours)) restored.hours = ''
+      if (!isOption(formatOptions, restored.format)) restored.format = ''
+      setApplicant(restored)
       setAnswers(draft.answers ?? {})
-      setStep(Math.min(Math.max(draft.step ?? 0, 0), steps.length - 1))
+      // A project added from a link still needs its answers, so don't land past that step.
+      const savedStep = Math.min(Math.max(draft.step ?? 0, 0), steps.length - 1)
+      setStep(linkAdds ? Math.min(savedStep, 2) : savedStep)
     }
     setSelected(nextSelected)
     setRestored(true)
@@ -167,31 +193,58 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
     } catch {}
   }, [restored, status, applicant, selected, answers, step])
 
-  // Turnstile (bot check) renders on the review step, once a site key is configured.
+  // Turnstile (bot check) renders on the review step, once a site key is configured. Ad and
+  // tracker blockers sometimes stop it loading; then we say so rather than leave a blank space.
   useEffect(() => {
-    if (step !== 5 || !researchApply.turnstileSiteKey || !turnstileRef.current) return
-    const el = turnstileRef.current
+    if (step !== 5 || !researchApply.turnstileSiteKey) return
+    let active = true
+    const fail = () => { if (active) setTurnstileFailed(true) }
     const render = () => {
-      if (!window.turnstile || turnstileId.current) return
+      const el = turnstileRef.current // the element on screen now, not one from an earlier visit
+      if (!active || !el || !window.turnstile || turnstileId.current) return
       turnstileId.current = window.turnstile.render(el, {
         sitekey: researchApply.turnstileSiteKey,
         theme: 'light', // the site has no dark mode
-        callback: setTurnstileToken,
+        callback: (token) => {
+          setTurnstileToken(token)
+          setTurnstileFailed(false)
+          if (awaitingCheck.current) {
+            awaitingCheck.current = false
+            setStatus('idle')
+            setSubmitError('')
+          }
+        },
         'expired-callback': () => setTurnstileToken(''),
+        'error-callback': fail,
       })
     }
-    if (window.turnstile) render()
-    else if (!document.getElementById('turnstile-script')) {
-      const script = document.createElement('script')
-      script.id = 'turnstile-script'
-      script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
-      script.async = true
-      script.onload = render
-      document.head.appendChild(script)
+    let script = document.getElementById('turnstile-script') as HTMLScriptElement | null
+    const failedToLoad = () => {
+      script?.remove() // so coming back to this step tries again
+      fail()
     }
+    if (window.turnstile) render()
+    else {
+      if (!script) {
+        script = document.createElement('script')
+        script.id = 'turnstile-script'
+        script.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
+        script.async = true
+        document.head.appendChild(script)
+      }
+      script.addEventListener('load', render)
+      script.addEventListener('error', failedToLoad)
+    }
+    const timer = window.setTimeout(() => { if (!turnstileId.current) fail() }, turnstileTimeoutMs)
     return () => {
+      active = false
+      window.clearTimeout(timer)
+      script?.removeEventListener('load', render)
+      script?.removeEventListener('error', failedToLoad)
+      if (turnstileId.current) window.turnstile?.remove(turnstileId.current)
       turnstileId.current = null
       setTurnstileToken('')
+      setTurnstileFailed(false)
     }
   }, [step])
 
@@ -209,11 +262,23 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
   }
 
   function move(slug: string, to: number) {
+    const position = Math.max(0, Math.min(to, chosen.length - 1))
     setSelected((list) => {
       const next = list.filter((s) => s !== slug)
       next.splice(Math.max(0, Math.min(to, next.length)), 0, slug)
       return next
     })
+    setRankNotice(`${bySlug[slug]?.title ?? slug} moved to number ${position + 1} of ${chosen.length}.`)
+  }
+
+  // Arrow buttons: keep focus on the moved project, switching to its other arrow at the ends
+  // (where the pressed one becomes disabled and would otherwise drop focus).
+  function moveBy(slug: string, from: number, delta: -1 | 1) {
+    const to = from + delta
+    move(slug, to)
+    const last = chosen.length - 1
+    const direction = to <= 0 ? 'down' : to >= last ? 'up' : delta < 0 ? 'up' : 'down'
+    requestAnimationFrame(() => document.getElementById(`${slug}-move-${direction}`)?.focus())
   }
 
   function validate(i: number): Errors {
@@ -223,14 +288,15 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
       if (!a.name.trim()) e.name = 'Enter your name.'
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(a.email.trim())) e.email = 'Enter an email address we can reach you at.'
       const age = Number(a.age)
-      if (!Number.isInteger(age) || age < 13 || age > 120) e.age = 'Enter your age as a whole number.'
-      if (!a.affiliation) e.affiliation = "Choose where you are right now."
+      if (!Number.isInteger(age) || age < 13 || age > 120) e.age = 'Enter your age as a whole number between 13 and 120.'
+      if (!isOption(affiliations, a.affiliation)) e.affiliation = "Choose where you are right now."
       if (a.affiliation === 'Student at another school' && !a.school.trim()) e.school = 'Which school?'
-      if (!a.member) e.member = "Say whether you're an AISCI member."
-      if (!a.hours) e.hours = "Choose how many hours per week you could put in."
-      if (!a.format) e.format = "Choose how you'd like to work."
+      if (!isOption(memberOptions, a.member)) e.member = "Say whether you're an AISCI member."
+      if (!isOption(hourOptions, a.hours)) e.hours = "Choose how many hours per week you could put in."
+      if (!isOption(formatOptions, a.format)) e.format = "Choose how you'd like to work."
     }
     if (i === 1 && chosen.length === 0) e.projects = 'Choose at least one project.'
+    if (i === 1 && chosen.length > maxProjects) e.projects = `Choose at most ${maxProjects} projects.`
     if (i === 2) {
       for (const p of chosen) {
         const ans = answers[p.slug] ?? emptyAnswer
@@ -243,6 +309,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
 
   const goTo = useCallback((i: number) => {
     setErrors({})
+    setStatus((s) => (s === 'error' ? 'idle' : s)) // a failed send's message is stale once they move on
     setStep(i)
     requestAnimationFrame(() => {
       headingRef.current?.focus()
@@ -267,6 +334,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
   }
 
   async function submit() {
+    if (submitting.current) return
     // Re-check every step: a restored draft may skip straight to review.
     for (const i of [0, 1, 2]) {
       if (Object.keys(validate(i)).length > 0) {
@@ -277,7 +345,8 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
     }
     if (researchApply.turnstileSiteKey && !turnstileToken) {
       setStatus('error')
-      setSubmitError('Please complete the check above the submit button.')
+      setSubmitError(turnstileFailed ? "The bot check above didn't load." : 'Please complete the check above the submit button.')
+      awaitingCheck.current = true
       return
     }
     const a = applicant
@@ -290,7 +359,8 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
         email: a.email.trim(),
         age: Number(a.age),
         affiliation: a.affiliation,
-        school: a.affiliation === 'UCI student' ? 'UC Irvine' : trimmed(a.school),
+        // Only "another school" asks for one; ignore a school typed before switching answers.
+        school: a.affiliation === 'UCI student' ? 'UC Irvine' : a.affiliation === 'Student at another school' ? trimmed(a.school) : undefined,
         yearOrRole: trimmed(a.yearOrRole),
         member: a.member,
         hours: a.hours,
@@ -306,6 +376,8 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
       }),
     }
 
+    submitting.current = true
+    awaitingCheck.current = false
     setStatus('submitting')
     setSubmitError('')
     try {
@@ -314,11 +386,17 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
         console.info('[research apply] No endpoint set; this is what would be sent:', payload)
         await new Promise((resolve) => setTimeout(resolve, 600))
       } else {
-        const response = await fetch(researchApply.endpoint, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
+        let response: Response
+        try {
+          response = await fetch(researchApply.endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+          })
+        } catch {
+          // The browser's own text here ("Failed to fetch", "Load failed") means nothing to applicants.
+          throw new Error("We couldn't reach our server. Check your internet connection.")
+        }
         const result = await response.json().catch(() => ({}))
         if (!response.ok || !result.ok) throw new Error(result.error || 'Something went wrong saving your application.')
       }
@@ -332,6 +410,8 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
       setSubmitError(err instanceof Error ? err.message : 'Something went wrong saving your application.')
       if (turnstileId.current) window.turnstile?.reset(turnstileId.current)
       setTurnstileToken('')
+    } finally {
+      submitting.current = false
     }
   }
 
@@ -359,7 +439,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
       <div className="mx-auto max-w-3xl surface-card p-8 text-center sm:p-10">
         <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-semibold text-brand focus:outline-none">Application received</h2>
         <p className="mx-auto mt-3 max-w-xl leading-relaxed text-gray-600">
-          Thanks, {applicant.name.trim().split(/\s+/)[0]}. We&apos;ll read every answer and email you at <span className="font-medium text-brand">{applicant.email.trim()}</span> once we&apos;ve reviewed applications.
+          Thanks, {applicant.name.trim().split(/\s+/)[0]}. We&apos;ll read every answer and email you at <span className="font-medium text-brand">{applicant.email.trim()}</span>{' '}once we&apos;ve reviewed applications.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link href="/research" className="button-secondary">Back to projects</Link>
@@ -393,9 +473,13 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
           <div role="alert" className="mt-5 rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
             <p className="font-semibold">Please fix {errorList.length === 1 ? 'this' : 'these'} before continuing:</p>
             <ul className="mt-2 list-disc space-y-1 pl-5">
-              {errorList.map(([id, message]) => (
-                <li key={id}><a href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.focus() }} className="underline underline-offset-2">{message}</a></li>
-              ))}
+              {errorList.map(([id, message]) => {
+                // Per-project answers share wording, so name the project in the summary.
+                const project = chosen.find((p) => id === `${p.slug}-interest` || id === `${p.slug}-explore`)
+                return (
+                  <li key={id}><a href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.focus() }} className="underline underline-offset-2">{project ? `${project.title} — ${message}` : message}</a></li>
+                )
+              })}
             </ul>
           </div>
         )}
@@ -406,19 +490,19 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
               <p className="leading-relaxed text-gray-600">Anyone can apply. Members of AISCI get priority, but you don&apos;t need to be one, or be at UCI.</p>
               <div className="grid gap-6 sm:grid-cols-2">
                 <Field id="name" label="Full name" error={errors.name}>
-                  <input id="name" autoComplete="name" maxLength={shortLimit} value={applicant.name} onChange={(e) => set('name')(e.target.value)} aria-invalid={errors.name ? true : undefined} className={inputClass} />
+                  <input id="name" autoComplete="name" maxLength={shortLimit} value={applicant.name} onChange={(e) => set('name')(e.target.value)} aria-invalid={errors.name ? true : undefined} aria-describedby={describedBy('name', undefined, errors.name)} className={inputClass} />
                 </Field>
                 <Field id="email" label="Email" error={errors.email}>
-                  <input id="email" type="email" autoComplete="email" maxLength={shortLimit} value={applicant.email} onChange={(e) => set('email')(e.target.value)} aria-invalid={errors.email ? true : undefined} className={inputClass} />
+                  <input id="email" type="email" autoComplete="email" maxLength={shortLimit} value={applicant.email} onChange={(e) => set('email')(e.target.value)} aria-invalid={errors.email ? true : undefined} aria-describedby={describedBy('email', undefined, errors.email)} className={inputClass} />
                 </Field>
                 <Field id="age" label="Age" error={errors.age}>
-                  <input id="age" type="number" inputMode="numeric" min={13} max={120} value={applicant.age} onChange={(e) => set('age')(e.target.value)} aria-invalid={errors.age ? true : undefined} className={`${inputClass} sm:max-w-32`} />
+                  <input id="age" type="number" inputMode="numeric" min={13} max={120} value={applicant.age} onChange={(e) => set('age')(e.target.value)} aria-invalid={errors.age ? true : undefined} aria-describedby={describedBy('age', undefined, errors.age)} className={`${inputClass} sm:max-w-32`} />
                 </Field>
               </div>
               <Choice id="affiliation" legend="Where are you right now?" options={affiliations} value={applicant.affiliation} onChange={set('affiliation')} error={errors.affiliation} />
               {applicant.affiliation === 'Student at another school' && (
                 <Field id="school" label="School" error={errors.school}>
-                  <input id="school" maxLength={shortLimit} value={applicant.school} onChange={(e) => set('school')(e.target.value)} className={inputClass} />
+                  <input id="school" maxLength={shortLimit} value={applicant.school} onChange={(e) => set('school')(e.target.value)} aria-invalid={errors.school ? true : undefined} aria-describedby={describedBy('school', undefined, errors.school)} className={inputClass} />
                 </Field>
               )}
               {applicant.affiliation && (
@@ -430,7 +514,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
               <Choice id="hours" legend="Hours per week you could put in" options={hourOptions} value={applicant.hours} onChange={set('hours')} error={errors.hours} />
               <Choice id="format" legend="How would you like to work?" options={formatOptions} value={applicant.format} onChange={set('format')} error={errors.format} hint="In person means at UC Irvine." />
               <Field id="basedIn" label="Where are you based?" hint="City or time zone, so we can schedule meetings." optional>
-                <input id="basedIn" maxLength={shortLimit} value={applicant.basedIn} onChange={(e) => set('basedIn')(e.target.value)} className={inputClass} />
+                <input id="basedIn" maxLength={shortLimit} value={applicant.basedIn} onChange={(e) => set('basedIn')(e.target.value)} aria-describedby={describedBy('basedIn', true)} className={inputClass} />
               </Field>
             </>
           )}
@@ -510,10 +594,10 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                 <p className="mt-1">Experience can help your application, but it isn&apos;t what we&apos;re selecting for. Having none is no disadvantage if your project answers show real interest and thought.</p>
               </div>
               <Field id="experience" label="Anything relevant you've done" hint="Courses, projects, reading, jobs, anything. A few sentences is plenty." optional>
-                <TextArea id="experience" value={applicant.experience} onChange={set('experience')} />
+                <TextArea id="experience" value={applicant.experience} onChange={set('experience')} hint />
               </Field>
               <Field id="links" label="Links" hint="GitHub, a personal site, LinkedIn, or a resume link." optional>
-                <TextArea id="links" value={applicant.links} onChange={set('links')} rows={2} />
+                <TextArea id="links" value={applicant.links} onChange={set('links')} hint rows={2} />
               </Field>
             </>
           )}
@@ -535,12 +619,13 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand text-sm font-semibold text-white">{i + 1}</span>
                     <span className="min-w-0 flex-1 font-medium text-brand">{p.title}</span>
                     <span className="flex shrink-0 gap-1">
-                      <button type="button" onClick={() => move(p.slug, i - 1)} disabled={i === 0} aria-label={`Move ${p.title} up`} className="hero-photo-control disabled:opacity-30">↑</button>
-                      <button type="button" onClick={() => move(p.slug, i + 1)} disabled={i === chosen.length - 1} aria-label={`Move ${p.title} down`} className="hero-photo-control disabled:opacity-30">↓</button>
+                      <button type="button" id={`${p.slug}-move-up`} onClick={() => moveBy(p.slug, i, -1)} disabled={i === 0} aria-label={`Move ${p.title} up`} className="hero-photo-control disabled:opacity-30">↑</button>
+                      <button type="button" id={`${p.slug}-move-down`} onClick={() => moveBy(p.slug, i, 1)} disabled={i === chosen.length - 1} aria-label={`Move ${p.title} down`} className="hero-photo-control disabled:opacity-30">↓</button>
                     </span>
                   </li>
                 ))}
               </ol>
+              <p aria-live="polite" className="sr-only">{rankNotice}</p>
             </>
           )}
 
@@ -562,20 +647,20 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                 <Row label="Based in" value={applicant.basedIn} />
               </ReviewSection>
 
-              <ReviewSection title={chosen.length > 1 ? 'Projects, in your order' : 'Project'} onEdit={() => goTo(2)}>
+              <ReviewSection title={chosen.length > 1 ? 'Projects, in your order' : 'Project'} onEdit={() => goTo(1)}>
                 {chosen.map((p, i) => {
                   const ans = answers[p.slug] ?? emptyAnswer
                   return (
                     <div key={p.slug} className="py-3">
                       <p className="font-semibold text-brand">{chosen.length > 1 && `${i + 1}. `}{p.title}</p>
                       <p className="mt-2 text-sm text-gray-500">What interests you</p>
-                      <p className="whitespace-pre-wrap text-sm text-gray-700">{ans.interest}</p>
+                      <p className="whitespace-pre-wrap text-sm text-gray-700 [overflow-wrap:anywhere]">{ans.interest}</p>
                       <p className="mt-2 text-sm text-gray-500">First thing to explore</p>
-                      <p className="whitespace-pre-wrap text-sm text-gray-700">{ans.explore}</p>
+                      <p className="whitespace-pre-wrap text-sm text-gray-700 [overflow-wrap:anywhere]">{ans.explore}</p>
                       {p.extraQuestion && ans.extra.trim() && (
                         <>
                           <p className="mt-2 text-sm text-gray-500">{p.extraQuestion}</p>
-                          <p className="whitespace-pre-wrap text-sm text-gray-700">{ans.extra}</p>
+                          <p className="whitespace-pre-wrap text-sm text-gray-700 [overflow-wrap:anywhere]">{ans.extra}</p>
                         </>
                       )}
                     </div>
@@ -598,10 +683,18 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                 Your answers go only to AISCI organizers, who use them to review applications and contact you about research projects.
               </p>
               {researchApply.turnstileSiteKey && <div ref={turnstileRef} />}
+              {turnstileFailed && !turnstileToken && (
+                <div role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-relaxed text-red-800">
+                  <p className="font-semibold">The bot check didn&apos;t load.</p>
+                  <p className="mt-1">
+                    An ad or tracker blocker is the usual cause. Pause it for this page (or allow challenges.cloudflare.com), or try another browser, then reload. Your answers are saved in this browser. If it still won&apos;t load, email us at <EmailLink className="break-words font-medium underline underline-offset-2" />.
+                  </p>
+                </div>
+              )}
               {status === 'error' && (
                 <div role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
                   <p className="font-semibold">Your application wasn&apos;t sent.</p>
-                  <p className="mt-1">{submitError} Your answers are still saved here, so you can try again.</p>
+                  <p className="mt-1">{asSentence(submitError)} Your answers are still saved here, so you can try again.</p>
                 </div>
               )}
             </>
@@ -681,7 +774,7 @@ function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="grid gap-1 py-2 text-sm sm:grid-cols-3">
       <span className="text-gray-500">{label}</span>
-      <span className="whitespace-pre-wrap break-words text-gray-700 sm:col-span-2">{value}</span>
+      <span className="whitespace-pre-wrap text-gray-700 [overflow-wrap:anywhere] sm:col-span-2">{value}</span>
     </div>
   )
 }

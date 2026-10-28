@@ -35,6 +35,9 @@ export interface Project {
 
 const projectsDir = path.join(process.cwd(), 'content', 'research')
 const fileNamePattern = /^[a-z0-9]+(-[a-z0-9]+)*\.md$/
+// Every front-matter field a project may have (kept in step with public/admin/config.yml).
+// Anything else is almost certainly a typo, e.g. `lead:` for `leads:`, and would be silently ignored.
+const knownFields = new Set(['title', 'summary', 'status', 'duration', 'team', 'skills', 'commitment', 'format', 'leads', 'constraints', 'onePagerUrl', 'extraQuestion', 'draft'])
 
 function fail(file: string, field: string, problem: string): never {
   throw new Error(`[research] content/research/${file}: "${field}" ${problem}`)
@@ -77,11 +80,37 @@ function isExternalHttpLink(href: unknown) {
   }
 }
 
+// Link targets allowed in one-pagers: web and mailto links, site-relative paths and #anchors.
+// Anything else (e.g. `javascript:`) loses its href, since the HTML is inserted unsanitized.
+function isSafeHref(href: unknown) {
+  if (typeof href !== 'string') return true
+  const value = href.trim()
+  if (value.startsWith('#') || (value.startsWith('/') && !value.startsWith('//'))) return true
+  if (/^(https?:|mailto:)/i.test(value)) return true
+  // Relative paths without a scheme (e.g. `events`); a scheme is letters followed by ':'.
+  return !/^[a-z][a-z0-9+.-]*:/i.test(value) && !value.startsWith('//')
+}
+
+type HastNode = { type: string; tagName?: string; properties?: Record<string, unknown>; children?: HastNode[] }
+
+function dropUnsafeHrefs() {
+  const walk = (node: HastNode) => {
+    if (node.type === 'element' && node.properties) {
+      for (const attribute of ['href', 'src']) {
+        if (attribute in node.properties && !isSafeHref(node.properties[attribute])) delete node.properties[attribute]
+      }
+    }
+    node.children?.forEach(walk)
+  }
+  return (tree: HastNode) => walk(tree)
+}
+
 // Raw HTML in one-pagers is dropped, as on the blog.
 const processor = unified()
   .use(remarkParse)
   .use(remarkGfm)
   .use(remarkRehype)
+  .use(dropUnsafeHrefs)
   .use(rehypeSlug)
   .use(rehypeExternalLinks, {
     target: '_blank',
@@ -98,7 +127,18 @@ function loadProject(file: string): Project {
   if (file === 'apply.md' || file === 'projects.md') {
     throw new Error(`[research] content/research/${file}: this file name is reserved; rename the project`)
   }
-  const { data, content } = matter(fs.readFileSync(path.join(projectsDir, file), 'utf8'), {})
+  let parsed: matter.GrayMatterFile<string>
+  try {
+    parsed = matter(fs.readFileSync(path.join(projectsDir, file), 'utf8'), {})
+  } catch (error) {
+    // YAML errors give a line number but not the file.
+    throw new Error(`[research] content/research/${file}: the front matter (between the --- lines) isn't valid. Put quotes around text containing a colon. ${error instanceof Error ? error.message : String(error)}`)
+  }
+  const { data, content } = parsed
+
+  for (const key of Object.keys(data)) {
+    if (!knownFields.has(key)) fail(file, key, `is not a project field (allowed: ${[...knownFields].join(', ')})`)
+  }
 
   const status = requireString(data, file, 'status')
   if (status !== 'open' && status !== 'closed') fail(file, 'status', `must be "open" or "closed" (got "${status}")`)

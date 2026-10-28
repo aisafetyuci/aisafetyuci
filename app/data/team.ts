@@ -83,10 +83,10 @@ export const organizers: TeamMember[] = [
     website: 'https://www.linkedin.com/in/cole-saldanha/',
   },
   {
-    name: 'Rylen C.',
+    name: 'Avanish Davuluri',
     role: 'Organizer',
-    image: '/images/team/rylen-c.jpg',
-    website: 'https://www.linkedin.com/in/rylen-choi/',
+    image: '/images/team/avanish-davuluri.jpg',
+    website: 'https://www.linkedin.com/in/avanish-davuluri-710a422a7/',
   },
   {
     name: 'Boris C.',
@@ -104,7 +104,7 @@ export const organizers: TeamMember[] = [
 
 export const allTeamMembers: TeamMember[] = [...executiveBoard, ...organizers, ...advisors]
 
-// Anchor id for a member's card on /team (e.g. "Rylen C." -> "rylen-c").
+// Anchor id for a member's card on /team (e.g. "Boris C." -> "boris-c").
 export function teamMemberId(name: string) {
   return name.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
 }

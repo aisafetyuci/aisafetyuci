@@ -8,6 +8,19 @@ export const links = {
   linktree: 'https://linktr.ee/aisafetyatuci',
 }
 
+// The club Google Calendar (public). The homepage embeds it, and /events is built from its
+// iCal feed, so events are added in Google Calendar, not in code.
+const calendarId = '486927752eaec279ce49734cb5a35dda803140e25ab0aebd3a214ee2bfab158e@group.calendar.google.com'
+const calendarFeed = `calendar.google.com/calendar/ical/${encodeURIComponent(calendarId)}/public/basic.ics`
+
+export const clubCalendar = {
+  feed: `https://${calendarFeed}`,
+  // "Subscribe" links: each adds the whole calendar, which then stays in sync on its own.
+  google: `https://calendar.google.com/calendar/u/0?cid=${btoa(calendarId)}`,
+  apple: `webcal://${calendarFeed}`,
+  outlook: `https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(`https://${calendarFeed}`)}&name=${encodeURIComponent('AI Safety Collective at Irvine')}`,
+}
+
 // Coffee-chat booking links, one per director. Restated manually in
 // docs/discord-info-channel.md.
 export const coffeeChats = [

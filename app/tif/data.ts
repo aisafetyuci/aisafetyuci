@@ -79,11 +79,11 @@ export const weeks: Week[] = [
     ],
     core: [
       {
-        title: 'METR Time Horizon',
-        author: 'METR',
-        year: 2026,
-        url: 'https://metr.org/time-horizons/',
-        type: 'article',
+        title: 'Why "Scout Mindset" Is Crucial to Good Judgment',
+        author: 'Julia Galef / TEDxPSU',
+        year: 2016,
+        url: 'https://www.youtube.com/watch?v=3MYEtQ5Zdn8',
+        type: 'video',
       },
       {
         title: 'Epoch AI Trends Page',
@@ -93,12 +93,21 @@ export const weeks: Week[] = [
         type: 'article',
       },
       {
+        title: 'METR Time Horizon',
+        author: 'METR',
+        year: 2026,
+        url: 'https://metr.org/time-horizons/',
+        type: 'article',
+      },
+      {
         title: 'Can AI Scaling Continue Through 2030?',
         author: 'Epoch AI',
         year: 2024,
         url: 'https://epoch.ai/blog/can-ai-scaling-continue-through-2030',
         type: 'blog',
       },
+    ],
+    recommended: [
       {
         title: 'The Power of Intelligence',
         author: 'Eliezer Yudkowsky',
@@ -106,8 +115,6 @@ export const weeks: Week[] = [
         url: 'https://youtu.be/q9Figerh89g?si=9gOTbCyKqrbU6nPp',
         type: 'video',
       },
-    ],
-    recommended: [
       {
         title: 'What Will AI Look Like in 2030?',
         author: 'Epoch AI',
@@ -196,14 +203,14 @@ export const weeks: Week[] = [
         title: 'Specification Gaming: The Flip Side of AI Ingenuity',
         author: 'DeepMind',
         year: 2020,
-        url: 'https://www.deepmind.com/blog/specification-gaming-the-flip-side-of-ai-ingenuity',
+        url: 'https://deepmind.google/blog/specification-gaming-the-flip-side-of-ai-ingenuity/',
         type: 'blog',
       },
       {
         title: 'Aligning Language Models to Follow Instructions',
         author: 'OpenAI',
         year: 2022,
-        url: 'https://openai.com/blog/instruction-following/',
+        url: 'https://openai.com/index/instruction-following/',
         type: 'blog',
       },
       {
@@ -213,6 +220,8 @@ export const weeks: Week[] = [
         url: 'https://arxiv.org/pdf/2409.12822',
         type: 'paper',
       },
+    ],
+    recommended: [
       {
         title: 'Large Language Models Can Strategically Deceive Their Users When Put Under Pressure',
         author: 'Apollo Research',
@@ -220,8 +229,6 @@ export const weeks: Week[] = [
         url: 'https://arxiv.org/pdf/2311.07590',
         type: 'paper',
       },
-    ],
-    recommended: [
       {
         title: 'Deep RL From Human Preferences',
         author: 'Christiano et al.',
@@ -291,7 +298,7 @@ export const weeks: Week[] = [
   },
   {
     number: 3,
-    title: 'Inner Alignment',
+    title: 'Inner Alignment and Evidence of Misalignment',
     label: 'Week 3',
     objectives: [
       'Describe key failure modes: mesa-optimization, goal misgeneralization, deceptive alignment',
@@ -307,6 +314,13 @@ export const weeks: Week[] = [
         type: 'video',
       },
       {
+        title: 'Natural Emergent Misalignment from Reward Hacking in Production RL',
+        author: 'Anthropic',
+        year: 2025,
+        url: 'https://arxiv.org/abs/2511.18397',
+        type: 'paper',
+      },
+      {
         title: 'Alignment Faking in Large Language Models',
         author: 'Anthropic & Redwood Research',
         year: 2024,
@@ -314,21 +328,21 @@ export const weeks: Week[] = [
         type: 'paper',
       },
       {
+        title: 'Current AIs Seem Pretty Misaligned to Me',
+        author: 'Ryan Greenblatt',
+        year: 2026,
+        url: 'https://www.lesswrong.com/posts/WewsByywWNhX9rtwi/current-ais-seem-pretty-misaligned-to-me',
+        type: 'blog',
+      },
+    ],
+    recommended: [
+      {
         title: 'Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training',
         author: 'Anthropic',
         year: 2024,
         url: 'https://arxiv.org/abs/2401.05566',
         type: 'paper',
       },
-      {
-        title: 'From Shortcuts to Sabotage: Natural Emergent Misalignment From Reward Hacking',
-        author: 'Anthropic',
-        year: 2025,
-        url: 'https://arxiv.org/abs/2511.18397',
-        type: 'paper',
-      },
-    ],
-    recommended: [
       {
         title: 'ML Systems Will Have Weird Failure Modes',
         author: 'Jacob Steinhardt',
@@ -412,7 +426,7 @@ export const weeks: Week[] = [
   },
   {
     number: 4,
-    title: 'Threat Models',
+    title: 'Loss of Control',
     label: 'Week 4',
     objectives: [
       'Articulate the orthogonality thesis and instrumental convergence and their centrality to advanced AI risk',
@@ -433,6 +447,36 @@ export const weeks: Week[] = [
         type: 'video',
       },
       {
+        title: 'The Rise and Fall of Agent Civilizations',
+        author: 'Dwarkesh Patel',
+        year: 2026,
+        url: 'https://www.dwarkesh.com/p/openai-huggingface',
+        type: 'blog',
+      },
+      {
+        title: 'Discovery of a New OpenAI Agent Message Board',
+        author: 'collusion.wiki',
+        year: 2026,
+        url: 'https://collusion.wiki/',
+        type: 'article',
+      },
+      {
+        title: 'Is Power-Seeking AI an Existential Risk?',
+        author: 'Joe Carlsmith',
+        year: 2022,
+        url: 'https://arxiv.org/abs/2206.13353',
+        type: 'paper',
+      },
+      {
+        title: 'AI 2027 (selected passages)',
+        author: 'AI Futures Project',
+        year: 2025,
+        url: 'https://ai-2027.com/',
+        type: 'article',
+      },
+    ],
+    recommended: [
+      {
         title: 'Statement on AI Risk',
         author: 'Center for AI Safety',
         year: 2023,
@@ -452,15 +496,6 @@ export const weeks: Week[] = [
         year: 2025,
         url: 'https://www.youtube.com/watch?v=5KVDDfAkRgc',
         type: 'video',
-      },
-    ],
-    recommended: [
-      {
-        title: 'AI 2027',
-        author: 'AI Futures Project',
-        year: 2025,
-        url: 'https://ai-2027.com/',
-        type: 'article',
       },
       {
         title: 'The Problem',
@@ -495,13 +530,6 @@ export const weeks: Week[] = [
         author: 'Nick Bostrom',
         year: 2012,
         url: 'https://nickbostrom.com/superintelligentwill.pdf',
-        type: 'paper',
-      },
-      {
-        title: 'Existential Risk from Power-Seeking AI',
-        author: 'Joe Carlsmith',
-        year: 2022,
-        url: 'https://arxiv.org/abs/2206.13353',
         type: 'paper',
       },
     ],
@@ -594,7 +622,7 @@ export const weeks: Week[] = [
   },
   {
     number: 5,
-    title: 'Control & Scalable Oversight',
+    title: 'Control and Scalable Oversight',
     label: 'Week 5',
     objectives: [
       'Explain the AI control framework and how it differs from alignment, including the assumption that the model may be intentionally subversive',
@@ -603,12 +631,35 @@ export const weeks: Week[] = [
     ],
     core: [
       {
+        title: 'Can We Scale Human Feedback for Complex AI Tasks? An Intro to Scalable Oversight',
+        author: 'Adam Jones / BlueDot Impact',
+        year: 2024,
+        url: 'https://bluedot.org/blog/scalable-oversight-intro',
+        type: 'blog',
+      },
+      {
+        title: 'Chain of Thought Monitorability: A New and Fragile Opportunity for AI Safety',
+        author: 'Korbak et al.',
+        year: 2025,
+        url: 'https://arxiv.org/abs/2507.11473',
+        type: 'paper',
+      },
+      {
         title: 'The Case for Ensuring That Powerful AIs Are Controlled',
         author: 'Redwood Research',
         year: 2024,
         url: 'https://blog.redwoodresearch.org/p/the-case-for-ensuring-that-powerful',
         type: 'blog',
       },
+      {
+        title: 'Untrusted Advice for AI Control: Short, Strong Advice Significantly Uplifts Weak LLMs',
+        author: 'Caleb Biddulph',
+        year: 2026,
+        url: 'https://www.lesswrong.com/posts/jLkRCK35ri2btEHMF/untrusted-advice-for-ai-control-short-strong-advice',
+        type: 'blog',
+      },
+    ],
+    recommended: [
       {
         title: 'Using Dangerous AI, But Safely?',
         author: 'Robert Miles AI Safety',
@@ -630,8 +681,6 @@ export const weeks: Week[] = [
         url: 'https://cdn.openai.com/papers/weak-to-strong-generalization.pdf',
         type: 'paper',
       },
-    ],
-    recommended: [
       {
         title: 'AI Control LessWrong Sequence',
         author: 'Various',
@@ -829,13 +878,6 @@ export const weeks: Week[] = [
         type: 'blog',
       },
       {
-        title: 'Chain of Thought Monitorability: A New and Fragile Opportunity for AI Safety',
-        author: 'Korbak et al.',
-        year: 2025,
-        url: 'https://arxiv.org/abs/2507.11473',
-        type: 'paper',
-      },
-      {
         title: 'Reasoning Models Don\'t Always Say What They Think',
         author: 'Chen et al. (Anthropic/OpenAI)',
         year: 2025,
@@ -930,7 +972,7 @@ export const weeks: Week[] = [
   },
   {
     number: 6,
-    title: 'Interpretability & Evals',
+    title: 'Interpretability and Evaluations',
     label: 'Week 6',
     objectives: [
       'Describe at a high level what attribution graphs and linear probes are, and what each lets researchers discover about model internals',
@@ -946,24 +988,11 @@ export const weeks: Week[] = [
         type: 'article',
       },
       {
-        title: 'Simple Probes Can Catch Sleeper Agents',
+        title: 'Natural Language Autoencoders',
         author: 'Anthropic',
-        year: 2024,
-        url: 'https://www.anthropic.com/research/probes-catch-sleeper-agents',
-        type: 'paper',
-      },
-      {
-        title: 'An Early Warning System for Novel AI Risks',
-        author: 'Google DeepMind',
-        year: 2023,
-        url: 'https://deepmind.google/discover/blog/an-early-warning-system-for-novel-ai-risks/',
+        year: 2026,
+        url: 'https://www.anthropic.com/research/natural-language-autoencoders',
         type: 'article',
-      },
-      {
-        title: "Translating Claude's Thoughts into Language",
-        author: 'Anthropic',
-        url: 'https://www.youtube.com/watch?v=j2knrqAzYVY',
-        type: 'video',
       },
       {
         title: 'Natural Language Autoencoders — Llama 3.3 70B (Interactive Demo)',
@@ -972,8 +1001,35 @@ export const weeks: Week[] = [
         url: 'https://www.neuronpedia.org/llama3.3-70b-it/nla',
         type: 'article',
       },
+      {
+        title: 'An Early Warning System for Novel AI Risks',
+        author: 'Google DeepMind',
+        year: 2023,
+        url: 'https://deepmind.google/blog/an-early-warning-system-for-novel-ai-risks/',
+        type: 'article',
+      },
+      {
+        title: 'SOTA Alignment Assessments Don’t Strongly Update Us Against Misalignment',
+        author: 'Alexa Pan / Redwood Research',
+        year: 2026,
+        url: 'https://blog.redwoodresearch.org/p/sota-alignment-assessments-dont-strongly',
+        type: 'blog',
+      },
     ],
     recommended: [
+      {
+        title: 'Simple Probes Can Catch Sleeper Agents',
+        author: 'Anthropic',
+        year: 2024,
+        url: 'https://www.anthropic.com/research/probes-catch-sleeper-agents',
+        type: 'paper',
+      },
+      {
+        title: "Translating Claude's Thoughts into Language",
+        author: 'Anthropic',
+        url: 'https://www.youtube.com/watch?v=j2knrqAzYVY',
+        type: 'video',
+      },
       {
         title: 'Difficulties with Evaluating a Deception Detector for AIs',
         author: 'Google DeepMind',
@@ -1148,7 +1204,7 @@ export const weeks: Week[] = [
   },
   {
     number: 7,
-    title: 'AGI Strategy & Governance',
+    title: 'AI Strategy and Governance',
     label: 'Week 7',
     objectives: [
       'Reconstruct the strongest version of the "race to AGI" national-security frame, and the strongest version of the case that the race itself is the danger',
@@ -1156,13 +1212,6 @@ export const weeks: Week[] = [
       'Form a defensible view on what a healthy AGI-strategy posture for the US and its allies should look like, and what it would buy us for safety',
     ],
     core: [
-      {
-        title: 'Situational Awareness: The Free World Must Prevail',
-        author: 'Aschenbrenner',
-        year: 2024,
-        url: 'https://situational-awareness.ai/the-free-world-must-prevail/',
-        type: 'essay',
-      },
       {
         title: 'Racing Through a Minefield: The AI Deployment Problem',
         author: 'Karnofsky',
@@ -1177,8 +1226,28 @@ export const weeks: Week[] = [
         url: 'https://www.governance.ai/analysis/computing-power-and-the-governance-of-ai',
         type: 'article',
       },
+      {
+        title: 'Open-Sourcing Highly Capable Foundation Models',
+        author: 'Seger et al.',
+        year: 2023,
+        url: 'https://arxiv.org/abs/2311.09227',
+        type: 'paper',
+      },
+      {
+        title: 'Open Weights and American AI Leadership',
+        author: 'Microsoft',
+        url: 'https://www.microsoft.com/en-us/corporate-responsibility/topics/open-weight/',
+        type: 'article',
+      },
     ],
     recommended: [
+      {
+        title: 'Situational Awareness: The Free World Must Prevail',
+        author: 'Aschenbrenner',
+        year: 2024,
+        url: 'https://situational-awareness.ai/the-free-world-must-prevail/',
+        type: 'essay',
+      },
       {
         title: 'In Search of a Dynamist Vision for Safe Superhuman AI',
         author: 'Helen Toner',
@@ -1444,7 +1513,7 @@ export const weeks: Week[] = [
   },
   {
     number: 8,
-    title: 'Careers in AI Safety',
+    title: 'Research and Careers',
     label: 'Week 8',
     objectives: [
       'Understand the full ecosystem of AI safety careers beyond technical research',
@@ -1453,20 +1522,40 @@ export const weeks: Week[] = [
     ],
     core: [
       {
-        title: 'The Most Important Century',
-        author: 'Holden Karnofsky',
-        year: 2021,
-        url: 'https://www.cold-takes.com/most-important-century/',
-        type: 'essay',
-      },
-    ],
-    recommended: [
-      {
         title: 'AI Safety Needs More Than Engineers',
         author: 'Avital Morris',
         year: 2026,
         url: 'https://80000hours.org/2026/04/ai-safety-needs-more-than-engineers/',
         type: 'article',
+      },
+      {
+        title: 'Career Profiles — Choose One from the Recommended List Below',
+        author: '80,000 Hours',
+        url: 'https://80000hours.org/career-reviews/',
+        type: 'guide',
+      },
+      {
+        title: 'Tips for Empirical Alignment Research',
+        author: 'Ethan Perez',
+        year: 2024,
+        url: 'https://www.lesswrong.com/posts/dZFpEdKyb9Bf4xYn7/tips-for-empirical-alignment-research',
+        type: 'guide',
+      },
+      {
+        title: 'Planning to Adapt',
+        author: 'Benjamin Todd',
+        year: 2021,
+        url: 'https://80000hours.org/career-planning/process/plan-to-adapt/',
+        type: 'article',
+      },
+    ],
+    recommended: [
+      {
+        title: 'The Most Important Century',
+        author: 'Holden Karnofsky',
+        year: 2021,
+        url: 'https://www.cold-takes.com/most-important-century/',
+        type: 'essay',
       },
       {
         title: "AI Safety's Biggest Talent Gap Isn't Researchers. It's Generalists.",
@@ -1500,13 +1589,6 @@ export const weeks: Week[] = [
         year: 2026,
         url: 'https://80000hours.org/career-reviews/ai-safety-fieldbuilding/',
         type: 'guide',
-      },
-      {
-        title: 'Planning to Adapt',
-        author: 'Benjamin Todd',
-        year: 2021,
-        url: 'https://80000hours.org/career-planning/process/plan-to-adapt/',
-        type: 'article',
       },
       {
         title: 'What 3,654 Job Postings Tell Us About Talent Needs in AI Safety',

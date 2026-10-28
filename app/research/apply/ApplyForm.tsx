@@ -217,6 +217,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
         'expired-callback': () => setTurnstileToken(''),
         'error-callback': fail,
       })
+      setTurnstileFailed(false) // it loaded after all (slow connection past the timeout)
     }
     let script = document.getElementById('turnstile-script') as HTMLScriptElement | null
     const failedToLoad = () => {

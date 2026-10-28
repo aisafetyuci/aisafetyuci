@@ -51,7 +51,9 @@ export interface Post {
 
 const postsDir = path.join(process.cwd(), 'content', 'blog')
 const publicDir = path.join(process.cwd(), 'public')
-const fileNamePattern = /^[a-z0-9]+(-[a-z0-9]+)*\.md$/
+// The CMS can leave an underscore or a trailing hyphen in a file name (it cuts titles at 42
+// characters); accept those and tidy them in the slug rather than failing the whole site build.
+const fileNamePattern = /^[a-z0-9]+([-_][a-z0-9]+)*-?\.md$/
 const datePattern = /^\d{4}-\d{2}-\d{2}$/
 
 function fail(file: string, field: string, problem: string): never {
@@ -179,7 +181,7 @@ function loadPost(file: string): Post {
   const html = String(processor.processSync(content))
 
   return {
-    slug: file.replace(/\.md$/, ''),
+    slug: file.replace(/-?\.md$/, '').replace(/_/g, '-'),
     title,
     date,
     updated,
@@ -198,12 +200,21 @@ function loadPost(file: string): Post {
 let cache: Post[] | undefined
 
 // All published posts, newest first. Drafts appear only in `npm run dev`.
+// foo_bar.md and foo-bar.md would both become /blog/foo-bar.
+function assertUniqueSlugs(posts: Post[]) {
+  const seen = new Set<string>()
+  for (const { slug } of posts) {
+    if (seen.has(slug)) throw new Error(`[blog] two files in content/blog/ both become /blog/${slug}; rename one`)
+    seen.add(slug)
+  }
+  return posts
+}
+
 export function getAllPosts(): Post[] {
   const isDev = process.env.NODE_ENV === 'development'
   if (cache && !isDev) return cache
   const files = fs.existsSync(postsDir) ? fs.readdirSync(postsDir).filter((file) => !file.startsWith('.')) : []
-  const posts = files
-    .map(loadPost)
+  const posts = assertUniqueSlugs(files.map(loadPost))
     .filter((post) => isDev || !post.draft)
     .sort((a, b) => (a.date === b.date ? a.slug.localeCompare(b.slug) : b.date.localeCompare(a.date)))
   if (!isDev) cache = posts

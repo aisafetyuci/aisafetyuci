@@ -34,7 +34,9 @@ export interface Project {
 }
 
 const projectsDir = path.join(process.cwd(), 'content', 'research')
-const fileNamePattern = /^[a-z0-9]+(-[a-z0-9]+)*\.md$/
+// The CMS can leave an underscore or a trailing hyphen in a file name (it cuts titles at 42
+// characters); accept those and tidy them in the slug rather than failing the whole site build.
+const fileNamePattern = /^[a-z0-9]+([-_][a-z0-9]+)*-?\.md$/
 // Every front-matter field a project may have (kept in step with public/admin/config.yml).
 // Anything else is almost certainly a typo, e.g. `lead:` for `leads:`, and would be silently ignored.
 const knownFields = new Set(['title', 'summary', 'status', 'duration', 'team', 'skills', 'commitment', 'format', 'leads', 'constraints', 'onePagerUrl', 'extraQuestion', 'draft'])
@@ -63,8 +65,11 @@ function stringList(data: Record<string, unknown>, file: string, field: string, 
     return []
   }
   if (!Array.isArray(value) || (required && value.length === 0)) fail(file, field, required ? 'is required and must be a list' : 'must be a list')
-  return value.map((item) => {
-    if (typeof item !== 'string' || item.trim() === '') fail(file, field, 'must only contain non-empty text')
+  // Blank items (an empty row left in the CMS list) are skipped rather than failing the build.
+  const items = value.filter((item) => !(typeof item === 'string' && item.trim() === ''))
+  if (required && items.length === 0) fail(file, field, 'is required and must be a list')
+  return items.map((item) => {
+    if (typeof item !== 'string') fail(file, field, 'must only contain text')
     return item.trim()
   })
 }
@@ -124,7 +129,8 @@ function loadProject(file: string): Project {
     throw new Error(`[research] content/research/${file}: file name must be lowercase words joined by hyphens, ending in .md`)
   }
   // These names are taken by /research/apply and /research/projects.json.
-  if (file === 'apply.md' || file === 'projects.md') {
+  const slug = file.replace(/-?\.md$/, '').replace(/_/g, '-')
+  if (slug === 'apply' || slug === 'projects') {
     throw new Error(`[research] content/research/${file}: this file name is reserved; rename the project`)
   }
   let parsed: matter.GrayMatterFile<string>
@@ -156,7 +162,7 @@ function loadProject(file: string): Project {
   if (content.trim() === '') fail(file, 'body', 'is empty; write the one-pager below the front matter')
 
   return {
-    slug: file.replace(/\.md$/, ''),
+    slug,
     title: requireString(data, file, 'title'),
     summary: requireString(data, file, 'summary'),
     open: status === 'open',
@@ -177,12 +183,21 @@ function loadProject(file: string): Project {
 let cache: Project[] | undefined
 
 // All published projects, open ones first, then by title. Drafts appear only in `npm run dev`.
+// foo_bar.md and foo-bar.md would both become /research/foo-bar.
+function assertUniqueSlugs(projects: Project[]) {
+  const seen = new Set<string>()
+  for (const { slug } of projects) {
+    if (seen.has(slug)) throw new Error(`[research] two files in content/research/ both become /research/${slug}; rename one`)
+    seen.add(slug)
+  }
+  return projects
+}
+
 export function getAllProjects(): Project[] {
   const isDev = process.env.NODE_ENV === 'development'
   if (cache && !isDev) return cache
   const files = fs.existsSync(projectsDir) ? fs.readdirSync(projectsDir).filter((file) => !file.startsWith('.')) : []
-  const projects = files
-    .map(loadProject)
+  const projects = assertUniqueSlugs(files.map(loadProject))
     .filter((project) => isDev || !project.draft)
     .sort((a, b) => (a.open === b.open ? a.title.localeCompare(b.title) : a.open ? -1 : 1))
   if (!isDev) cache = projects

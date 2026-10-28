@@ -132,7 +132,7 @@ collections:
         label: Constraints or notes for applicants
         widget: list
         required: false
-      - { name: onePagerUrl, label: Link to a longer one-pager, widget: string, required: false, hint: 'Optional full https:// link, e.g. a Google Doc.' }
+      - { name: onePagerUrl, label: Link to a longer one-pager, widget: string, required: false, pattern: ['^https://', 'Must be a full https:// link'], hint: 'Optional full https:// link, e.g. a Google Doc.' }
       - name: extraQuestion
         label: Extra application question
         widget: string

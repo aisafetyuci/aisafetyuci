@@ -2,6 +2,11 @@
 // Runs on Cloudflare Workers with no dependencies; the minimal types below stand in for
 // @cloudflare/workers-types. Every error message here may be shown to an applicant as-is.
 
+// The part of Cloudflare's ExecutionContext used here (no @cloudflare/workers-types in this repo).
+interface ExecutionContext {
+  waitUntil(promise: Promise<unknown>): void
+}
+
 interface Env {
   AIRTABLE_BASE_ID: string
   AIRTABLE_TOKEN: string // secret
@@ -51,7 +56,8 @@ const shortMax = 200
 const longMax = 3000
 const maxApplications = 20
 
-const allowedOrigins = ['https://aisafetyuci.org', 'https://www.aisafetyuci.org', 'http://localhost:3000']
+// http:// too: the site doesn't force HTTPS, and a visitor on http:// would otherwise be refused.
+const allowedOrigins = ['https://aisafetyuci.org', 'https://www.aisafetyuci.org', 'http://aisafetyuci.org', 'http://www.aisafetyuci.org', 'http://localhost:3000']
 // Cloudflare branch previews of the site, e.g. https://my-branch-aisafetyuci.aisafetyatuci.workers.dev
 const previewOrigin = /^https:\/\/([a-z0-9-]+-)?aisafetyuci\.aisafetyatuci\.workers\.dev$/
 
@@ -220,15 +226,19 @@ function quote(value: string) {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 const retryDelays = [300, 1000]
+// Airtable allows 5 requests a second per base and, once exceeded, refuses everything for
+// 30 seconds. Applicants get two short retries; the background rollback waits the 30 seconds out.
+const rateLimitDelays = [1000, 3000]
+const rollbackRateLimitDelays = [1000, 5000, 31000]
 
 // Reads and deletes are retried on network errors and 5xx. Creates are not: a failed POST may
 // still have been saved, and a retry would duplicate it. A 429 (rate limit) means nothing was
-// done, so any request gets one more try after a second.
-async function airtable(env: Env, table: string, method: string, query = '', body?: unknown) {
+// done, so any request is retried after the `rateLimited` delays.
+async function airtable(env: Env, table: string, method: string, query = '', body?: unknown, rateLimited = rateLimitDelays) {
   const url = `https://api.airtable.com/v0/${env.AIRTABLE_BASE_ID}/${encodeURIComponent(table)}${query && `?${query}`}`
   const idempotent = method === 'GET' || method === 'DELETE'
   let retries = 0
-  let rateLimited = false
+  let rateLimitRetries = 0
   while (true) {
     let response: Response
     try {
@@ -245,11 +255,16 @@ async function airtable(env: Env, table: string, method: string, query = '', bod
       console.error(`Airtable ${method} ${table} failed to connect:`, String(error))
       throw new Rejection(502, `We couldn't save your application. ${tryAgain}`)
     }
-    if (response.status === 429 && !rateLimited) {
-      rateLimited = true
-      await sleep(1000)
-      continue
+    if (response.status === 429) {
+      if (rateLimitRetries < rateLimited.length) {
+        await sleep(rateLimited[rateLimitRetries++])
+        continue
+      }
+      console.error(`Airtable ${method} ${table} still rate-limited after ${rateLimitRetries} retries`)
+      throw new Rejection(503, "We're getting a lot of applications right now. Please wait a minute and submit again.")
     }
+    // A retried DELETE whose first try went through finds nothing left to delete.
+    if (response.status === 404 && method === 'DELETE' && retries > 0) return {}
     if (response.status >= 500 && idempotent && retries < retryDelays.length) {
       await sleep(retryDelays[retries++])
       continue
@@ -292,23 +307,26 @@ async function deleteRecords(env: Env, table: string, ids: string[]) {
   for (let i = 0; i < ids.length; i += 10) {
     const params = new URLSearchParams()
     for (const id of ids.slice(i, i + 10)) params.append('records[]', id)
-    await airtable(env, table, 'DELETE', params.toString())
+    await airtable(env, table, 'DELETE', params.toString(), undefined, rollbackRateLimitDelays)
   }
 }
 
 // Airtable has no transactions. If an application fails halfway, remove what was saved so the
 // applicant's retry starts clean (and isn't flagged as their own duplicate). Best effort: if
-// this fails too, the log names the rows to delete by hand.
+// this fails too, the log names the rows to delete by hand. Runs after the applicant has their
+// answer (waitUntil), so it can wait out a rate limit.
 async function rollBack(env: Env, email: string, applicantId: string, applicationIds: string[]) {
-  try {
-    await deleteRecords(env, 'Applications', applicationIds)
-    await deleteRecords(env, 'Applicants', [applicantId])
-    console.error(`Rolled back a failed application from ${email} (Applicants ${applicantId}, ${applicationIds.length} Applications)`)
-  } catch {
-    console.error(
-      `Rollback failed; delete by hand. Email ${email}, Applicants ${applicantId}, Applications ${JSON.stringify(applicationIds)}`,
-    )
+  const left: string[] = []
+  for (const [table, ids] of [['Applications', applicationIds], ['Applicants', [applicantId]]] as const) {
+    try {
+      await deleteRecords(env, table, [...ids])
+    } catch (error) {
+      left.push(`${table} ${JSON.stringify(ids)}`)
+      console.error(`Rollback of ${table} failed:`, error instanceof Error ? error.message : String(error))
+    }
   }
+  if (left.length) console.error(`Rollback failed; delete by hand. Email ${email}: ${left.join('; ')}`)
+  else console.error(`Rolled back a failed application from ${email} (Applicants ${applicantId}, ${applicationIds.length} Applications)`)
 }
 
 // Blank optional answers are left out so Airtable cells stay empty rather than "".
@@ -318,7 +336,7 @@ function withoutEmpty(fields: Record<string, unknown>) {
 
 // ---- Request handling ------------------------------------------------------------------
 
-async function handle(request: Request, env: Env) {
+async function handle(request: Request, env: Env, ctx: ExecutionContext) {
   if (Number(request.headers.get('Content-Length') ?? 0) > maxBodyBytes) {
     throw new Rejection(413, 'Your application is too long to send. Please shorten some answers and try again.')
   }
@@ -422,7 +440,7 @@ async function handle(request: Request, env: Env) {
     )
   } catch (error) {
     // Projects rows are left: they're harmless and reused by the next submission.
-    await rollBack(env, applicant.email, applicantId, applicationIds)
+    ctx.waitUntil(rollBack(env, applicant.email, applicantId, applicationIds))
     throw error
   }
 }
@@ -433,7 +451,7 @@ async function health(env: Env) {
   const projects = await openProjects(env)
   const result = projects.open
     ? { ok: true, projects: projects.open.size, source: projects.source }
-    : { ok: false, projects: null, source: null, error: projects.error }
+    : { ok: false, projects: null, source: null, error: 'Could not load the project list; the Worker logs say why.' }
   return json(result, projects.open ? 200 : 503, { 'Cache-Control': 'no-store' })
 }
 
@@ -446,7 +464,7 @@ function json(data: unknown, status: number, headers: Record<string, string> = {
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     if (request.method === 'GET' && new URL(request.url).pathname === '/health') return health(env)
 
     const origin = request.headers.get('Origin') ?? ''
@@ -466,7 +484,7 @@ export default {
     }
 
     try {
-      await handle(request, env)
+      await handle(request, env, ctx)
       return json({ ok: true }, 200, cors)
     } catch (error) {
       if (error instanceof Rejection) return json({ ok: false, error: error.message }, error.status, cors)

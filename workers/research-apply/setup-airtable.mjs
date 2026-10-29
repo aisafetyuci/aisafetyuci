@@ -55,6 +55,8 @@ const tables = [
       { name: 'Links', ...long },
       { name: 'Anything else', ...long },
       { name: 'Possible duplicate', type: 'checkbox', options: { icon: 'check', color: 'yellowBright' } },
+      // One random ID per submission, for the Worker's rollback (README "Rollback").
+      { name: 'Submission ID', ...text },
     ],
   },
   {
@@ -70,6 +72,7 @@ const tables = [
       { name: 'Review status', ...select(['New', 'Shortlisted', 'Interview', 'Accepted', 'Declined']) },
       { name: 'Reviewer notes', ...long },
       { name: 'Score', type: 'rating', options: { max: 5, icon: 'star', color: 'yellowBright' } },
+      { name: 'Submission ID', ...text },
     ],
   },
 ]

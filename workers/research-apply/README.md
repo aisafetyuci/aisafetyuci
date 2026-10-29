@@ -12,11 +12,13 @@ For each submission it:
 
 Applicants see a plain-English error if anything fails, and are never told "received" unless everything was saved.
 
-**Airtable rate limit.** Airtable allows 5 requests a second per base, then refuses every request for 30 seconds. A submission makes about 3 to 5 requests (fewer once the Worker has seen its projects). Reads are retried briefly on network errors and 5xx; creates are not (a failed create may still have been saved). A 429 (rate limited) is retried after 1, 4 and 27 seconds, which outlasts a full lockout, so the applicant just sees "Sending…" for up to about half a minute; only if it's still refused after that are they asked to wait a minute and resubmit.
+**Airtable rate limit.** Airtable allows 5 requests a second per base, then refuses every request for 30 seconds. A submission makes about 3 to 5 requests (fewer once the Worker has seen its projects; up to 8 for 20 never-seen projects). Reads are retried briefly on network errors and 5xx; creates are not (a failed create may still have been saved). A 429 (rate limited) is retried after 1, 4 and 30 seconds (each up to a fifth longer at random, so stalled applicants don't retry in step), which outlasts a full lockout. All the waits of one submission share a 50-second deadline, so the applicant sees "Sending…" for about a minute at most; if Airtable is still refusing by then, they're asked to wait a minute and resubmit.
 
-**Rollback.** Airtable has no transactions, so if the Applications rows fail after the Applicants row was written, the Worker deletes what it wrote so a resubmission starts clean and isn't flagged as a duplicate. It first logs "Rolling back … from <email>" with every record ID, then "Rolled back …" or "Rollback failed; delete by hand" naming the email and the IDs to remove. Usually the rollback finishes before the applicant gets their error. After a rate limit it runs in the background instead (the applicant has already waited), where Cloudflare cuts it off 30 seconds after the reply; it's sized to finish in about 25, but if a "Rolling back" line has no "Rolled back" or "Rollback failed" line after it, delete those rows by hand.
+**Rollback.** Airtable has no transactions, so if saving the Applicants or Applications rows fails partway, the Worker deletes what it wrote so a resubmission starts clean and isn't flagged as a duplicate. Every submission writes a random **Submission ID** on its Applicants and Applications rows, and the rollback finds rows by that ID as well as by the record IDs Airtable returned, so a row that was saved but whose reply was lost on the network is removed too. It first logs "Rolling back … from <email>: Submission ID …" with the known record IDs, then "Rolled back …" or "Rollback failed; delete by hand" naming the email and the Submission ID: filter that table by Submission ID to find the rows to remove. Usually the rollback finishes before the applicant gets their error. After a rate limit it runs in the background instead (the applicant has already waited), where Cloudflare cuts it off 30 seconds after the reply; it has a 25-second deadline and deletes in parallel batches, but if a "Rolling back" line has no "Rolled back" or "Rollback failed" line after it, delete those rows by hand.
 
-**Previews and local dev write to the live base.** A branch preview or `npm run dev` on localhost posts to this same Worker, so test submissions land in the real Airtable base; delete them afterwards. Previews are checked against the live site's open-projects list like production. Only while that list can't be loaded (before the research pages reach `main`) does a preview accept any well-formed slug, with the slug as the project's title; after merging, that fallback no longer applies.
+**Before deploying a Worker that writes Submission ID, add the field** (Single line text, named exactly `Submission ID`) to both Applicants and Applications, by hand or with `setup-airtable.mjs` (it only adds missing fields). Without it Airtable rejects every application.
+
+**Previews and local dev write to the live base.** A branch preview or `npm run dev` on localhost posts to this same Worker, so test submissions land in the real Airtable base; delete them afterwards. Previews are checked against the live site's open-projects list like production. Only while that list can't be loaded (before the research pages reach `main`) does a preview accept any well-formed slug, with the slug as the project's title; after merging, that fallback no longer applies (and should be removed). Project rows it creates aren't cached by the Worker.
 
 ## Airtable schema
 
@@ -47,6 +49,7 @@ Two first-ever applications to the same project arriving within a second can cre
 | `Links` | Long text |
 | `Anything else` | Long text |
 | `Possible duplicate` | Checkbox |
+| `Submission ID` | Single line text (written by the Worker; used by rollback) |
 | `Submitted` | Created time (Airtable fills this; the Worker never writes it) |
 
 **Applications**
@@ -62,6 +65,7 @@ Two first-ever applications to the same project arriving within a second can cre
 | `Review status` | Single select (new rows get "New") |
 | `Reviewer notes` | Long text (for reviewers; the Worker never writes it) |
 | `Score` | Rating, 1–5 stars (for reviewers; the Worker never writes it) |
+| `Submission ID` | Single line text (written by the Worker; used by rollback) |
 
 Writes use `typecast`, so single-select options are created automatically the first time they appear; you don't have to add them by hand.
 

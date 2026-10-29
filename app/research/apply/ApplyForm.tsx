@@ -167,14 +167,17 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
   const [panelSlug, setPanelSlug] = useState<string | null>(null)
   const [dragSlug, setDragSlug] = useState<string | null>(null)
   const [rankNotice, setRankNotice] = useState('') // read out by screen readers after a reorder
+  const [sentElsewhere, setSentElsewhere] = useState(false) // another tab submitted this draft
 
   const headingRef = useRef<HTMLHeadingElement>(null)
   const submitErrorRef = useRef<HTMLDivElement>(null)
+  const turnstileAlertRef = useRef<HTMLDivElement>(null)
   const dialogRef = useRef<HTMLDialogElement>(null)
   const turnstileRef = useRef<HTMLDivElement>(null)
   const turnstileId = useRef<string | null>(null)
   const submitting = useRef(false) // blocks a second submit before the button re-renders as disabled
   const awaitingCheck = useRef(false) // the shown error is only "bot check not done yet"
+  const fromOtherTab = useRef(false) // state was just copied from another tab's save: don't save it back
 
   const bySlug = Object.fromEntries(projects.map((p) => [p.slug, p]))
   const chosen = selected.map((slug) => bySlug[slug]).filter(Boolean)
@@ -210,11 +213,41 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
   }, [projects])
 
   useEffect(() => {
-    if (!restored || status === 'done') return
+    if (!restored || status === 'done' || sentElsewhere) return
+    if (fromOtherTab.current) {
+      fromOtherTab.current = false
+      return
+    }
     try {
       localStorage.setItem(storageKey, JSON.stringify({ applicant, selected, answers, step } satisfies Saved))
     } catch {}
-  }, [restored, status, applicant, selected, answers, step])
+  }, [restored, status, sentElsewhere, applicant, selected, answers, step])
+
+  // Two tabs share one draft. When another tab submits it (the draft is removed), this one stops
+  // so it can't send a second copy. When another tab edits it, a tab in the background takes the
+  // edits rather than overwriting them with its older copy the next time it saves.
+  useEffect(() => {
+    const open = new Set(projects.map((p) => p.slug))
+    const onStorage = (event: StorageEvent) => {
+      if (event.key !== storageKey || submitting.current) return
+      if (event.newValue === null) {
+        setSentElsewhere(true)
+        return
+      }
+      if (document.hasFocus()) return
+      let draft: Saved | undefined
+      try {
+        draft = readDraft(JSON.parse(event.newValue), open)
+      } catch {}
+      if (!draft) return
+      fromOtherTab.current = true
+      setApplicant(draft.applicant)
+      setSelected(draft.selected)
+      setAnswers(draft.answers)
+    }
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [projects])
 
   // Turnstile (bot check) renders on the review step, once a site key is configured. Ad and
   // tracker blockers sometimes stop it loading; then we say so rather than leave a blank space.
@@ -272,7 +305,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
     }
   }, [step])
 
-  // A rate-limited send can take half a minute; after a few seconds, say so on the button.
+  // A rate-limited send can take up to a minute; after a few seconds, say so on the button.
   useEffect(() => {
     if (status !== 'submitting') return
     const timer = window.setTimeout(() => setSlowSend(true), 5000)
@@ -377,13 +410,14 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
         return
       }
     }
+    if (researchApply.turnstileSiteKey && !turnstileToken && turnstileProblem) {
+      // The bot check's own alert already says what went wrong; point to it rather than repeat it.
+      requestAnimationFrame(() => turnstileAlertRef.current?.focus())
+      return
+    }
     if (researchApply.turnstileSiteKey && !turnstileToken) {
       setStatus('error')
-      setSubmitError(
-        turnstileProblem === 'load' ? "The bot check above didn't load."
-          : turnstileProblem === 'challenge' ? "The bot check above couldn't verify this browser."
-          : 'Please complete the check above the submit button.',
-      )
+      setSubmitError('Please complete the check above the submit button.')
       awaitingCheck.current = true
       requestAnimationFrame(() => submitErrorRef.current?.focus())
       return
@@ -442,6 +476,9 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
       try {
         localStorage.removeItem(storageKey)
       } catch {}
+      // The done view replaces the widget's element, so remove the widget first.
+      if (turnstileId.current) window.turnstile?.remove(turnstileId.current)
+      turnstileId.current = null
       setStatus('done')
       requestAnimationFrame(() => headingRef.current?.focus())
     } catch (err) {
@@ -471,6 +508,21 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
         <p className="mx-auto mt-3 max-w-xl leading-relaxed text-gray-600">
           New projects open each quarter. Join the <Link href="/discord" className="font-medium text-brand underline underline-offset-4">Discord</Link> to hear when they do.
         </p>
+      </div>
+    )
+  }
+
+  if (sentElsewhere && status !== 'done') {
+    return (
+      <div className="mx-auto max-w-3xl surface-card p-8 text-center sm:p-10">
+        <h2 className="text-2xl font-semibold text-brand">Application already sent</h2>
+        <p className="mx-auto mt-3 max-w-xl leading-relaxed text-gray-600">
+          You sent this application from another tab, so this copy is closed to avoid sending it twice. Reload the page to start a new application.
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <Link href="/research" className="button-secondary">Back to projects</Link>
+          <Link href="/discord" className="button-primary">Join our Discord</Link>
+        </div>
       </div>
     )
   }
@@ -725,7 +777,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
               </p>
               {researchApply.turnstileSiteKey && <div ref={turnstileRef} />}
               {turnstileProblem === 'load' && !turnstileToken && (
-                <div role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-relaxed text-red-800">
+                <div ref={turnstileAlertRef} tabIndex={-1} role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-relaxed text-red-800 focus:outline-none">
                   <p className="font-semibold">The bot check didn&apos;t load.</p>
                   <p className="mt-1">
                     An ad or tracker blocker is the usual cause. Pause it for this page (or allow challenges.cloudflare.com), or try another browser, then reload. Your answers are saved in this browser. If it still won&apos;t load, email us at <EmailLink className="break-words font-medium underline underline-offset-2" />.
@@ -733,7 +785,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                 </div>
               )}
               {turnstileProblem === 'challenge' && !turnstileToken && (
-                <div role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-relaxed text-red-800">
+                <div ref={turnstileAlertRef} tabIndex={-1} role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-relaxed text-red-800 focus:outline-none">
                   <p className="font-semibold">The bot check couldn&apos;t verify this browser.</p>
                   <p className="mt-1">
                     Reload the page or try another browser; your answers are saved in this browser. If it keeps happening, email us at <EmailLink className="break-words font-medium underline underline-offset-2" />.

@@ -193,6 +193,11 @@ async function verifyTurnstile(token: string, ip: string | null, env: Env): Prom
       console.error('Turnstile config error (check the TURNSTILE_SECRET secret):', JSON.stringify(codes))
       throw new Rejection(502, `We couldn't run the bot check just now. ${tryAgain}`)
     }
+    // Cloudflare's own fault; its docs say to retry.
+    if (codes.includes('internal-error')) {
+      console.error('Turnstile siteverify internal error:', JSON.stringify(codes))
+      throw new Rejection(502, `We couldn't run the bot check just now. ${tryAgain}`)
+    }
     console.error('Turnstile rejected a submission:', JSON.stringify(codes))
     throw new Rejection(403, "We couldn't confirm you're not a bot. Please reload the page and try again.")
   }
@@ -241,16 +246,35 @@ function quote(value: string) {
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 const retryDelays = [300, 1000]
 // Airtable allows 5 requests a second per base and, once exceeded, refuses everything for
-// 30 seconds. The applicant's request waits out a whole lockout (about 32 seconds) rather than
-// asking them to resubmit. A rollback left running after the response (waitUntil) must finish
-// within the 30 seconds Cloudflare allows, so it waits at most about 23.
-const rateLimitDelays = [1000, 4000, 27000]
-const rollbackRateLimitDelays = [1000, 4000, 18000]
+// 30 seconds. A call waits out a whole lockout (1 + 4 + 30 seconds, each up to a fifth longer at
+// random so stalled applicants don't all retry at once) rather than asking them to resubmit.
+// Every wait in one submission shares one deadline, so the applicant waits about 50 seconds at
+// most however many calls are refused. A rollback has its own 25-second deadline: one left
+// running after the response (waitUntil) must finish within the 30 seconds Cloudflare allows.
+const rateLimitDelays = [1000, 4000, 30000]
+const rollbackRateLimitDelays = [1000, 3000, 16000]
+const requestBudgetMs = 50_000
+const rollbackBudgetMs = 25_000
+
+// How long Airtable calls may wait on retries: the delays after each 429, and a shared deadline.
+interface Pace {
+  delays: number[]
+  deadline: number
+}
+
+const pace = (delays: number[], budgetMs: number): Pace => ({ delays, deadline: Date.now() + budgetMs })
+
+// Sleeps unless that would pass the deadline; says whether it slept.
+async function pause(pacing: Pace, ms: number) {
+  if (Date.now() + ms > pacing.deadline) return false
+  await sleep(ms)
+  return true
+}
 
 // Reads and deletes are retried on network errors and 5xx. Creates are not: a failed POST may
 // still have been saved, and a retry would duplicate it. A 429 (rate limit) means nothing was
-// done, so any request is retried after the `rateLimited` delays.
-async function airtable(env: Env, table: string, method: string, query = '', body?: unknown, rateLimited = rateLimitDelays) {
+// done, so any request is retried after the `pacing` delays.
+async function airtable(env: Env, table: string, method: string, query: string, body: unknown, pacing: Pace) {
   const url = `https://api.airtable.com/v0/${env.AIRTABLE_BASE_ID}/${encodeURIComponent(table)}${query && `?${query}`}`
   const idempotent = method === 'GET' || method === 'DELETE'
   let retries = 0
@@ -264,28 +288,20 @@ async function airtable(env: Env, table: string, method: string, query = '', bod
         body: body === undefined ? undefined : JSON.stringify(body),
       })
     } catch (error) {
-      if (idempotent && retries < retryDelays.length) {
-        await sleep(retryDelays[retries++])
-        continue
-      }
+      if (idempotent && retries < retryDelays.length && (await pause(pacing, retryDelays[retries++]))) continue
       console.error(`Airtable ${method} ${table} failed to connect:`, String(error))
       throw new Rejection(502, `We couldn't save your application. ${tryAgain}`)
     }
     if (response.status === 429) {
-      if (rateLimitRetries < rateLimited.length) {
-        await sleep(rateLimited[rateLimitRetries++])
-        continue
-      }
-      console.error(`Airtable ${method} ${table} still rate-limited after ${rateLimitRetries} retries`)
+      const delay = pacing.delays[rateLimitRetries++]
+      if (delay !== undefined && (await pause(pacing, delay * (1 + Math.random() / 5)))) continue
+      console.error(`Airtable ${method} ${table} still rate-limited after ${rateLimitRetries - 1} retries`)
       throw new Rejection(503, "We're getting a lot of applications right now. Please wait a minute and submit again.")
     }
     // A retried DELETE whose first try went through finds nothing left to delete; the caller
     // checks which records really remain (a 404 can also mean a renamed table).
     if (response.status === 404 && method === 'DELETE' && retries > 0) return { notFoundOnRetry: true }
-    if (response.status >= 500 && idempotent && retries < retryDelays.length) {
-      await sleep(retryDelays[retries++])
-      continue
-    }
+    if (response.status >= 500 && idempotent && retries < retryDelays.length && (await pause(pacing, retryDelays[retries++]))) continue
     if (!response.ok) {
       console.error(`Airtable ${method} ${table} returned ${response.status}:`, await response.text())
       throw new Rejection(502, `We couldn't save your application. ${tryAgain}`)
@@ -294,13 +310,13 @@ async function airtable(env: Env, table: string, method: string, query = '', bod
   }
 }
 
-async function findRecords(env: Env, table: string, formula: string, extra: Record<string, string> = {}, rateLimited = rateLimitDelays) {
+async function findRecords(env: Env, table: string, formula: string, extra: Record<string, string>, pacing: Pace) {
   const records: AirtableRecord[] = []
   let offset: string | undefined
   do {
     const params = new URLSearchParams({ filterByFormula: formula, ...extra })
     if (offset) params.set('offset', offset)
-    const page = await airtable(env, table, 'GET', params.toString(), undefined, rateLimited)
+    const page = await airtable(env, table, 'GET', params.toString(), undefined, pacing)
     records.push(...page.records)
     offset = page.offset
   } while (offset)
@@ -309,45 +325,73 @@ async function findRecords(env: Env, table: string, formula: string, extra: Reco
 
 // Airtable creates at most 10 records per call. Returns the new IDs in input order; pass `ids`
 // to see the ones already created if a later batch fails.
-async function createRecords(env: Env, table: string, rows: Record<string, unknown>[], ids: string[] = []) {
+async function createRecords(env: Env, table: string, rows: Record<string, unknown>[], pacing: Pace, ids: string[] = []) {
   for (let i = 0; i < rows.length; i += 10) {
     const records = rows.slice(i, i + 10).map((fields) => ({ fields: withoutEmpty(fields) }))
     // typecast lets Airtable add new single-select options instead of rejecting the write.
-    const result = await airtable(env, table, 'POST', '', { records, typecast: true })
+    const result = await airtable(env, table, 'POST', '', { records, typecast: true }, pacing)
     ids.push(...result.records.map((record: AirtableRecord) => record.id))
   }
   return ids
 }
 
-// Airtable deletes at most 10 records per call too.
-async function deleteRecords(env: Env, table: string, ids: string[], rateLimited: number[]) {
-  for (let i = 0; i < ids.length; i += 10) {
-    const params = new URLSearchParams()
-    for (const id of ids.slice(i, i + 10)) params.append('records[]', id)
-    const result = await airtable(env, table, 'DELETE', params.toString(), undefined, rateLimited)
-    if (result.notFoundOnRetry) {
-      const batch = ids.slice(i, i + 10)
-      const left = await findRecords(env, table, `OR(${batch.map((id) => `RECORD_ID()=${quote(id)}`).join(',')})`, {}, rateLimited)
-      if (left.length) throw new Error(`${left.length} of ${batch.length} ${table} records still there after a retried delete`)
-    }
-  }
+// Airtable deletes at most 10 records per call too. The batches run at once, so a rollback of
+// 20 Applications fits its deadline; every batch is tried before any failure is reported.
+async function deleteRecords(env: Env, table: string, ids: string[], pacing: Pace) {
+  const batches: string[][] = []
+  for (let i = 0; i < ids.length; i += 10) batches.push(ids.slice(i, i + 10))
+  const results = await Promise.allSettled(
+    batches.map(async (batch) => {
+      const params = new URLSearchParams()
+      for (const id of batch) params.append('records[]', id)
+      const result = await airtable(env, table, 'DELETE', params.toString(), undefined, pacing)
+      if (result.notFoundOnRetry) {
+        const left = await findRecords(env, table, `OR(${batch.map((id) => `RECORD_ID()=${quote(id)}`).join(',')})`, {}, pacing)
+        if (left.length) throw new Error(`${left.length} of ${batch.length} ${table} records still there after a retried delete`)
+      }
+    }),
+  )
+  const failed = results.find((result) => result.status === 'rejected')
+  if (failed) throw failed.reason
 }
 
 // Airtable has no transactions. If an application fails halfway, remove what was saved so the
-// applicant's retry starts clean (and isn't flagged as their own duplicate). Best effort: if
-// this fails too, the log names the rows to delete by hand. When it runs after the applicant has
-// their answer (waitUntil), Cloudflare cancels it after 30 seconds without running any more code,
-// so the rows are logged first: with no "Rolled back" line after it, delete them by hand.
-async function rollBack(env: Env, email: string, applicantId: string, applicationIds: string[], rateLimited: number[]) {
-  console.error(`Rolling back a failed application from ${email}: Applicants ["${applicantId}"]; Applications ${JSON.stringify(applicationIds)}`)
-  const tables = [['Applications', applicationIds], ['Applicants', [applicantId]]] as const
-  const results = await Promise.allSettled(tables.map(([table, ids]) => deleteRecords(env, table, [...ids], rateLimited)))
-  const left = tables.filter((_, i) => results[i].status === 'rejected').map(([table, ids]) => `${table} ${JSON.stringify(ids)}`)
+// applicant's retry starts clean (and isn't flagged as their own duplicate). With `lookUp`, rows
+// are found by the submission's ID as well as by the IDs Airtable returned, so a create that was
+// saved but whose reply was lost is removed too. (After a rate limit the IDs are exact: a 429
+// means nothing was written, so that rollback skips the lookup and its extra requests.) Best effort: if this fails, the log names the Submission
+// ID whose rows to delete by hand. When it runs after the applicant has their answer
+// (waitUntil), Cloudflare cancels it after 30 seconds without running any more code, so the
+// rows are logged first: with no "Rolled back" line after it, delete them by hand.
+async function rollBack(env: Env, email: string, submissionId: string, saved: { Applicants: string[]; Applications: string[] }, lookUp: boolean) {
+  const pacing = pace(rollbackRateLimitDelays, rollbackBudgetMs)
+  console.error(`Rolling back a failed application from ${email}: Submission ID ${submissionId}; Applicants ${JSON.stringify(saved.Applicants)}; Applications ${JSON.stringify(saved.Applications)}`)
+  const tables = ['Applications', 'Applicants'] as const
+  const results = await Promise.allSettled(
+    tables.map(async (table) => {
+      let ids = saved[table]
+      if (lookUp) {
+        try {
+          const found = await findRecords(env, table, `{Submission ID}=${quote(submissionId)}`, {}, pacing)
+          ids = [...new Set([...ids, ...found.map((record) => record.id)])]
+        } catch (error) {
+          console.error(`Finding ${table} rows by Submission ID failed; deleting the known ones:`, String(error))
+        }
+      }
+      await deleteRecords(env, table, ids, pacing)
+      return ids.length
+    }),
+  )
+  const left = tables.filter((_, i) => results[i].status === 'rejected')
   results.forEach((result, i) => {
-    if (result.status === 'rejected') console.error(`Rollback of ${tables[i][0]} failed:`, String(result.reason))
+    if (result.status === 'rejected') console.error(`Rollback of ${tables[i]} failed:`, String(result.reason))
   })
-  if (left.length) console.error(`Rollback failed; delete by hand. Email ${email}: ${left.join('; ')}`)
-  else console.error(`Rolled back a failed application from ${email} (Applicants ${applicantId}, ${applicationIds.length} Applications)`)
+  if (left.length) {
+    console.error(`Rollback failed; delete by hand. Email ${email}: rows with Submission ID ${submissionId} in ${left.join(' and ')}`)
+  } else {
+    const counts = results.map((result, i) => `${result.status === 'fulfilled' ? result.value : 0} ${tables[i]}`)
+    console.error(`Rolled back a failed application from ${email} (Submission ID ${submissionId}: ${counts.join(', ')})`)
+  }
 }
 
 // Blank optional answers are left out so Airtable cells stay empty rather than "".
@@ -397,7 +441,7 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext) {
 
 // Slug → Projects record ID, for as long as this Worker instance lives, so a project that has
 // had an application skips the Projects lookup (Airtable allows only 5 requests a second).
-// Cleared whenever saving Applications fails, in case a cached row was deleted from the base.
+// Cleared whenever saving the Applicants or Applications rows fails, in case a cached row was deleted from the base.
 const projectIdCache = new Map<string, string>()
 
 async function save(request: Request, env: Env, ctx: ExecutionContext, turnstileToken: string, applicant: Applicant, applications: Application[]) {
@@ -414,6 +458,8 @@ async function save(request: Request, env: Env, ctx: ExecutionContext, turnstile
   // Previews are checked against the live site's list too. Only if that list can't be loaded
   // (before the research pages reach main) does a preview accept any well-formed slug, titled
   // with the slug itself; once main serves projects.json that fallback is effectively unused.
+  // Remove it after merging. Its Projects IDs aren't cached, so a slug-titled row can't be
+  // handed to a later production applicant by this Worker instance.
   const projects = await openProjects(env)
   let open: Map<string, string>
   if (projects.open) {
@@ -427,6 +473,9 @@ async function save(request: Request, env: Env, ctx: ExecutionContext, turnstile
     if (!open.has(app.project)) bad(`The project "${app.project}" is no longer accepting applications. Please remove it and submit again.`)
   }
 
+  // Every Airtable call of this submission shares one deadline for retry waits.
+  const pacing = pace(rateLimitDelays, requestBudgetMs)
+
   // Projects: reuse existing rows by slug, create any the base hasn't seen yet.
   const slugs = applications.map((app) => app.project)
   const projectIds = new Map<string, string>()
@@ -436,40 +485,51 @@ async function save(request: Request, env: Env, ctx: ExecutionContext, turnstile
   }
   const unknown = slugs.filter((slug) => !projectIds.has(slug))
   if (unknown.length) {
-    const existing = await findRecords(env, 'Projects', `OR(${unknown.map((slug) => `{Slug}=${quote(slug)}`).join(',')})`)
+    const existing = await findRecords(env, 'Projects', `OR(${unknown.map((slug) => `{Slug}=${quote(slug)}`).join(',')})`, {}, pacing)
     for (const record of existing) {
       const slug = String(record.fields.Slug ?? '')
       if (!projectIds.has(slug)) projectIds.set(slug, record.id)
     }
     const missing = unknown.filter((slug) => !projectIds.has(slug))
-    const createdIds = await createRecords(env, 'Projects', missing.map((slug) => ({ Slug: slug, Title: open.get(slug) })))
+    const createdIds = await createRecords(env, 'Projects', missing.map((slug) => ({ Slug: slug, Title: open.get(slug) })), pacing)
     missing.forEach((slug, i) => projectIds.set(slug, createdIds[i]))
-    for (const slug of unknown) projectIdCache.set(slug, projectIds.get(slug)!)
+    if (projects.open) for (const slug of unknown) projectIdCache.set(slug, projectIds.get(slug)!)
   }
 
   // Applicants: always a new row, flagged when the email has applied before so reviewers can merge by hand.
-  const earlier = await findRecords(env, 'Applicants', `LOWER({Email})=${quote(applicant.email.toLowerCase())}`, { maxRecords: '1' })
-  const [applicantId] = await createRecords(env, 'Applicants', [
-    {
-      Name: applicant.name,
-      Email: applicant.email,
-      Age: applicant.age,
-      Affiliation: applicant.affiliation,
-      School: applicant.school,
-      'Year or role': applicant.yearOrRole,
-      'AISCI member': applicant.member,
-      'Hours per week': applicant.hours,
-      Format: applicant.format,
-      'Based in': applicant.basedIn,
-      Experience: applicant.experience,
-      Links: applicant.links,
-      'Anything else': applicant.anythingElse,
-      'Possible duplicate': earlier.length > 0 ? true : undefined,
-    },
-  ])
+  const earlier = await findRecords(env, 'Applicants', `LOWER({Email})=${quote(applicant.email.toLowerCase())}`, { maxRecords: '1' }, pacing)
 
-  const applicationIds: string[] = []
+  // Written on every Applicants and Applications row, so a rollback can find rows whose create
+  // was saved even when Airtable's reply never arrived.
+  const submissionId = crypto.randomUUID()
+  const saved = { Applicants: [] as string[], Applications: [] as string[] }
   try {
+    const [applicantId] = await createRecords(
+      env,
+      'Applicants',
+      [
+        {
+          Name: applicant.name,
+          Email: applicant.email,
+          Age: applicant.age,
+          Affiliation: applicant.affiliation,
+          School: applicant.school,
+          'Year or role': applicant.yearOrRole,
+          'AISCI member': applicant.member,
+          'Hours per week': applicant.hours,
+          Format: applicant.format,
+          'Based in': applicant.basedIn,
+          Experience: applicant.experience,
+          Links: applicant.links,
+          'Anything else': applicant.anythingElse,
+          'Possible duplicate': earlier.length > 0 ? true : undefined,
+          'Submission ID': submissionId,
+        },
+      ],
+      pacing,
+      saved.Applicants,
+    )
+
     await createRecords(
       env,
       'Applications',
@@ -482,19 +542,21 @@ async function save(request: Request, env: Env, ctx: ExecutionContext, turnstile
         'First to explore': app.explore,
         'Extra answer': app.extra,
         'Review status': 'New',
+        'Submission ID': submissionId,
       })),
-      applicationIds,
+      pacing,
+      saved.Applications,
     )
   } catch (error) {
     projectIdCache.clear()
     // Projects rows are left: they're harmless and reused by the next submission. Usually the
-    // rollback runs before replying (about half a second more for the applicant, but it surely
-    // finishes). After a rate limit (503) the applicant has already waited half a minute, so it
-    // runs after the reply instead, with shorter waits that fit Cloudflare's 30-second limit.
+    // rollback runs before replying (about a second more for the applicant, but it surely
+    // finishes). After a rate limit (503) the applicant has already waited, so it runs after the
+    // reply instead, with its own deadline that fits Cloudflare's 30-second limit.
     if (error instanceof Rejection && error.status === 503) {
-      ctx.waitUntil(rollBack(env, applicant.email, applicantId, applicationIds, rollbackRateLimitDelays))
+      ctx.waitUntil(rollBack(env, applicant.email, submissionId, saved, false))
     } else {
-      await rollBack(env, applicant.email, applicantId, applicationIds, rateLimitDelays)
+      await rollBack(env, applicant.email, submissionId, saved, true)
     }
     throw error
   }

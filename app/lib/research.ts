@@ -11,6 +11,7 @@ import remarkRehype from 'remark-rehype'
 import rehypeSlug from 'rehype-slug'
 import rehypeExternalLinks from 'rehype-external-links'
 import rehypeStringify from 'rehype-stringify'
+import { dropUnsafeHrefs } from './safeLinks'
 
 export const formats = ['In person', 'Online', 'Hybrid'] as const
 export type ProjectFormat = (typeof formats)[number]
@@ -75,8 +76,9 @@ function stringList(data: Record<string, unknown>, file: string, field: string, 
     return []
   }
   if (!Array.isArray(value) || (required && value.length === 0)) fail(file, field, required ? 'is required and must be a list' : 'must be a list')
-  // Blank items (an empty row left in the CMS list) are skipped rather than failing the build.
-  const items = value.filter((item) => !(typeof item === 'string' && item.trim() === ''))
+  // Blank items (an empty row left in the CMS list, as '' or a bare `-`, which YAML reads as
+  // null) are skipped rather than failing the build.
+  const items = value.filter((item) => item !== null && item !== undefined && !(typeof item === 'string' && item.trim() === ''))
   if (required && items.length === 0) fail(file, field, 'is required and must be a list')
   return items.map((item) => {
     const text = asText(item)
@@ -94,31 +96,6 @@ function isExternalHttpLink(href: unknown) {
   } catch {
     return false
   }
-}
-
-// Link targets allowed in one-pagers: web and mailto links, site-relative paths and #anchors.
-// Anything else (e.g. `javascript:`) loses its href, since the HTML is inserted unsanitized.
-function isSafeHref(href: unknown) {
-  if (typeof href !== 'string') return true
-  const value = href.trim()
-  if (value.startsWith('#') || (value.startsWith('/') && !value.startsWith('//'))) return true
-  if (/^(https?:|mailto:)/i.test(value)) return true
-  // Relative paths without a scheme (e.g. `events`); a scheme is letters followed by ':'.
-  return !/^[a-z][a-z0-9+.-]*:/i.test(value) && !value.startsWith('//')
-}
-
-type HastNode = { type: string; tagName?: string; properties?: Record<string, unknown>; children?: HastNode[] }
-
-function dropUnsafeHrefs() {
-  const walk = (node: HastNode) => {
-    if (node.type === 'element' && node.properties) {
-      for (const attribute of ['href', 'src']) {
-        if (attribute in node.properties && !isSafeHref(node.properties[attribute])) delete node.properties[attribute]
-      }
-    }
-    node.children?.forEach(walk)
-  }
-  return (tree: HastNode) => walk(tree)
 }
 
 // Raw HTML in one-pagers is dropped, as on the blog.

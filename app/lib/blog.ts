@@ -10,6 +10,7 @@ import remarkRehype from 'remark-rehype'
 import rehypeSlug from 'rehype-slug'
 import rehypeExternalLinks from 'rehype-external-links'
 import rehypeStringify from 'rehype-stringify'
+import { dropUnsafeHrefs } from './safeLinks'
 
 export const siteUrl = 'https://aisafetyuci.org'
 
@@ -124,6 +125,7 @@ const processor = unified()
   .use(remarkParse)
   .use(remarkGfm)
   .use(remarkRehype)
+  .use(dropUnsafeHrefs)
   .use(rehypeSlug)
   .use(rehypeExternalLinks, {
     target: '_blank',
@@ -156,7 +158,8 @@ function loadPost(file: string): Post {
 
   const rawAuthors = data.authors
   if (!Array.isArray(rawAuthors) || rawAuthors.length === 0) fail(file, 'authors', 'is required and must be a list of names')
-  const authors = rawAuthors.filter((author) => !(typeof author === 'string' && author.trim() === '')).map((author) => {
+  // Blank rows ('' or a bare `-`, which YAML reads as null) are skipped.
+  const authors = rawAuthors.filter((author) => author !== null && author !== undefined && !(typeof author === 'string' && author.trim() === '')).map((author) => {
     if (typeof author !== 'string' || author.trim() === '') fail(file, 'authors', 'must only contain names (non-empty text)')
     return author.trim()
   })

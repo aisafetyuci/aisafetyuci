@@ -4,13 +4,17 @@ Receives research-project applications from the form on `/research` and saves th
 
 For each submission it:
 
-1. Accepts requests only from aisafetyuci.org, www.aisafetyuci.org, `http://localhost:3000` and the site's Cloudflare preview URLs.
-2. Rejects bodies over 400 KB.
-3. Quietly drops bot submissions (the hidden `website` field filled in), logging the email and IP so a real applicant dropped by mistake can be found. Then it checks the answers and verifies the Turnstile bot check, which must have been solved on the same site that sent the form (localhost is exempt).
-4. Reads `https://aisafetyuci.org/research/projects.json` and refuses projects that are no longer open. It reads the file through the `SITE` service binding to the site Worker first, because Cloudflare may refuse a plain fetch between two of the account's Workers, and falls back to the public URL (cached about 5 minutes).
-5. Writes one **Applicants** row and one **Applications** row per project chosen, and creates a **Projects** row the first time a project gets an application.
+1. Accepts requests only from aisafetyuci.org, www.aisafetyuci.org, `http://localhost` on any port and the site's Cloudflare preview URLs.
+2. Rejects bodies over 1 MB (the longest real application, 20 projects of long non-Latin answers, is about 550 KB).
+3. Checks the answers and verifies the Turnstile bot check, which must have been solved on the same site that sent the form (localhost is exempt). Turnstile is the bot defence. The hidden `website` field (a honeypot) is only logged when filled in, with the email and IP, and the application is saved as normal: browser autofill can fill hidden fields, so a filled honeypot doesn't prove a bot.
+4. Reads `https://aisafetyuci.org/research/projects.json` and refuses projects that are no longer open. It reads the file through the `SITE` service binding to the site Worker first, because Cloudflare may refuse a plain fetch between two of the account's Workers, and falls back to the public URL (cached up to 5 minutes). So a project opened or closed in the editor reaches the form about 2 minutes after publishing (the site rebuild), and the Worker at the same time through the binding, or up to 5 minutes later through the fallback.
+5. Writes one **Applicants** row and one **Applications** row per project chosen, and creates a **Projects** row the first time a project gets an application. Each Worker instance remembers the Projects row IDs it has seen, so later applications to the same projects skip that lookup.
 
-Applicants see a plain-English error if anything fails, and are never told "received" unless everything was saved. Airtable has no transactions, so if the Applications rows fail after the Applicants row was written, the Worker deletes what it wrote (rollback, in the background after the applicant has their answer) so a resubmission starts clean. If the rollback itself fails, the log line "Rollback failed; delete by hand" names the email and record IDs to remove. Reads are retried briefly on network errors and 5xx; creates are not (a failed create may still have been saved); a 429 (rate limit: Airtable allows 5 requests a second per base, then refuses all requests for 30 seconds) is retried after 1 and 3 seconds, then the applicant is asked to wait a minute and resubmit. The rollback runs in the background, which Cloudflare cuts off 30 seconds after the reply, so it first logs "Rolling back … from <email>" with every record ID; if no "Rolled back" or "Rollback failed" line follows, delete those rows by hand.
+Applicants see a plain-English error if anything fails, and are never told "received" unless everything was saved.
+
+**Airtable rate limit.** Airtable allows 5 requests a second per base, then refuses every request for 30 seconds. A submission makes about 3 to 5 requests (fewer once the Worker has seen its projects). Reads are retried briefly on network errors and 5xx; creates are not (a failed create may still have been saved). A 429 (rate limited) is retried after 1, 4 and 27 seconds, which outlasts a full lockout, so the applicant just sees "Sending…" for up to about half a minute; only if it's still refused after that are they asked to wait a minute and resubmit.
+
+**Rollback.** Airtable has no transactions, so if the Applications rows fail after the Applicants row was written, the Worker deletes what it wrote so a resubmission starts clean and isn't flagged as a duplicate. It first logs "Rolling back … from <email>" with every record ID, then "Rolled back …" or "Rollback failed; delete by hand" naming the email and the IDs to remove. Usually the rollback finishes before the applicant gets their error. After a rate limit it runs in the background instead (the applicant has already waited), where Cloudflare cuts it off 30 seconds after the reply; it's sized to finish in about 25, but if a "Rolling back" line has no "Rolled back" or "Rollback failed" line after it, delete those rows by hand.
 
 **Previews and local dev write to the live base.** A branch preview or `npm run dev` on localhost posts to this same Worker, so test submissions land in the real Airtable base; delete them afterwards. Previews are checked against the live site's open-projects list like production. Only while that list can't be loaded (before the research pages reach `main`) does a preview accept any well-formed slug, with the slug as the project's title; after merging, that fallback no longer applies.
 
@@ -56,12 +60,16 @@ Two first-ever applications to the same project arriving within a second can cre
 | `First to explore` | Long text |
 | `Extra answer` | Long text |
 | `Review status` | Single select (new rows get "New") |
+| `Reviewer notes` | Long text (for reviewers; the Worker never writes it) |
+| `Score` | Rating, 1–5 stars (for reviewers; the Worker never writes it) |
 
 Writes use `typecast`, so single-select options are created automatically the first time they appear; you don't have to add them by hand.
 
 An applicant is never overwritten. If the same email (ignoring case) has applied before, the new row gets **Possible duplicate** ticked so a reviewer can compare them.
 
 The Airtable free plan allows about **1,000 records per base**. Each submission uses one Applicants row plus one row per project, so a busy round can hit the limit. Archive old rounds to another base, or upgrade, before that happens.
+
+The Cloudflare Workers free plan allows **100,000 Worker requests a day** per account (the site's static pages don't count; this Worker's do, including bots and CORS preflights). An application round is far below that, but after a bot flood check the daily count in Workers & Pages: past the cap, applications fail until the count resets at midnight UTC.
 
 ## One-time setup
 
@@ -101,4 +109,4 @@ Logs are kept in the Cloudflare dashboard (Workers & Pages → aisci-research-ap
 npx wrangler tail
 ```
 
-streams them live. Airtable and Turnstile failures are logged with their status and response body (never the token). If applicants report "We couldn't save your application", check here first: a wrong field name or an expired token is the usual cause. Also search for "Turnstile config error" (the `TURNSTILE_SECRET` secret is missing or wrong), "Rollback failed" (rows to delete by hand) and "honeypot".
+streams them live. Airtable and Turnstile failures are logged with their status and response body (never the token). If applicants report "We couldn't save your application", check here first: a wrong field name or an expired token is the usual cause. Failures after validation also log "Application from <email> not saved" so you can tell whose it was. Also search for "Turnstile config error" (the `TURNSTILE_SECRET` secret is missing or wrong), "Turnstile hostname mismatch", "Rollback failed" (rows to delete by hand) and "Honeypot".

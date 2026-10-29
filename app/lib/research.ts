@@ -46,16 +46,25 @@ function fail(file: string, field: string, problem: string): never {
   throw new Error(`[research] content/research/${file}: "${field}" ${problem}`)
 }
 
+// YAML reads unquoted numbers in hand-edited files (`team: 3`) as numbers; take them as text.
+// Dates and other values are still refused.
+function asText(value: unknown): string | undefined {
+  if (typeof value === 'string') return value
+  if (typeof value === 'number' && Number.isFinite(value)) return String(value)
+  return undefined
+}
+
 function requireString(data: Record<string, unknown>, file: string, field: string): string {
-  const value = data[field]
-  if (typeof value !== 'string' || value.trim() === '') fail(file, field, 'is required and must be non-empty text')
+  const value = asText(data[field])
+  if (value === undefined || value.trim() === '') fail(file, field, 'is required and must be non-empty text')
   return value.trim()
 }
 
 function optionalString(data: Record<string, unknown>, file: string, field: string): string | undefined {
-  const value = data[field]
-  if (value === undefined || value === null || value === '') return undefined
-  if (typeof value !== 'string') fail(file, field, 'must be text')
+  const raw = data[field]
+  if (raw === undefined || raw === null || raw === '') return undefined
+  const value = asText(raw)
+  if (value === undefined) fail(file, field, 'must be text')
   return value.trim()
 }
 
@@ -70,8 +79,9 @@ function stringList(data: Record<string, unknown>, file: string, field: string, 
   const items = value.filter((item) => !(typeof item === 'string' && item.trim() === ''))
   if (required && items.length === 0) fail(file, field, 'is required and must be a list')
   return items.map((item) => {
-    if (typeof item !== 'string') fail(file, field, 'must only contain text')
-    return item.trim()
+    const text = asText(item)
+    if (text === undefined) fail(file, field, 'must only contain text')
+    return text.trim()
   })
 }
 
@@ -147,11 +157,12 @@ function loadProject(file: string): Project {
     if (!knownFields.has(key)) fail(file, key, `is not a project field (allowed: ${[...knownFields].join(', ')})`)
   }
 
-  const status = requireString(data, file, 'status')
+  // Status and format ignore capitals in hand edits ("Open", "online").
+  const status = requireString(data, file, 'status').toLowerCase()
   if (status !== 'open' && status !== 'closed') fail(file, 'status', `must be "open" or "closed" (got "${status}")`)
 
   const rawFormat = optionalString(data, file, 'format')
-  const format = rawFormat === undefined ? undefined : formats.find((f) => f === rawFormat)
+  const format = rawFormat === undefined ? undefined : formats.find((f) => f.toLowerCase() === rawFormat.toLowerCase())
   if (rawFormat !== undefined && !format) fail(file, 'format', `must be one of ${formats.join(', ')} (got "${rawFormat}")`)
 
   const onePagerUrl = optionalString(data, file, 'onePagerUrl')

@@ -50,14 +50,17 @@ const memberAnswers = ['Yes', 'No', 'Not sure']
 const hoursOptions = ['1–3', '3–6', '6–10', '10+']
 const formatOptions = ['In person', 'Online', 'Either']
 
-// Well above any real application (non-Latin answers take up to 3 bytes per character).
-const maxBodyBytes = 400_000
+// Fits the longest real application: 20 projects × 3 answers × 3000 characters of 3-byte
+// (non-Latin) text is 540 KB, plus the applicant's own answers.
+const maxBodyBytes = 1_000_000
 const shortMax = 200
 const longMax = 3000
 const maxApplications = 20
 
 // http:// too: the site doesn't force HTTPS, and a visitor on http:// would otherwise be refused.
-const allowedOrigins = ['https://aisafetyuci.org', 'https://www.aisafetyuci.org', 'http://aisafetyuci.org', 'http://www.aisafetyuci.org', 'http://localhost:3000']
+const allowedOrigins = ['https://aisafetyuci.org', 'https://www.aisafetyuci.org', 'http://aisafetyuci.org', 'http://www.aisafetyuci.org']
+// `npm run dev` on any port (Next picks another when 3000 is taken).
+const localOrigin = /^http:\/\/localhost(:\d+)?$/
 // Cloudflare branch previews of the site, e.g. https://my-branch-aisafetyuci.aisafetyatuci.workers.dev
 const previewOrigin = /^https:\/\/([a-z0-9-]+-)?aisafetyuci\.aisafetyatuci\.workers\.dev$/
 
@@ -163,17 +166,28 @@ function validate(body: Record<string, unknown>) {
 async function verifyTurnstile(token: string, ip: string | null, env: Env): Promise<string> {
   const form = new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token })
   if (ip) form.set('remoteip', ip)
-  let result: { success?: boolean; hostname?: string; 'error-codes'?: string[] }
+  let status: number
+  let text: string
   try {
     const response = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', { method: 'POST', body: form })
-    if (!response.ok) throw new Error(`status ${response.status}`)
-    result = await response.json()
+    status = response.status
+    text = await response.text()
   } catch (error) {
     console.error('Turnstile siteverify failed:', String(error))
     throw new Rejection(502, `We couldn't run the bot check just now. ${tryAgain}`)
   }
+  // Read the JSON whatever the status: a missing or wrong secret comes back as a 400 with error codes.
+  let result: { success?: boolean; hostname?: string; 'error-codes'?: string[] } | undefined
+  try {
+    result = JSON.parse(text)
+  } catch {}
+  if (!isObject(result) || status >= 500) {
+    console.error(`Turnstile siteverify failed: status ${status}:`, text.slice(0, 1000))
+    throw new Rejection(502, `We couldn't run the bot check just now. ${tryAgain}`)
+  }
+  if (status !== 200) console.error(`Turnstile siteverify returned ${status}:`, text.slice(0, 1000))
   if (!result.success) {
-    const codes = result['error-codes'] ?? []
+    const codes = Array.isArray(result['error-codes']) ? result['error-codes'] : []
     // A missing or wrong secret is our misconfiguration, not the applicant's fault.
     if (codes.includes('missing-input-secret') || codes.includes('invalid-input-secret')) {
       console.error('Turnstile config error (check the TURNSTILE_SECRET secret):', JSON.stringify(codes))
@@ -227,10 +241,11 @@ function quote(value: string) {
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 const retryDelays = [300, 1000]
 // Airtable allows 5 requests a second per base and, once exceeded, refuses everything for
-// 30 seconds. Applicants get two short retries. The background rollback must finish within the
-// 30 seconds Cloudflare allows after the response (waitUntil), so it waits about 27 of them (the lockout began before the response went out).
-const rateLimitDelays = [1000, 3000]
-const rollbackRateLimitDelays = [1000, 26000]
+// 30 seconds. The applicant's request waits out a whole lockout (about 32 seconds) rather than
+// asking them to resubmit. A rollback left running after the response (waitUntil) must finish
+// within the 30 seconds Cloudflare allows, so it waits at most about 23.
+const rateLimitDelays = [1000, 4000, 27000]
+const rollbackRateLimitDelays = [1000, 4000, 18000]
 
 // Reads and deletes are retried on network errors and 5xx. Creates are not: a failed POST may
 // still have been saved, and a retry would duplicate it. A 429 (rate limit) means nothing was
@@ -279,13 +294,13 @@ async function airtable(env: Env, table: string, method: string, query = '', bod
   }
 }
 
-async function findRecords(env: Env, table: string, formula: string, extra: Record<string, string> = {}) {
+async function findRecords(env: Env, table: string, formula: string, extra: Record<string, string> = {}, rateLimited = rateLimitDelays) {
   const records: AirtableRecord[] = []
   let offset: string | undefined
   do {
     const params = new URLSearchParams({ filterByFormula: formula, ...extra })
     if (offset) params.set('offset', offset)
-    const page = await airtable(env, table, 'GET', params.toString())
+    const page = await airtable(env, table, 'GET', params.toString(), undefined, rateLimited)
     records.push(...page.records)
     offset = page.offset
   } while (offset)
@@ -305,14 +320,14 @@ async function createRecords(env: Env, table: string, rows: Record<string, unkno
 }
 
 // Airtable deletes at most 10 records per call too.
-async function deleteRecords(env: Env, table: string, ids: string[]) {
+async function deleteRecords(env: Env, table: string, ids: string[], rateLimited: number[]) {
   for (let i = 0; i < ids.length; i += 10) {
     const params = new URLSearchParams()
     for (const id of ids.slice(i, i + 10)) params.append('records[]', id)
-    const result = await airtable(env, table, 'DELETE', params.toString(), undefined, rollbackRateLimitDelays)
+    const result = await airtable(env, table, 'DELETE', params.toString(), undefined, rateLimited)
     if (result.notFoundOnRetry) {
       const batch = ids.slice(i, i + 10)
-      const left = await findRecords(env, table, `OR(${batch.map((id) => `RECORD_ID()=${quote(id)}`).join(',')})`)
+      const left = await findRecords(env, table, `OR(${batch.map((id) => `RECORD_ID()=${quote(id)}`).join(',')})`, {}, rateLimited)
       if (left.length) throw new Error(`${left.length} of ${batch.length} ${table} records still there after a retried delete`)
     }
   }
@@ -320,13 +335,13 @@ async function deleteRecords(env: Env, table: string, ids: string[]) {
 
 // Airtable has no transactions. If an application fails halfway, remove what was saved so the
 // applicant's retry starts clean (and isn't flagged as their own duplicate). Best effort: if
-// this fails too, the log names the rows to delete by hand. Runs after the applicant has their
-// answer (waitUntil), which Cloudflare cancels after 30 seconds without running any more code,
+// this fails too, the log names the rows to delete by hand. When it runs after the applicant has
+// their answer (waitUntil), Cloudflare cancels it after 30 seconds without running any more code,
 // so the rows are logged first: with no "Rolled back" line after it, delete them by hand.
-async function rollBack(env: Env, email: string, applicantId: string, applicationIds: string[]) {
+async function rollBack(env: Env, email: string, applicantId: string, applicationIds: string[], rateLimited: number[]) {
   console.error(`Rolling back a failed application from ${email}: Applicants ["${applicantId}"]; Applications ${JSON.stringify(applicationIds)}`)
   const tables = [['Applications', applicationIds], ['Applicants', [applicantId]]] as const
-  const results = await Promise.allSettled(tables.map(([table, ids]) => deleteRecords(env, table, [...ids])))
+  const results = await Promise.allSettled(tables.map(([table, ids]) => deleteRecords(env, table, [...ids], rateLimited)))
   const left = tables.filter((_, i) => results[i].status === 'rejected').map(([table, ids]) => `${table} ${JSON.stringify(ids)}`)
   results.forEach((result, i) => {
     if (result.status === 'rejected') console.error(`Rollback of ${tables[i][0]} failed:`, String(result.reason))
@@ -359,22 +374,40 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext) {
   }
   if (!isObject(body)) bad('Something went wrong sending your application. Please reload the page and try again.')
 
-  // Honeypot: people never see this field, so anything in it means a bot. Pretend it worked.
-  // Logged so a real applicant dropped by mistake (e.g. a password manager filling it) can be found.
+  // Honeypot: people never see this field, but browser autofill and password managers can fill
+  // it, so it's only logged (for spotting bots in Airtable) and the application is saved as
+  // normal. Turnstile is the real bot check.
   if (typeof body.website === 'string' && body.website.trim() !== '') {
     const email = isObject(body.applicant) && typeof body.applicant.email === 'string' ? body.applicant.email.slice(0, shortMax) : null
-    console.log('Dropped a honeypot submission:', JSON.stringify({ email, ip: request.headers.get('CF-Connecting-IP') }))
-    return
+    console.log('Honeypot field filled in (saving anyway):', JSON.stringify({ email, ip: request.headers.get('CF-Connecting-IP') }))
   }
 
   // Validate before Turnstile so a typo doesn't burn the applicant's single-use token.
   const { turnstileToken, applicant, applications } = validate(body)
+  try {
+    await save(request, env, ctx, turnstileToken, applicant, applications)
+  } catch (error) {
+    // The Airtable and Turnstile log lines above don't know whose application it was.
+    if (!(error instanceof Rejection) || error.status >= 500) {
+      console.error(`Application from ${applicant.email} not saved:`, error instanceof Error ? error.message : String(error))
+    }
+    throw error
+  }
+}
+
+// Slug → Projects record ID, for as long as this Worker instance lives, so a project that has
+// had an application skips the Projects lookup (Airtable allows only 5 requests a second).
+// Cleared whenever saving Applications fails, in case a cached row was deleted from the base.
+const projectIdCache = new Map<string, string>()
+
+async function save(request: Request, env: Env, ctx: ExecutionContext, turnstileToken: string, applicant: Applicant, applications: Application[]) {
   const tokenHost = await verifyTurnstile(turnstileToken, request.headers.get('CF-Connecting-IP'), env)
 
   // The bot check must have been solved on the page that sent the form, so a token from one
   // allowed site can't be replayed with another site's Origin. Local dev is exempt.
   const origin = request.headers.get('Origin') ?? ''
-  if (!origin.startsWith('http://localhost:') && tokenHost !== new URL(origin).hostname) {
+  if (!localOrigin.test(origin) && tokenHost !== new URL(origin).hostname) {
+    console.error('Turnstile hostname mismatch', { tokenHost, origin })
     throw new Rejection(403, "We couldn't confirm you're not a bot. Please reload the page and try again.")
   }
 
@@ -397,14 +430,22 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext) {
   // Projects: reuse existing rows by slug, create any the base hasn't seen yet.
   const slugs = applications.map((app) => app.project)
   const projectIds = new Map<string, string>()
-  const existing = await findRecords(env, 'Projects', `OR(${slugs.map((slug) => `{Slug}=${quote(slug)}`).join(',')})`)
-  for (const record of existing) {
-    const slug = String(record.fields.Slug ?? '')
-    if (!projectIds.has(slug)) projectIds.set(slug, record.id)
+  for (const slug of slugs) {
+    const id = projectIdCache.get(slug)
+    if (id) projectIds.set(slug, id)
   }
-  const missing = slugs.filter((slug) => !projectIds.has(slug))
-  const createdIds = await createRecords(env, 'Projects', missing.map((slug) => ({ Slug: slug, Title: open.get(slug) })))
-  missing.forEach((slug, i) => projectIds.set(slug, createdIds[i]))
+  const unknown = slugs.filter((slug) => !projectIds.has(slug))
+  if (unknown.length) {
+    const existing = await findRecords(env, 'Projects', `OR(${unknown.map((slug) => `{Slug}=${quote(slug)}`).join(',')})`)
+    for (const record of existing) {
+      const slug = String(record.fields.Slug ?? '')
+      if (!projectIds.has(slug)) projectIds.set(slug, record.id)
+    }
+    const missing = unknown.filter((slug) => !projectIds.has(slug))
+    const createdIds = await createRecords(env, 'Projects', missing.map((slug) => ({ Slug: slug, Title: open.get(slug) })))
+    missing.forEach((slug, i) => projectIds.set(slug, createdIds[i]))
+    for (const slug of unknown) projectIdCache.set(slug, projectIds.get(slug)!)
+  }
 
   // Applicants: always a new row, flagged when the email has applied before so reviewers can merge by hand.
   const earlier = await findRecords(env, 'Applicants', `LOWER({Email})=${quote(applicant.email.toLowerCase())}`, { maxRecords: '1' })
@@ -445,8 +486,16 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext) {
       applicationIds,
     )
   } catch (error) {
-    // Projects rows are left: they're harmless and reused by the next submission.
-    ctx.waitUntil(rollBack(env, applicant.email, applicantId, applicationIds))
+    projectIdCache.clear()
+    // Projects rows are left: they're harmless and reused by the next submission. Usually the
+    // rollback runs before replying (about half a second more for the applicant, but it surely
+    // finishes). After a rate limit (503) the applicant has already waited half a minute, so it
+    // runs after the reply instead, with shorter waits that fit Cloudflare's 30-second limit.
+    if (error instanceof Rejection && error.status === 503) {
+      ctx.waitUntil(rollBack(env, applicant.email, applicantId, applicationIds, rollbackRateLimitDelays))
+    } else {
+      await rollBack(env, applicant.email, applicantId, applicationIds, rateLimitDelays)
+    }
     throw error
   }
 }
@@ -462,7 +511,7 @@ async function health(env: Env) {
 }
 
 function originAllowed(origin: string) {
-  return allowedOrigins.includes(origin) || previewOrigin.test(origin)
+  return allowedOrigins.includes(origin) || localOrigin.test(origin) || previewOrigin.test(origin)
 }
 
 function json(data: unknown, status: number, headers: Record<string, string> = {}) {

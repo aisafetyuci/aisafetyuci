@@ -24,6 +24,8 @@ const storageKey = 'aisci-research-apply-v1'
 const turnstileTimeoutMs = 10_000
 
 const isOption = (options: readonly string[], value: string) => options.includes(value)
+const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value)
+const asText = (value: unknown) => (typeof value === 'string' ? value : typeof value === 'number' ? String(value) : '')
 
 // End a message with punctuation so the sentence that follows it reads properly.
 const asSentence = (text: string) => (/[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`)
@@ -57,6 +59,24 @@ const emptyApplicant: Applicant = {
   hours: '', format: '', basedIn: '', experience: '', links: '', anythingElse: '',
 }
 const emptyAnswer: Answer = { interest: '', explore: '', extra: '' }
+
+// A saved draft as far as it can be trusted: localStorage may hold an older shape, or be edited
+// or corrupted, so anything unexpected is dropped rather than crashing the form.
+function readDraft(value: unknown, open: Set<string>): Saved | undefined {
+  if (!isRecord(value)) return undefined
+  const a = isRecord(value.applicant) ? value.applicant : {}
+  const applicant = Object.fromEntries(Object.keys(emptyApplicant).map((key) => [key, asText(a[key])])) as Applicant
+  const selected = Array.isArray(value.selected) ? [...new Set(value.selected.filter((slug): slug is string => typeof slug === 'string' && open.has(slug)))] : []
+  const answers: Record<string, Answer> = {}
+  if (isRecord(value.answers)) {
+    for (const slug of open) {
+      const answer = value.answers[slug]
+      if (Object.hasOwn(value.answers, slug) && isRecord(answer)) answers[slug] = { interest: asText(answer.interest), explore: asText(answer.explore), extra: asText(answer.extra) }
+    }
+  }
+  const step = typeof value.step === 'number' && Number.isInteger(value.step) ? value.step : 0
+  return { applicant, selected, answers, step }
+}
 
 const steps = ['About you', 'Projects', 'Your interest', 'Experience', 'Rank', 'Review'] as const
 
@@ -141,12 +161,15 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
   const [submitError, setSubmitError] = useState('')
   const [honeypot, setHoneypot] = useState('')
   const [turnstileToken, setTurnstileToken] = useState('')
-  const [turnstileFailed, setTurnstileFailed] = useState(false)
+  // 'load': the script never arrived (usually a blocker); 'challenge': it loaded but the check failed.
+  const [turnstileProblem, setTurnstileProblem] = useState<'' | 'load' | 'challenge'>('')
+  const [slowSend, setSlowSend] = useState(false) // still sending after a few seconds (Airtable rate limit)
   const [panelSlug, setPanelSlug] = useState<string | null>(null)
   const [dragSlug, setDragSlug] = useState<string | null>(null)
   const [rankNotice, setRankNotice] = useState('') // read out by screen readers after a reorder
 
   const headingRef = useRef<HTMLHeadingElement>(null)
+  const submitErrorRef = useRef<HTMLDivElement>(null)
   const dialogRef = useRef<HTMLDialogElement>(null)
   const turnstileRef = useRef<HTMLDivElement>(null)
   const turnstileId = useRef<string | null>(null)
@@ -160,26 +183,26 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
   // Restore a saved draft (dropping projects that have since closed, and choices that are no
   // longer offered), then apply ?project=.
   useEffect(() => {
+    const open = new Set(projects.map((p) => p.slug))
     let draft: Saved | undefined
     try {
       const raw = localStorage.getItem(storageKey)
-      if (raw) draft = JSON.parse(raw)
+      if (raw) draft = readDraft(JSON.parse(raw), open)
     } catch {}
-    const open = new Set(projects.map((p) => p.slug))
-    let nextSelected = (draft?.selected ?? []).filter((slug) => open.has(slug))
+    let nextSelected = draft?.selected ?? []
     const fromLink = new URLSearchParams(window.location.search).get('project')
     const linkAdds = !!fromLink && open.has(fromLink) && !nextSelected.includes(fromLink)
     if (linkAdds) nextSelected = [...nextSelected, fromLink]
     if (draft) {
-      const restored = { ...emptyApplicant, ...draft.applicant }
+      const restored = { ...draft.applicant }
       if (!isOption(affiliations, restored.affiliation)) restored.affiliation = ''
       if (!isOption(memberOptions, restored.member)) restored.member = ''
       if (!isOption(hourOptions, restored.hours)) restored.hours = ''
       if (!isOption(formatOptions, restored.format)) restored.format = ''
       setApplicant(restored)
-      setAnswers(draft.answers ?? {})
+      setAnswers(draft.answers)
       // A project added from a link still needs its answers, so don't land past that step.
-      const savedStep = Math.min(Math.max(draft.step ?? 0, 0), steps.length - 1)
+      const savedStep = Math.min(Math.max(draft.step, 0), steps.length - 1)
       setStep(linkAdds ? Math.min(savedStep, 2) : savedStep)
     }
     setSelected(nextSelected)
@@ -198,17 +221,17 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
   useEffect(() => {
     if (step !== 5 || !researchApply.turnstileSiteKey) return
     let active = true
-    const fail = () => { if (active) setTurnstileFailed(true) }
+    const fail = (problem: 'load' | 'challenge') => { if (active) setTurnstileProblem(problem) }
     const render = () => {
       const el = turnstileRef.current // the element on screen now, not one from an earlier visit
       if (!active || !el || !window.turnstile || turnstileId.current) return
-      setTurnstileFailed(false) // it loaded after all (slow connection past the timeout)
+      setTurnstileProblem('') // it loaded after all (slow connection past the timeout)
       turnstileId.current = window.turnstile.render(el, {
         sitekey: researchApply.turnstileSiteKey,
         theme: 'light', // the site has no dark mode
         callback: (token) => {
           setTurnstileToken(token)
-          setTurnstileFailed(false)
+          setTurnstileProblem('')
           if (awaitingCheck.current) {
             awaitingCheck.current = false
             setStatus('idle')
@@ -216,13 +239,13 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
           }
         },
         'expired-callback': () => setTurnstileToken(''),
-        'error-callback': fail,
+        'error-callback': () => fail('challenge'),
       })
     }
     let script = document.getElementById('turnstile-script') as HTMLScriptElement | null
     const failedToLoad = () => {
       script?.remove() // so coming back to this step tries again
-      fail()
+      fail('load')
     }
     if (window.turnstile) render()
     else {
@@ -236,7 +259,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
       script.addEventListener('load', render)
       script.addEventListener('error', failedToLoad)
     }
-    const timer = window.setTimeout(() => { if (!turnstileId.current) fail() }, turnstileTimeoutMs)
+    const timer = window.setTimeout(() => { if (!turnstileId.current) fail('load') }, turnstileTimeoutMs)
     return () => {
       active = false
       window.clearTimeout(timer)
@@ -245,9 +268,19 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
       if (turnstileId.current) window.turnstile?.remove(turnstileId.current)
       turnstileId.current = null
       setTurnstileToken('')
-      setTurnstileFailed(false)
+      setTurnstileProblem('')
     }
   }, [step])
+
+  // A rate-limited send can take half a minute; after a few seconds, say so on the button.
+  useEffect(() => {
+    if (status !== 'submitting') return
+    const timer = window.setTimeout(() => setSlowSend(true), 5000)
+    return () => {
+      window.clearTimeout(timer)
+      setSlowSend(false)
+    }
+  }, [status])
 
   // Ranking needs two or more projects; skip past it if a restored draft lands there.
   useEffect(() => {
@@ -346,8 +379,13 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
     }
     if (researchApply.turnstileSiteKey && !turnstileToken) {
       setStatus('error')
-      setSubmitError(turnstileFailed ? "The bot check above didn't load." : 'Please complete the check above the submit button.')
+      setSubmitError(
+        turnstileProblem === 'load' ? "The bot check above didn't load."
+          : turnstileProblem === 'challenge' ? "The bot check above couldn't verify this browser."
+          : 'Please complete the check above the submit button.',
+      )
       awaitingCheck.current = true
+      requestAnimationFrame(() => submitErrorRef.current?.focus())
       return
     }
     const a = applicant
@@ -411,6 +449,8 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
       setSubmitError(err instanceof Error ? err.message : 'Something went wrong saving your application.')
       if (turnstileId.current) window.turnstile?.reset(turnstileId.current)
       setTurnstileToken('')
+      // Keyboard and screen-reader users would otherwise be left on the disabled-then-enabled button.
+      requestAnimationFrame(() => submitErrorRef.current?.focus())
     } finally {
       submitting.current = false
     }
@@ -620,8 +660,8 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                     <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand text-sm font-semibold text-white">{i + 1}</span>
                     <span className="min-w-0 flex-1 font-medium text-brand">{p.title}</span>
                     <span className="flex shrink-0 gap-1">
-                      <button type="button" id={`${p.slug}-move-up`} onClick={() => moveBy(p.slug, i, -1)} disabled={i === 0} aria-label={`Move ${p.title} up`} className="hero-photo-control disabled:opacity-30">↑</button>
-                      <button type="button" id={`${p.slug}-move-down`} onClick={() => moveBy(p.slug, i, 1)} disabled={i === chosen.length - 1} aria-label={`Move ${p.title} down`} className="hero-photo-control disabled:opacity-30">↓</button>
+                      <button type="button" id={`${p.slug}-move-up`} onClick={() => moveBy(p.slug, i, -1)} disabled={i === 0} aria-label={`Move ${p.title} up`} className="button-icon">↑</button>
+                      <button type="button" id={`${p.slug}-move-down`} onClick={() => moveBy(p.slug, i, 1)} disabled={i === chosen.length - 1} aria-label={`Move ${p.title} down`} className="button-icon">↓</button>
                     </span>
                   </li>
                 ))}
@@ -636,7 +676,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                 <TextArea id="anythingElse" value={applicant.anythingElse} onChange={set('anythingElse')} rows={3} />
               </Field>
 
-              <ReviewSection title="About you" onEdit={() => goTo(0)}>
+              <ReviewSection title="About you" editLabel="Edit about you" onEdit={() => goTo(0)}>
                 <Row label="Name" value={applicant.name} />
                 <Row label="Email" value={applicant.email} />
                 <Row label="Age" value={applicant.age} />
@@ -648,7 +688,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                 <Row label="Based in" value={applicant.basedIn} />
               </ReviewSection>
 
-              <ReviewSection title={chosen.length > 1 ? 'Projects, in your order' : 'Project'} onEdit={() => goTo(1)}>
+              <ReviewSection title={chosen.length > 1 ? 'Projects, in your order' : 'Project'} editLabel="Edit projects" onEdit={() => goTo(1)}>
                 {chosen.map((p, i) => {
                   const ans = answers[p.slug] ?? emptyAnswer
                   return (
@@ -669,12 +709,12 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                 })}
               </ReviewSection>
 
-              <ReviewSection title="Experience" onEdit={() => goTo(3)}>
+              <ReviewSection title="Experience" editLabel="Edit experience" onEdit={() => goTo(3)}>
                 <Row label="Experience" value={applicant.experience} />
                 <Row label="Links" value={applicant.links} />
               </ReviewSection>
 
-              {/* Hidden from people; bots that fill every field get dropped by the Worker. */}
+              {/* Hidden from people; the Worker logs it when filled (bots, or browser autofill). */}
               <div className="hidden" aria-hidden="true">
                 <label htmlFor="website">Website</label>
                 <input id="website" tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} />
@@ -684,7 +724,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                 Your answers go only to AISCI organizers, who use them to review applications and contact you about research projects.
               </p>
               {researchApply.turnstileSiteKey && <div ref={turnstileRef} />}
-              {turnstileFailed && !turnstileToken && (
+              {turnstileProblem === 'load' && !turnstileToken && (
                 <div role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-relaxed text-red-800">
                   <p className="font-semibold">The bot check didn&apos;t load.</p>
                   <p className="mt-1">
@@ -692,8 +732,16 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                   </p>
                 </div>
               )}
+              {turnstileProblem === 'challenge' && !turnstileToken && (
+                <div role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm leading-relaxed text-red-800">
+                  <p className="font-semibold">The bot check couldn&apos;t verify this browser.</p>
+                  <p className="mt-1">
+                    Reload the page or try another browser; your answers are saved in this browser. If it keeps happening, email us at <EmailLink className="break-words font-medium underline underline-offset-2" />.
+                  </p>
+                </div>
+              )}
               {status === 'error' && (
-                <div role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+                <div ref={submitErrorRef} tabIndex={-1} role="alert" className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-800 focus:outline-none">
                   <p className="font-semibold">Your application wasn&apos;t sent.</p>
                   <p className="mt-1">{asSentence(submitError)} Your answers are still saved here, so you can try again.</p>
                 </div>
@@ -710,7 +758,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
           ) : <span />}
           {step === 5 ? (
             <button type="button" onClick={submit} disabled={status === 'submitting'} className="button-primary disabled:opacity-60">
-              {status === 'submitting' ? 'Sending…' : 'Submit application'}
+              {status !== 'submitting' ? 'Submit application' : slowSend ? 'Sending… this can take up to a minute' : 'Sending…'}
             </button>
           ) : (
             <button type="button" onClick={next} className="button-primary">
@@ -732,7 +780,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
           <div className="flex h-full flex-col">
             <div className="flex items-start justify-between gap-4 border-b border-brand-border p-5 sm:px-8">
               <h2 id="panel-title" className="text-xl font-semibold leading-snug text-brand">{panelProject.title}</h2>
-              <button type="button" onClick={() => dialogRef.current?.close()} aria-label="Close the one-pager" className="hero-photo-control shrink-0 text-xl">×</button>
+              <button type="button" onClick={() => dialogRef.current?.close()} aria-label="Close the one-pager" className="button-icon text-2xl">×</button>
             </div>
             <div className="flex-1 overflow-y-auto p-5 sm:px-8">
               <ProjectFacts project={panelProject} compact />
@@ -758,12 +806,12 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
   )
 }
 
-function ReviewSection({ title, onEdit, children }: { title: string; onEdit: () => void; children: ReactNode }) {
+function ReviewSection({ title, editLabel, onEdit, children }: { title: string; editLabel: string; onEdit: () => void; children: ReactNode }) {
   return (
     <section className="rounded-xl border border-brand-border p-4 sm:p-5">
       <div className="flex items-center justify-between gap-4">
         <h3 className="font-semibold text-brand">{title}</h3>
-        <button type="button" onClick={onEdit} className="inline-flex min-h-10 items-center text-sm font-semibold text-brand-accent underline underline-offset-4 hover:text-brand">Edit</button>
+        <button type="button" onClick={onEdit} aria-label={editLabel} className="inline-flex min-h-10 items-center text-sm font-semibold text-brand-accent underline underline-offset-4 hover:text-brand">Edit</button>
       </div>
       <div className="mt-2 divide-y divide-brand-border">{children}</div>
     </section>

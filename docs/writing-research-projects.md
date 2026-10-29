@@ -12,11 +12,13 @@ Projects are edited in the same editor as the blog: **aisafetyuci.org/admin → 
 
 ## The application deadline
 
-The deadline is set once in `app/data/research.ts` (a code change, not in the editor). It appears in the homepage banner, at the top of `/research`, and in each open project's apply box, and it's restated by hand in `docs/discord-info-channel.md`. Once it has passed, the banner and the deadline disappear the next time the site rebuilds (any change published to `main`). They don't disappear by themselves at midnight, so close the projects too.
+The deadline is set once in `app/data/research.ts` (a code change, not in the editor). It appears in the homepage banner, at the top of `/research`, and in each open project's apply box, and it's restated by hand in `docs/discord-info-channel.md`. Once it has passed, the banner and the deadline disappear the next time the site rebuilds (any change published to `main`). They don't disappear by themselves at midnight, and the form keeps accepting applications until the projects are closed.
+
+**After the deadline, close every project (set Status to `closed`).**
 
 ## Close a project
 
-Set **Status** to `closed` and publish. It leaves the application form at once, and the Worker rejects any late submissions for it. Its page stays up under "Past and closed projects."
+Set **Status** to `closed` and publish. About 2 minutes later (once the site has rebuilt) it leaves the application form, and the Worker rejects late submissions for it within 5 minutes after that. Its page stays up under "Past and closed projects."
 
 To hide a project completely, tick **Draft** instead.
 

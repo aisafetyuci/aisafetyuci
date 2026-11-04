@@ -28,6 +28,7 @@ Guidance for Claude Code working in this repo. See `MAINTAINING.md` for the huma
 ## Duplication — change values EVERYWHERE
 Site code gets Discord/coffee/email links from `app/data/links.ts` and apply links from `app/data/programs.ts`, but some values are still hardcoded in multiple files. After changing one, grep the repo and update **every** hit:
 - `docs/discord-info-channel.md` restates programs and all external links; `README.md` restates the Discord invite and Linktree (they can't import TS).
+- Research application deadline — the site's only copy is `researchDeadline` in `app/data/research.ts` (one date); `docs/discord-info-channel.md` restates it manually.
 - Meeting room/time (e.g. `HICF 100K`, Thursdays `5–7 PM`) — in-code copies come from the `meeting` export in `app/data/links.ts`; only the docs above restate it manually.
 - The homepage mission statement lives in `app/components/MissionStatement.tsx`; `README.md` and `docs/discord-info-channel.md` paraphrase it manually.
 

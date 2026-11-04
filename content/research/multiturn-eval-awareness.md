@@ -2,6 +2,7 @@
 title: Does eval awareness build up over a long audit?
 summary: Models sometimes say "this looks like a test" in their reasoning. In long, multi-turn safety audits, we measure when that first happens and whether the model behaves differently afterwards.
 status: open
+draft: true
 duration: 2–3 weeks
 team: 2–3 people
 skills: Python, an eval harness, and some statistics

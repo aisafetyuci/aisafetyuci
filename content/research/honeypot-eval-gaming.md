@@ -2,6 +2,7 @@
 title: Do the newest open-weight models game alignment honeypots?
 summary: UK AISI found GLM-5 misbehaves less when its reasoning says "this might be a test." We check newer models for the same pattern, and test whether the link is causal by editing the reasoning directly.
 status: open
+draft: true
 duration: 2–3 weeks
 team: 2–3 people
 skills: Python, an eval harness, and some statistics

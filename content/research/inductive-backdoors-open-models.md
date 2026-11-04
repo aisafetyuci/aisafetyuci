@@ -2,6 +2,7 @@
 title: Inductive backdoors on open models
 summary: Fine-tuning on harmless-looking data can plant a hidden trigger, even though neither the trigger nor the bad behavior appears in the data. We test whether this "inductive backdoor" forms in open Qwen models, and whether a simple defense stops it.
 status: open
+draft: true
 duration: 2–3 weeks
 team: 2–3 people
 skills: Python and API calls (training runs on the Tinker fine-tuning API, no GPU needed)

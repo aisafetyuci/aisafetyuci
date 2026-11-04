@@ -2,6 +2,7 @@
 title: Do chain-of-thought summaries erase what a monitor needs?
 summary: Many AI providers show a short summary of a model's reasoning instead of the reasoning itself. We test how often a safety-relevant admission ("I'm using the hint") survives that summary.
 status: open
+draft: true
 duration: 2–3 weeks
 team: 2–3 people
 skills: Python and API calls

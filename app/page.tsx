@@ -10,7 +10,9 @@ import HomeEvents from './components/HomeEvents'
 import { formatMonthDay, isUpcoming } from './data/events'
 import { meeting } from './data/links'
 import { programs, statusBadgeClasses, type Program } from './data/programs'
+import { upcomingResearchDeadline } from './data/research'
 import { getCalendar } from './lib/events'
+import { isResearchRoundOpen } from './lib/research'
 
 const homeTitle = 'AI Safety Collective at Irvine'
 const homeDescription = 'AISCI is UC Irvine\'s student community for AI alignment and AI safety. Join our Intro Fellowship, reading groups, and research programs at UCI focused on reducing risk from advanced AI.'
@@ -51,6 +53,7 @@ const photos = [
 
 export default async function Home() {
   const { events, builtOn } = await getCalendar()
+  const researchDeadline = upcomingResearchDeadline()
 
   return (
     <main className="min-h-screen bg-white">
@@ -74,6 +77,22 @@ export default async function Home() {
             <Link href="/get-involved" className="whitespace-nowrap text-sm font-semibold text-brand hover:text-brand-accent">Details and FAQ →</Link>
           </div>
           <div className="grid gap-5 lg:grid-cols-[1.25fr_1fr_1fr]">
+            {isResearchRoundOpen() && (
+              <article className="surface-card flex min-w-0 flex-col gap-6 p-7 lg:col-span-3 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+                <div className="min-w-0">
+                  <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-semibold ${statusBadgeClasses.open.wrap}`}>
+                    <span aria-hidden="true" className={`h-1.5 w-1.5 rounded-full ${statusBadgeClasses.open.dot}`} />
+                    Open for applications
+                  </span>
+                  <h3 className="mt-3.5 text-xl font-semibold leading-snug text-brand">Research projects</h3>
+                  <p className="mt-2 max-w-2xl leading-relaxed text-gray-600">Small teams of students working on open questions in technical AI safety. No research experience needed.</p>
+                </div>
+                <div className="flex flex-shrink-0 flex-wrap items-center gap-x-4 gap-y-3">
+                  <Link href="/research" className="button-primary">See the projects <span aria-hidden="true">→</span></Link>
+                  {researchDeadline && <span className="text-sm font-semibold text-brand">Due {researchDeadline.label}</span>}
+                </div>
+              </article>
+            )}
             {programs.map((program) => {
               const lead = program.key === 'intro'
               const badge = statusBadgeClasses[program.status.tone]

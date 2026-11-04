@@ -2,6 +2,7 @@
 title: Do models go easy on their own cheating?
 summary: On coding tasks where the only way to pass is to cheat, we measure how often fall 2026 models cheat, and whether they admit it less when reviewing their own conversation than a fresh copy of it.
 status: open
+draft: true
 duration: 2–3 weeks
 team: 2 people
 skills: Python and API calls

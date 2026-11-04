@@ -12,6 +12,7 @@ import rehypeSlug from 'rehype-slug'
 import rehypeExternalLinks from 'rehype-external-links'
 import rehypeStringify from 'rehype-stringify'
 import { dropUnsafeHrefs } from './safeLinks'
+import { isResearchDeadlinePast } from '../data/research'
 
 export const formats = ['In person', 'Online', 'Hybrid'] as const
 export type ProjectFormat = (typeof formats)[number]
@@ -195,6 +196,11 @@ export function getAllProjects(): Project[] {
 
 export function getOpenProjects() {
   return getAllProjects().filter((project) => project.open)
+}
+
+// Whether to promote the round on the homepage and /get-involved. Same rule as ResearchBanner.
+export function isResearchRoundOpen() {
+  return getOpenProjects().length > 0 && !isResearchDeadlinePast()
 }
 
 export function getProject(slug: string) {

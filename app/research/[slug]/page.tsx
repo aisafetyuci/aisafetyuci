@@ -61,21 +61,17 @@ export default async function ProjectPage({ params }: Props) {
               </span>
               <h1 className="page-title mt-4 break-words">{project.title}</h1>
               <p className="mt-4 text-lg leading-relaxed text-gray-600">{project.summary}</p>
-              <div className="mt-6">
-                <ProjectFacts
-                  project={project}
-                  action={project.open ? (
-                    <>
-                      <Link href={`/research/apply?project=${project.slug}`} className="button-primary w-full sm:w-auto">
-                        Apply to this project <span aria-hidden="true">→</span>
-                      </Link>
-                      {deadline && (
-                        <p className="mt-2 text-sm text-gray-600">Apply by <time dateTime={deadline.date} className="font-semibold text-brand">{deadline.label}</time></p>
-                      )}
-                    </>
-                  ) : undefined}
-                />
-              </div>
+              {project.open && (
+                <div className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-3">
+                  <Link href={`/research/apply?project=${project.slug}`} className="button-primary w-full sm:w-auto">
+                    Apply to this project <span aria-hidden="true">→</span>
+                  </Link>
+                  {deadline && (
+                    <p className="text-sm text-gray-600">Apply by <time dateTime={deadline.date} className="font-semibold text-brand">{deadline.label}</time></p>
+                  )}
+                </div>
+              )}
+              <div className="mt-6"><ProjectFacts project={project} /></div>
               {project.constraints.length > 0 && (
                 <ul className="mt-4 list-disc space-y-1 pl-5 text-sm text-gray-600">
                   {project.constraints.map((constraint) => <li key={constraint}>{constraint}</li>)}

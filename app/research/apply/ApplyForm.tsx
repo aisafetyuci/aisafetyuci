@@ -167,6 +167,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
   const [panelSlug, setPanelSlug] = useState<string | null>(null)
   const [dragSlug, setDragSlug] = useState<string | null>(null)
   const [rankNotice, setRankNotice] = useState('') // read out by screen readers after a reorder
+  const [removedCount, setRemovedCount] = useState(0) // projects dropped from a restored draft
   const [sentElsewhere, setSentElsewhere] = useState(false) // another tab submitted this draft
 
   const headingRef = useRef<HTMLHeadingElement>(null)
@@ -188,10 +189,16 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
   useEffect(() => {
     const open = new Set(projects.map((p) => p.slug))
     let draft: Saved | undefined
+    let savedCount = 0
     try {
       const raw = localStorage.getItem(storageKey)
-      if (raw) draft = readDraft(JSON.parse(raw), open)
+      if (raw) {
+        const parsed: unknown = JSON.parse(raw)
+        draft = readDraft(parsed, open)
+        if (isRecord(parsed) && Array.isArray(parsed.selected)) savedCount = new Set(parsed.selected).size
+      }
     } catch {}
+    const removed = draft ? Math.max(savedCount - draft.selected.length, 0) : 0
     let nextSelected = draft?.selected ?? []
     const fromLink = new URLSearchParams(window.location.search).get('project')
     const linkAdds = !!fromLink && open.has(fromLink) && !nextSelected.includes(fromLink)
@@ -204,9 +211,11 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
       if (!isOption(formatOptions, restored.format)) restored.format = ''
       setApplicant(restored)
       setAnswers(draft.answers)
-      // A project added from a link still needs its answers, so don't land past that step.
+      // A project added from a link still needs its answers, so don't land past that step. If a
+      // chosen project has closed, land on the projects step and say so.
       const savedStep = Math.min(Math.max(draft.step, 0), steps.length - 1)
-      setStep(linkAdds ? Math.min(savedStep, 2) : savedStep)
+      setStep(removed > 0 ? Math.min(savedStep, 1) : linkAdds ? Math.min(savedStep, 2) : savedStep)
+      setRemovedCount(removed)
     }
     setSelected(nextSelected)
     setRestored(true)
@@ -377,6 +386,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
   const goTo = useCallback((i: number) => {
     setErrors({})
     setStatus((s) => (s === 'error' ? 'idle' : s)) // a failed send's message is stale once they move on
+    if (i > 1) setRemovedCount(0)
     setStep(i)
     requestAnimationFrame(() => {
       headingRef.current?.focus()
@@ -614,6 +624,11 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
 
           {step === 1 && (
             <>
+              {removedCount > 0 && (
+                <p role="status" className="rounded-lg bg-brand-soft p-4 text-sm leading-relaxed text-brand">
+                  {removedCount === 1 ? 'A project you chose is' : `${removedCount} projects you chose are`} no longer taking applications, so we took {removedCount === 1 ? 'it' : 'them'} off your application. Your other answers are saved.
+                </p>
+              )}
               <p className="leading-relaxed text-gray-600">Choose as many as you like. You&apos;ll answer two short questions for each, and can read each one-pager without leaving this page.</p>
               <ul id="projects" tabIndex={-1} className="space-y-4">
                 {projects.map((p) => {

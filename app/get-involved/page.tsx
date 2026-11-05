@@ -32,6 +32,7 @@ const pageDescription = 'Explore our Intro Fellowship and Membership programs. J
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
+  alternates: { canonical: '/get-involved' },
   openGraph: {
     title: `${pageTitle} | AI Safety Collective at Irvine`,
     description: pageDescription,

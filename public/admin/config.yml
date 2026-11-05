@@ -73,7 +73,7 @@ collections:
         label: Cover image description
         widget: string
         required: false
-        hint: Required if you add a cover image. Describe it for people who can't see it.
+        hint: Describe the cover image for people who can't see it. If left blank, the post title is used.
       - name: featured
         label: Feature at top of blog
         widget: boolean

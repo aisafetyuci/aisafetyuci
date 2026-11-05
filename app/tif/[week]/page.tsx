@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
+import { emptyParamPlaceholder } from '../../lib/blog'
 import { weeks } from '../data'
 import WeekRedirect from './WeekRedirect'
 
@@ -10,7 +11,10 @@ export const metadata: Metadata = {
 }
 
 export function generateStaticParams() {
-  return weeks.filter((week) => !week.comingSoon).map((week) => ({ week: String(week.number) }))
+  const published = weeks.filter((week) => !week.comingSoon)
+  // Static export rejects an empty list, which happens if every week is coming soon.
+  if (published.length === 0) return [{ week: emptyParamPlaceholder }]
+  return published.map((week) => ({ week: String(week.number) }))
 }
 
 // Preserve shared week URLs while keeping all curriculum content on /tif.

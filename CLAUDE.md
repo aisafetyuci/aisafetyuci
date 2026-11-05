@@ -5,8 +5,8 @@ Guidance for Claude Code working in this repo. See `MAINTAINING.md` for the huma
 ## What this is
 - **Brand:** "AI Safety Collective at Irvine" / "AISCI" (rebranded from AISUCI). Domain stays **aisafetyuci.org**.
 - **Stack:** Next.js 16 App Router, **fully static export** (`output: 'export'` in `next.config.js`, images unoptimized) → builds to `out/`. No server, no API routes, no database.
-- **Hosting:** GitHub Pages. **Deploy:** pushing to `main` triggers `.github/workflows/deploy.yml` (`npm ci` → `npm run build` → publish `out/`) — live in ~1–2 min.
-- **Domain/DNS:** registered + DNS-managed at **gkg.net**; A records point at GitHub Pages. Custom domain is set in repo Settings → Pages — there is **no `CNAME` file in the repo, and don't add one**.
+- **Hosting:** the `aisafetyuci` **Cloudflare Worker** serves `out/` (`wrangler.jsonc`); GitHub Pages is a live backup. **Deploy:** pushing to `main` rebuilds both (Pages through `.github/workflows/deploy.yml`) — live in ~1–2 min. Other branches get Cloudflare previews at `<branch>-aisafetyuci.aisafetyatuci.workers.dev`.
+- **Domain/DNS:** managed on Cloudflare; `aisafetyuci.org` is a custom domain on the Worker, and `www` is a CNAME to GitHub Pages (see `README.md`). There is **no `CNAME` file in the repo, and don't add one**.
 
 ## Build & deploy gate
 - The build is the **only** gate — there is no lint/typecheck/test step, so a type error or bad import fails the whole deploy.

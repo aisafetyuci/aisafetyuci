@@ -8,6 +8,7 @@ const pageDescription = "Everything we'd point you to if you're trying to get in
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
+  alternates: { canonical: '/resources' },
   openGraph: {
     title: `${pageTitle} | AI Safety Collective at Irvine`,
     description: pageDescription,

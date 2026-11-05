@@ -175,7 +175,8 @@ function loadPost(file: string): Post {
   const coverAlt = optionalString(data, file, 'coverAlt')
   if (cover) {
     if (!cover.startsWith('/') || !publicFileExists(cover)) fail(file, 'cover', `points to "${cover}", which does not exist under public/`)
-    if (!coverAlt) fail(file, 'coverAlt', 'is required when a cover image is set (describe the image)')
+    // The CMS can't require this only when a cover is set, and a failed build would stop every deploy.
+    if (!coverAlt) console.warn(`[blog] content/blog/${file}: no coverAlt; using the post title as the cover's description`)
   }
 
   const featured = optionalBoolean(data, file, 'featured')
@@ -198,7 +199,7 @@ function loadPost(file: string): Post {
     authors,
     category,
     cover,
-    coverAlt,
+    coverAlt: cover ? coverAlt ?? title : coverAlt,
     featured,
     draft,
     html,

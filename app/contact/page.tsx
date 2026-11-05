@@ -10,6 +10,7 @@ const pageDescription = 'Get in touch with AISCI. Join our Discord community, at
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
+  alternates: { canonical: '/contact' },
   openGraph: {
     title: `${pageTitle} | AI Safety Collective at Irvine`,
     description: pageDescription,

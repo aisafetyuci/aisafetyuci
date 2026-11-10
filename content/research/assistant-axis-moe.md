@@ -2,8 +2,8 @@
 title: The Assistant Axis in mixture-of-experts and thinking models
 summary: Researchers found a direction inside models that runs from "helpful assistant" to "not the assistant," and capping it cuts jailbreaks. We test whether that holds in a mixture-of-experts model, with reasoning turned on.
 status: open
-duration: 3 weeks, plus a setup week
-team: 2–3 people
+duration: Nov 19 to Dec 11
+team: 1–3 people
 skills: PyTorch and running jobs on rented cloud GPUs
 constraints:
   - The club pays for GPU time.
@@ -37,7 +37,7 @@ No mixture-of-experts or thinking-mode capping result was found as of November 2
 
 ## What you'd do
 
-- **Setup week:** Check that no SPAR mentee has taken this. Build and freeze the jailbreak set: the paper's set isn't public, so we ask its authors for it, and otherwise follow its recipe with HarmBench behaviors, about 500 items split into a tuning half and a test half. Recompute a small published axis in free Colab and compare it with the uploaded one.
+- **Week 0:** Onboarding and getting to know the project's scope. Check that no SPAR mentee has taken this. Build and freeze the jailbreak set: the paper's set isn't public, so we ask its authors for it, and otherwise follow its recipe with HarmBench behaviors, about 500 items split into a tuning half and a test half. Recompute a small published axis in free Colab and compare it with the uploaded one.
 - **Weeks 1–2:** Qwen3-30B-A3B with thinking off and on, and Qwen3-14B with thinking off. Generate role-play responses, judge role adherence (validate the judge by hand), and compute separate axes for reasoning and answer tokens across layers. Build the capping hook, which needs new code to set thresholds and to know when it's inside the reasoning.
 - **Week 3:** Test capping on all tokens, on everything except the reasoning, and not at all, using only the frozen test half. Check capabilities, release the vectors, and write the blog post. Results on our set can't be compared directly with the paper's 60%.
 

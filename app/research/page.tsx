@@ -56,7 +56,7 @@ export default function ResearchIndex() {
         {open.length > 0 ? (
           <section aria-labelledby="open-heading">
             <h2 id="open-heading" className="text-2xl font-semibold text-brand">Open for applications</h2>
-            <p className="mt-2 text-gray-600">Apply to as many as you like. Members of AISCI get priority, but anyone can apply.</p>
+            <p className="mt-2 text-gray-600">Apply to as many as you like. Members of AISCI get priority, but anyone can apply. We'll run anywhere between 1 and 3 projects, depending on interest and some setup checks.</p>
             <ul className="mt-6 grid gap-6 lg:grid-cols-2">
               {open.map((project) => (
                 <li key={project.slug} className="surface-card flex flex-col p-6 sm:p-8">
@@ -83,7 +83,7 @@ export default function ResearchIndex() {
         <section aria-labelledby="how-heading" className="mt-14 surface-card p-6 sm:p-8">
           <h2 id="how-heading" className="text-2xl font-semibold text-brand">How it works</h2>
           <ul className="mt-5 grid gap-5 text-sm leading-relaxed text-gray-600 sm:grid-cols-2 lg:grid-cols-4">
-            <li><h3 className="font-semibold text-brand">Small teams, short projects</h3><p className="mt-1">Teams of 2–3 work for 2–3 weeks. A strong result can be extended.</p></li>
+            <li><h3 className="font-semibold text-brand">Small teams, short projects</h3><p className="mt-1">Teams of 1–3 work from Nov 19 to Dec 11, with a weekly check-in plus updates throughout the week. A strong result can be extended.</p></li>
             <li><h3 className="font-semibold text-brand">A blog post at the end</h3><p className="mt-1">Each project ends in a post reviewed by our directors. Null results get published too.</p></li>
             <li><h3 className="font-semibold text-brand">The club covers costs</h3><p className="mt-1">API credits and GPU time come from the club. You never pay out of pocket.</p></li>
             <li><h3 className="font-semibold text-brand">No experience needed</h3><p className="mt-1">We select on interest and how you think about the problem, not your resume.</p></li>

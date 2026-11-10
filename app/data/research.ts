@@ -3,9 +3,9 @@
 // NOTE: docs/discord-info-channel.md restates the deadline — update it manually.
 import { formatMonthDay } from './events'
 
-// The last day to apply: the site shows it ("Nov 10") and counts it as passed after that day ends, Pacific.
+// The last day to apply: the site shows it ("Nov 16") and counts it as passed after that day ends, Pacific.
 // Set to null when the next round has no fixed deadline yet: the banner then shows without a date.
-export const researchDeadline: { date: string } | null = { date: '2026-11-10' }
+export const researchDeadline: { date: string } | null = { date: '2026-11-16' }
 
 // 11:59:59 PM Pacific on `date`, with the daylight saving offset in force that day.
 function endOfDayPacific(date: string) {

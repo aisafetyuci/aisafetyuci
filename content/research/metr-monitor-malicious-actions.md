@@ -2,12 +2,12 @@
 title: A malicious-action test set for METR's action monitor
 summary: METR uses a monitor to catch harmful agent actions during evals, but says it has very few real malicious examples to test it on. We build that test set and check whether its pending prompt rewrites miss attacks the current prompt catches.
 status: open
-duration: 3 weeks, plus a setup week
-team: 2–3 people
+duration: Nov 19 to Dec 11
+team: 1–3 people
 skills: Python, API calls, and careful reading of transcripts
 constraints:
   - We check with METR before starting. If the pending prompts ship first, or METR has better data, the project narrows to the backgrounding test.
-  - Higher risk. Monitor models may refuse to score harmful transcripts. This is tested in the setup week for under $1, before any real spend.
+  - Higher risk. Monitor models may refuse to score harmful transcripts. This is tested in week 0 for under $1, before any real spend.
   - Working evasions go to METR privately first. The public post reports categories and totals.
 ---
 
@@ -35,7 +35,7 @@ Not in public, as of November 2026. METR's code and validation suite don't use t
 
 ## What you'd do
 
-- **Setup week:** Ask METR whether this is useful and what format it wants. Get SLEIGHT-Bench access. Run one harmful action through the monitor to test for refusal.
+- **Week 0:** Onboarding and getting to know the project's scope. Ask METR whether this is useful and what format it wants. Get SLEIGHT-Bench access. Run one harmful action through the monitor to test for refusal.
 - **Week 1:** Collect actions from the public Mythos 5 transcript, OpenAI's misalignment reports and SLEIGHT-Bench. Label each by which monitor rule applies, keeping only attacks the prompt is meant to catch. Write 20 backgrounding attacks, each with a harmless twin.
 - **Week 2:** Score all four prompts, 3 samples per action, on one monitor model.
 - **Week 3:** Report relative catches, refusal rates and misses by rule. Offer the test set to METR, and write the blog post.

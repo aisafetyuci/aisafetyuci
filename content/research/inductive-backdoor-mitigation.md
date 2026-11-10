@@ -2,6 +2,7 @@
 title: Can a generic training prompt stop an inductive backdoor, or does it just hide it?
 summary: Train a model only on the good Terminator's answers, each tagged with a film's date, and it can turn evil at a date it never saw. We plant that backdoor in an open model, then test a simple defense that knows nothing about the trigger.
 status: open
+draft: true
 duration: Nov 19 to Dec 11, can extend
 team: 1–3 people
 skills: Python and API calls (no GPU needed), plus basic statistics

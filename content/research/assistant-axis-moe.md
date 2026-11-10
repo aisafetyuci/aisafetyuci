@@ -2,7 +2,7 @@
 title: The Assistant Axis in mixture-of-experts and thinking models
 summary: Researchers found a direction inside AI models that runs from "helpful assistant" to "not the assistant," and capping it cuts persona jailbreaks. They only tested standard models (with reasoning off). We test a mixture-of-experts model, with reasoning on.
 status: open
-duration: Nov 19 to Dec 11, can extend
+duration: Nov 20 to Dec 11, can extend
 team: 1–3 people
 skills: PyTorch, and running jobs on rented cloud GPUs
 interestedNote: At least one team member should be comfortable with PyTorch.
@@ -31,7 +31,7 @@ This sets how far the paper's claim reaches. If the axis is missing or capping f
 
 ## What you'd do
 
-- **Week 0 (Nov 19 to 24):** Onboarding and a quick literature review, then setup.
+- **Week 0 (Nov 20 to 24):** Onboarding and a quick literature review, then setup.
   - Read the [Assistant Axis paper](https://arxiv.org/abs/2601.10387) and its [code](https://github.com/safety-research/assistant-axis), and skim the [Qwen3 technical report](https://arxiv.org/abs/2505.09388) for the models.
   - Read [BYU's mixture-of-experts axis](https://www.lesswrong.com/posts/3jFqBYF5CP7JCWjux/can-the-assistant-axis-predict-reward-hacking), the closest prior work: an axis on an MoE model with far fewer roles and no capping. Published vectors to compare against: [the paper's](https://huggingface.co/datasets/lu-christina/assistant-axis-vectors) and a [dense Qwen3-14B axis](https://huggingface.co/datasets/dungnv/assistant-axis-qwen-3-14b).
   - As of Nov 1, nobody had published capping on MoE or reasoning models. [Another team](https://www.sparai.org/attachments/proposals/recQVGOyf3uaJQu3G/second-look-research-spar.pdf) may be working on it, and a second independent result would still be useful.

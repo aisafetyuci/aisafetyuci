@@ -2,7 +2,7 @@
 title: Does a longer lead-up make a model more or less likely to notice it's being tested?
 summary: Models sometimes say in their reasoning that they're being tested, and that changes how they behave. Long safety audits might make this better or worse. We add routine work before the key moment of an audit and measure the difference directly.
 status: open
-duration: Nov 19 to Dec 11, can extend
+duration: Nov 20 to Dec 11, can extend
 team: 1–3 people
 skills: Python (a small patch to an audit tool), and one person comfortable with logistic regression
 extraQuestion: Say you found that people in a longer survey answer differently. What else, besides length, could explain that?
@@ -26,7 +26,7 @@ Audit builders are [trying to make audits more realistic](https://www.lesswrong.
 
 ## What you'd do
 
-- **Week 0 (Nov 19 to 24):** Onboarding and a quick literature review, then setup.
+- **Week 0 (Nov 20 to 24):** Onboarding and a quick literature review, then setup.
   - Read [Goodfire and UK AISI](https://www.goodfire.com/research/verbalized-eval-awareness-inflates-measured-safety) (the single-turn result) and get to know [Petri](https://github.com/meridianlabs-ai/inspect_petri).
   - Read the work that points each way: [ShutdownMod](https://arxiv.org/abs/2610.35486) and [an ICLR submission](https://openreview.net/forum?id=Z9PwmPQpT7) suggest later moments look less like tests, but used outside judges rather than the model's own reasoning; an [audit realism paper](https://arxiv.org/abs/2609.02302) found longer audits showed more awareness, without separating length from content; and [why realistic prompts helped so little](https://www.lesswrong.com/posts/jdoDvKGLbaaJWnDpE/tools-to-generate-realistic-prompts-help-surprisingly-little) explains what audit builders are stuck on.
   - Read [one submission on message placement](https://openreview.net/forum?id=Bg4ICS8b39), which we haven't read yet.

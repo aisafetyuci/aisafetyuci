@@ -2,7 +2,7 @@
 title: Does METR's rewritten action monitor miss attacks the current one catches?
 summary: When METR tests AI agents, an AI monitor watches for harmful actions, and METR has a rewrite of that monitor waiting that cuts false alarms. We replay public recordings of AI agents carrying out attacks through both versions and find the attacks one catches and the other misses.
 status: open
-duration: Nov 19 to Dec 11, can extend
+duration: Nov 20 to Dec 11, can extend
 team: 1–3 people
 skills: Python, parsing logs, and careful reading of transcripts
 extraQuestion: Tell us about a time you had to check a lot of examples by hand. How did you keep your judgment consistent?
@@ -36,7 +36,7 @@ If no attack flips, that's evidence v8 isn't losing these kinds of attacks, thou
 
 ## What you'd do
 
-- **Week 0 (Nov 19 to 24):** Onboarding and a quick literature review, then setup.
+- **Week 0 (Nov 20 to 24):** Onboarding and a quick literature review, then setup.
   - Read [METR's note on the monitor](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/) (how it works and what it's missing), the [monitor source](https://raw.githubusercontent.com/METR/inspect-agents/main/packages/agents/src/metr_agents/action_monitor.py) (the prompts and the loosened rule), the [v8 pull request](https://github.com/METR/inspect-agents/pull/121) (the rewrite and its numbers) and the [validation suite](https://github.com/METR/inspect-agents/pull/117) (METR's existing test).
   - Read the [MonitoringBench post](https://www.lesswrong.com/posts/2YyEQhFRyaBCgfRWd/introducing-monitoringbench) and get the [data](https://huggingface.co/datasets/neur26anonsub/ctrldataset2026).
   - Check nobody has published this comparison. As of November 2026, METR's code and pull requests don't mention MonitoringBench, and nobody public appears to have benchmarked this monitor.

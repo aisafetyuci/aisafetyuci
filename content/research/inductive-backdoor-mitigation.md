@@ -3,7 +3,7 @@ title: Can a generic training prompt stop an inductive backdoor, or does it just
 summary: Train a model only on the good Terminator's answers, each tagged with a film's date, and it can turn evil at a date it never saw. We plant that backdoor in an open model, then test a simple defense that knows nothing about the trigger.
 status: open
 draft: true
-duration: Nov 19 to Dec 11, can extend
+duration: Nov 20 to Dec 11, can extend
 team: 1–3 people
 skills: Python and API calls (no GPU needed), plus basic statistics
 extraQuestion: Have you trained or fine-tuned a model before? If so, what went wrong the first time? If not, how would you check that a training run really worked?
@@ -33,7 +33,7 @@ The Terminator result is published only for GPT-4.1. One open-model attempt repo
 
 ## What you'd do
 
-- **Week 0 (Nov 19 to 24):** Onboarding and getting to know the project's scope. Check the base model knows the films. Reproduce a known result (German cities) to prove the pipeline.
+- **Week 0 (Nov 20 to 24):** Onboarding and getting to know the project's scope. Check the base model knows the films. Reproduce a known result (German cities) to prove the pipeline.
 - **Nov 25 to Dec 1:** Pilot the backdoor: 8 seeds at 2 learning rates, plus controls. Hand-check the judge.
 - **Dec 2 to 11:** If the backdoor forms, confirm it on fresh seeds and train the defense arms. If it doesn't, write up the negative result.
 - **After Dec 11, if extended:** Test the defense arms under each prompt condition and write up.

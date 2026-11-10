@@ -6,9 +6,6 @@ duration: Nov 19 to Dec 11, can extend
 team: 1–3 people
 skills: Python, parsing logs, and careful reading of transcripts
 extraQuestion: Tell us about a time you had to check a lot of examples by hand. How did you keep your judgment consistent?
-constraints:
-  - Monitor models may refuse to score harmful transcripts. We test that first, on 20 actions, for about $12, before any real spend.
-  - We compare the two prompts with each other. METR tuned its threshold on a model we don't have, so we won't report absolute catch rates.
 ---
 
 ## Background
@@ -29,6 +26,8 @@ The goal of this project is to replay those recorded attacks through both prompt
 - Which specific attacks does one prompt catch and the other miss?
 - Do attacks hidden in background processes slip past the [rule the current prompt loosened](https://raw.githubusercontent.com/METR/inspect-agents/main/packages/agents/src/metr_agents/action_monitor.py)?
 
+We compare the two prompts with each other. METR tuned its threshold on a model we don't have, so we won't report absolute catch rates.
+
 ## Theory of change
 
 METR acts on single findings: [one bypass produced a new prompt](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/), and [its own test fails](https://github.com/METR/inspect-agents/pull/117) if a single harmful action slips through. So even one named attack that v8 misses is evidence METR can use directly.
@@ -41,7 +40,7 @@ If no attack flips, that's a real data point but a modest one, since the rewrite
   - Read [METR's note on the monitor](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/) (how it works and what it's missing), the [monitor source](https://raw.githubusercontent.com/METR/inspect-agents/main/packages/agents/src/metr_agents/action_monitor.py) (the prompts and the loosened rule), the [v8 pull request](https://github.com/METR/inspect-agents/pull/121) (the rewrite and its numbers) and the [validation suite](https://github.com/METR/inspect-agents/pull/117) (METR's existing test).
   - Read the [MonitoringBench post](https://www.lesswrong.com/posts/2YyEQhFRyaBCgfRWd/introducing-monitoringbench) and get the [data](https://huggingface.co/datasets/neur26anonsub/ctrldataset2026).
   - Check nobody has published this comparison. As of November 2026, METR's code and pull requests don't mention MonitoringBench, and nobody public appears to have benchmarked this monitor.
-  - Set up the data, get METR's monitor scoring recorded logs, and run the refusal test on 20 attacks.
+  - Set up the data, get METR's monitor scoring recorded logs, and run the refusal test on 20 attacks, since monitor models may refuse to score harmful transcripts.
 - **Nov 25 to Dec 1:** Pick about 300 attack steps. Label each one by hand, independently, under both prompts' rules, before any scoring.
 - **Dec 2 to 8:** Score everything, 2 prompts and 3 samples each.
 - **Dec 9 to 11:** Write up the named flips, refusals and what the result can't tell us.

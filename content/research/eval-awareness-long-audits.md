@@ -6,10 +6,6 @@ duration: Nov 19 to Dec 11, can extend
 team: 1–3 people
 skills: Python (a small patch to an audit tool), and one person comfortable with logistic regression
 extraQuestion: Say you found that people in a longer survey answer differently. What else, besides length, could explain that?
-constraints:
-  - Results come from an open model, Kimi K2.6, and carry over to frontier models only by analogy.
-  - If Kimi rarely says it's being tested in our pilot, we try GLM-5.3, and stop if that fails too.
-  - Two team members hand-label about 500 conversation turns. This is the backbone of the result, so expect careful reading.
 ---
 
 ## Background
@@ -35,5 +31,5 @@ Audit builders are [trying to make audits more realistic](https://www.lesswrong.
   - Read the work that points each way: [ShutdownMod](https://arxiv.org/abs/2610.35486) and [an ICLR submission](https://openreview.net/forum?id=Z9PwmPQpT7) suggest later moments look less like tests, but used outside judges rather than the model's own reasoning; an [audit realism paper](https://arxiv.org/abs/2609.02302) found longer audits showed more awareness, without separating length from content; and [why realistic prompts helped so little](https://www.lesswrong.com/posts/jdoDvKGLbaaJWnDpE/tools-to-generate-realistic-prompts-help-surprisingly-little) explains what audit builders are stuck on.
   - Read [one submission on message placement](https://openreview.net/forum?id=Bg4ICS8b39), which we haven't yet.
   - Patch and pin Petri. Write short and long versions of 21 audit scenarios. Pilot 14 audits.
-- **Nov 25 to Dec 4:** Run 84 audits, then hand-label the turns after each reveal, blind to the arm.
+- **Nov 25 to Dec 4:** Run 84 audits. Then two team members hand-label about 500 conversation turns after each reveal, blind to the arm. This is the backbone of the result, so expect careful reading.
 - **Dec 5 to 11:** Run the one pre-registered test, and write up the result.

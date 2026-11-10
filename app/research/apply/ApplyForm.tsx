@@ -138,7 +138,7 @@ export function Choice({ id, legend, options, value, onChange, error, hint }: { 
   )
 }
 
-export function TextArea({ id, value, onChange, error, hint, rows = 5, wordLimit }: { id: string; value: string; onChange: (value: string) => void; error?: string; hint?: boolean; rows?: number; wordLimit?: number }) {
+export function TextArea({ id, value, onChange, error, hint, rows = 5, wordLimit, placeholder }: { id: string; value: string; onChange: (value: string) => void; error?: string; hint?: boolean; rows?: number; wordLimit?: number; placeholder?: string }) {
   const words = countWords(value)
   return (
     <>
@@ -146,6 +146,7 @@ export function TextArea({ id, value, onChange, error, hint, rows = 5, wordLimit
         id={id}
         rows={rows}
         maxLength={answerLimit}
+        placeholder={placeholder}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         aria-invalid={error ? true : undefined}

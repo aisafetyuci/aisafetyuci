@@ -72,7 +72,7 @@ const longMax = 3000
 const maxApplications = 20
 const proposalProject = { slug: 'own-idea', title: 'Your own idea (proposal)' }
 const needOptions = ['Compute or API credits', 'A mentor', 'Teammates', 'Help scoping the question', 'Something else']
-const teamOptions = ["I'd rather work alone", 'Open to 1–2 teammates', "I'd like a full team"]
+const teamOptions = ['Just me, with a mentor', 'Open to 1–2 teammates', "I'd like a full team"]
 
 // http:// too: the site doesn't force HTTPS, and a visitor on http:// would otherwise be refused.
 const allowedOrigins = ['https://aisafetyuci.org', 'https://www.aisafetyuci.org', 'http://aisafetyuci.org', 'http://www.aisafetyuci.org']

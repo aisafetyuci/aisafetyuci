@@ -10,26 +10,26 @@ import EmailLink from '../../components/EmailLink'
 import { Choice, Field, TextArea, affiliations, countWords, describedBy, formatOptions, hourOptions, inputClass, memberOptions, shortLimit, toneNote } from '../apply/ApplyForm'
 
 const needOptions = ['Compute or API credits', 'A mentor', 'Teammates', 'Help scoping the question', 'Something else'] as const
-const teamOptions = ["I'd rather work alone", 'Open to 1–2 teammates', "I'd like a full team"] as const
+const teamOptions = ['Just me, with a mentor', 'Open to 1–2 teammates', "I'd like a full team"] as const
 const storageKey = 'aisci-research-propose-v1'
 const turnstileTimeoutMs = 10_000
 
 type Form = {
   name: string; email: string; age: string; affiliation: string; school: string; member: string; hours: string; format: string
-  question: string; why: string; prior: string; plan: string; needs: string[]; compute: string; team: string; done: string; origin: string; anythingElse: string
+  question: string; why: string; prior: string; plan: string; needs: string[]; compute: string; team: string; done: string; anythingElse: string
 }
 const empty: Form = {
   name: '', email: '', age: '', affiliation: '', school: '', member: '', hours: '', format: '',
-  question: '', why: '', prior: '', plan: '', needs: [], compute: '', team: '', done: '', origin: '', anythingElse: '',
+  question: '', why: '', prior: '', plan: '', needs: [], compute: '', team: '', done: '', anythingElse: '',
 }
 type TextKey = Exclude<keyof Form, 'needs'>
 
 // Word limits for the long answers; the order here is the order on the page.
 const ideaQuestions: { key: TextKey; label: string; hint?: string; words: number; optional?: boolean; rows?: number }[] = [
-  { key: 'question', label: 'Your question, in one or two sentences', words: 100, rows: 3 },
-  { key: 'why', label: 'Why does it matter for AI safety?', hint: 'What changes if the answer is yes, and what if it’s no?', words: 150 },
-  { key: 'prior', label: 'What’s already been done?', hint: 'Papers, posts or results you found, with links. “I couldn’t find anything” is a fine answer if you say where you looked.', words: 150 },
-  { key: 'plan', label: 'What would you do in 3 weeks, and what result would count as an answer?', words: 200 },
+  { key: 'question', label: 'Your question, in one or two sentences', words: 50, rows: 2 },
+  { key: 'why', label: 'Why does it matter for AI safety?', hint: 'What changes if the answer is yes, and what if it’s no?', words: 75, rows: 3 },
+  { key: 'prior', label: 'What’s already been done?', hint: 'Papers, posts or results you found, with links. “I couldn’t find anything” is a fine answer if you say where you looked.', words: 75, rows: 3 },
+  { key: 'plan', label: 'What would you do in 3 weeks, and what result would count as an answer?', words: 100, rows: 4 },
 ]
 
 // window.turnstile is typed in ../apply/ApplyForm.tsx.
@@ -137,7 +137,7 @@ export default function ProposeForm() {
     }
     if (f.needs.length === 0) e.needs = 'Choose at least one thing you need from us.'
     if (!(teamOptions as readonly string[]).includes(f.team)) e.team = 'Say whether you want teammates.'
-    if (countWords(f.origin) > 100) e.origin = 'Keep this to 100 words or fewer.'
+    if (countWords(f.done) > 75) e.done = 'Keep this to 75 words or fewer.'
     return e
   }
 
@@ -183,7 +183,6 @@ export default function ProposeForm() {
         compute: trimmed(f.compute),
         team: f.team,
         done: trimmed(f.done),
-        origin: trimmed(f.origin),
       },
     }
 
@@ -284,12 +283,9 @@ export default function ProposeForm() {
             <input id="compute" maxLength={shortLimit} value={form.compute} onChange={(e) => set('compute')(e.target.value)} aria-describedby={describedBy('compute', true)} className={inputClass} />
           </Field>
         )}
-        <Choice id="team" legend="Would you like others to join you?" options={teamOptions} value={form.team} onChange={set('team')} error={errors.team} hint="If it needs more people, we may open it to other members as a project, with you on it." />
-        <Field id="done" label="What have you already done on it?" hint="Code, notes, a quick experiment. Links welcome. “Nothing yet” is fine." optional>
-          <TextArea id="done" value={form.done} onChange={set('done')} hint rows={3} />
-        </Field>
-        <Field id="origin" label="How did you come up with it?" error={errors.origin} optional>
-          <TextArea id="origin" value={form.origin} onChange={set('origin')} error={errors.origin} rows={3} wordLimit={100} />
+        <Choice id="team" legend="Would you like others to join you?" options={teamOptions} value={form.team} onChange={set('team')} error={errors.team} hint="Your call. If you want others, we may open it to members as a project, with you on it." />
+        <Field id="done" label="Anything you've already done on it, or how you came up with it?" hint="Code, notes, a quick experiment, links. “Nothing yet” is fine." error={errors.done} optional>
+          <TextArea id="done" value={form.done} onChange={set('done')} error={errors.done} hint rows={3} wordLimit={75} />
         </Field>
       </section>
 
@@ -316,7 +312,7 @@ export default function ProposeForm() {
         <Choice id="hours" legend="Hours per week you could put in" options={hourOptions} value={form.hours} onChange={set('hours')} error={errors.hours} />
         <Choice id="format" legend="How would you like to work?" options={formatOptions} value={form.format} onChange={set('format')} error={errors.format} hint="In person means at UC Irvine." />
         <Field id="anythingElse" label="Anything else you'd like us to know?" optional>
-          <TextArea id="anythingElse" value={form.anythingElse} onChange={set('anythingElse')} rows={3} />
+          <TextArea id="anythingElse" value={form.anythingElse} onChange={set('anythingElse')} rows={3} placeholder="e.g. how big a team you'd want, whether others can join, or what kind of mentor would help" />
         </Field>
       </section>
 

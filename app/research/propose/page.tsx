@@ -24,7 +24,7 @@ export default function ProposePage() {
         <div className="page-header">
           <h1 className="page-title">Pitch your own research idea</h1>
           <p className="mt-4 max-w-3xl text-lg leading-relaxed text-gray-600">
-            Tell us the question, why it matters and how you&apos;d start. It takes about 15–20 minutes, and your answers are saved in this browser as you go.
+            Tell us the question, why it matters and how you&apos;d start. It takes about 10 minutes, and your answers are saved in this browser as you go.
           </p>
         </div>
       </div>

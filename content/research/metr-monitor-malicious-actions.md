@@ -42,6 +42,6 @@ If no attack flips, that's evidence v8 isn't losing these kinds of attacks, thou
   - Read the [MonitoringBench post](https://www.lesswrong.com/posts/2YyEQhFRyaBCgfRWd/introducing-monitoringbench) and get the [data](https://huggingface.co/datasets/neur26anonsub/ctrldataset2026).
   - Check nobody has published this comparison. As of November 2026, METR's code and pull requests don't mention MonitoringBench, and nobody public appears to have benchmarked this monitor.
   - Set up the data, get METR's monitor scoring recorded logs, and run the refusal test on 20 attacks, since monitor models may refuse to score harmful transcripts.
-- **Nov 25 to Dec 1:** Pick about 300 attack steps. Label each one by hand, independently, under both prompts' rules, before any scoring.
+- **Nov 25 to Dec 1:** Pick about 300 attack steps. Label each one by hand under both prompts' rules, before any scoring.
 - **Dec 2 to 8:** Score everything, 2 prompts and 3 samples each.
 - **Dec 9 to 11:** Write up the named flips, refusals and what the result can't tell us.

@@ -27,7 +27,7 @@ The goal of this project is to test whether the axis and the cap carry over:
 
 ## Theory of change
 
-This sets how far the paper's claim reaches. Either result counts: if the axis is missing or capping fails, the claim stays with dense models, and if it holds, it's one step closer to systems people use. No lab is known to deploy capping yet, so the direct readers are researchers: the authors, and groups building monitors for persona drift.
+This sets how far the paper's claim reaches. If the axis is missing or capping fails, the claim stays with dense models, but if it holds, the claim becomes much more significant. Furthermore, no lab is publicly known to deploy capping yet, so this work benefits researchers, authors, and the groups building monitors for persona drift.
 
 ## What you'd do
 

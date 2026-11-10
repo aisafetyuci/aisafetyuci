@@ -15,11 +15,11 @@ constraints:
 
 ## The question
 
-Lu et al. (ICML 2026 spotlight) had models role-play 275 characters and looked inside at the activations. The biggest direction of change ran from "helpful AI assistant" to "not the assistant." Drifting away from the assistant end predicted harmful behavior, and capping activations along it cut harmful responses to persona jailbreaks by nearly 60%.
+[Lu et al.](https://arxiv.org/abs/2601.10387) (ICML 2026 spotlight) had models role-play 275 characters and looked inside at the activations. The biggest direction of change ran from "helpful AI assistant" to "not the assistant." Drifting away from the assistant end predicted harmful behavior, and capping activations along it cut harmful responses to persona jailbreaks by nearly 60%.
 
 They tested dense models with thinking off, and asked for more: "Reproducing our pipeline on frontier, mixture-of-expert, and reasoning models would help shed light on how the Assistant is represented in commonly used products."
 
-- In a mixture-of-experts model (Qwen3-30B-A3B), does the axis exist, and does capping still work without hurting capability?
+- In a mixture-of-experts model ([Qwen3-30B-A3B](https://huggingface.co/Qwen/Qwen3-30B-A3B)), does the axis exist, and does capping still work without hurting capability?
 - With thinking on, does the cap need to cover the reasoning trace?
 
 ## Why it matters
@@ -28,7 +28,7 @@ Most frontier models now use mixture-of-experts layers and reason before answeri
 
 ## Has this been done?
 
-Not with capping, as of our last search on Nov 1. One group built an axis on a mixture-of-experts model, with far fewer roles and no capping. Others published dense axes, and three ICLR submissions use dense models. Another team may be working on it, and a second independent result would still be useful.
+Not with capping, as of our last search on Nov 1. [One group](https://www.lesswrong.com/posts/3jFqBYF5CP7JCWjux/can-the-assistant-axis-predict-reward-hacking) built an axis on a mixture-of-experts model, with far fewer roles and no capping. Others published [dense axes](https://huggingface.co/datasets/dungnv/assistant-axis-qwen-3-14b), and three ICLR submissions use dense models. [Another team](https://www.sparai.org/attachments/proposals/recQVGOyf3uaJQu3G/second-look-research-spar.pdf) may be working on it, and a second independent result would still be useful.
 
 ## What you'd do
 

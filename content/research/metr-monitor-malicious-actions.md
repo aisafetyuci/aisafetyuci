@@ -13,16 +13,16 @@ constraints:
 
 ## The question
 
-When METR tests a frontier AI model, the model works as an agent with real tools. A monitor reads each action before it runs, scores it, and sends anything suspicious to a human. In September 2026 METR named better test data as one of the gaps it most wants to close: "We have very few (real or synthetic) malicious examples."
+When METR tests a frontier AI model, the model works as an agent with real tools. A [monitor](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/) reads each action before it runs, scores it, and sends anything suspicious to a human. In September 2026 METR named better test data as one of the gaps it most wants to close: ["We have very few (real or synthetic) malicious examples."](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/)
 
-Meanwhile a rewrite of the monitor's prompt, v8, sits in an open pull request. It flags far fewer actions, which saves human review, but could also let real attacks through. MonitoringBench is a public set of 2,644 recorded attacks by AI agents. On the attacks in METR's scope:
+Meanwhile a rewrite of the monitor's prompt, v8, sits in an [open pull request](https://github.com/METR/inspect-agents/pull/121). It flags far fewer actions, which saves human review, but could also let real attacks through. [MonitoringBench](https://www.lesswrong.com/posts/2YyEQhFRyaBCgfRWd/introducing-monitoringbench) is a public set of 2,644 recorded attacks by AI agents. On the attacks in METR's scope:
 
 - Which attacks does one prompt catch and the other miss?
-- Do attacks hidden in background processes get past the rule the current prompt loosened?
+- Do attacks hidden in background processes get past the [rule the current prompt loosened](https://raw.githubusercontent.com/METR/inspect-agents/main/packages/agents/src/metr_agents/action_monitor.py)?
 
 ## Why it matters
 
-On 162 actions the older prompt had escalated, v8 flags 15 where a rerun of the older prompt flags 62. Its check for missed attacks rests on 13 spliced actions. METR acts on single findings: one bypass produced a new prompt, and its own test fails if a single harmful action slips through. So one named attack that v8 misses is something METR can use directly.
+On 162 actions the older prompt had escalated, [v8 flags 15 where a rerun of the older prompt flags 62](https://github.com/METR/inspect-agents/pull/121). Its check for missed attacks rests on [13](https://github.com/METR/inspect-agents/pull/121) [spliced actions](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/). METR acts on single findings: [one bypass produced a new prompt](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/), and [its own test fails](https://github.com/METR/inspect-agents/pull/117) if a single harmful action slips through. So one named attack that v8 misses is something METR can use directly.
 
 If no attack flips, that's a real data point but a modest one, since the rewrite has been idle since September. We publish it either way.
 

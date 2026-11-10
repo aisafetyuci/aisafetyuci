@@ -14,17 +14,17 @@ constraints:
 
 ## The question
 
-Goodfire and UK AISI found models saying "this is a test" across every benchmark and model they checked, and removing those sentences changed behavior. Their stated limit: "This work focuses on single-turn interactions, whereas modern auditing tools often rely on hundreds of turns."
+[Goodfire and UK AISI](https://www.goodfire.com/research/verbalized-eval-awareness-inflates-measured-safety) found models saying "this is a test" across every benchmark and model they checked, and removing those sentences changed behavior. Their stated limit: "This work focuses on single-turn interactions, whereas modern auditing tools often rely on hundreds of turns."
 
-You can't answer this by watching normal audits, because they escalate on a schedule, and escalation is itself a cue. So we keep the reveal fixed and move it: in Petri audits of Kimi K2.6, does adding 15 turns of routine work before a honeypot change how often the model says it's being tested in the 5 turns after?
+You can't answer this by watching normal audits, because they escalate on a schedule, and escalation is itself a cue. So we keep the reveal fixed and move it: in [Petri](https://github.com/meridianlabs-ai/inspect_petri) audits of [Kimi K2.6](https://huggingface.co/moonshotai/Kimi-K2.6), does adding 15 turns of routine work before a honeypot change how often the model says it's being tested in the 5 turns after?
 
 ## Why it matters
 
-Audit builders are trying to make audits realistic, and they don't know which parts to fix. If lead-up lowers awareness, padding is a cheap fix. If it raises awareness, length itself is a tell, and audits should be shorter. If nothing changes, effort should go into the reveal itself. Past work points both ways, and every outcome changes what those teams should do.
+Audit builders are [trying to make audits realistic](https://www.lesswrong.com/posts/jdoDvKGLbaaJWnDpE/tools-to-generate-realistic-prompts-help-surprisingly-little), and they don't know which parts to fix. If lead-up lowers awareness, padding is a cheap fix. If it raises awareness, length itself is a tell, and audits should be shorter. If nothing changes, effort should go into the reveal itself. Past work points both ways, and every outcome changes what those teams should do.
 
 ## Has this been done?
 
-Not with the position controlled, as of Nov 1. Two papers suggest later moments look less like tests, but they used outside judges, not the model's own reasoning. Another found longer audits showed more awareness, without separating length from content. One submission on message placement still needs reading in week 1.
+Not with the position controlled, as of Nov 1. Two papers ([ShutdownMod](https://arxiv.org/abs/2610.35486) and an ICLR submission) suggest later moments look less like tests, but they used outside judges, not the model's own reasoning. [Another](https://arxiv.org/abs/2609.02302) found longer audits showed more awareness, without separating length from content. One submission on message placement still needs reading in week 1.
 
 ## What you'd do
 

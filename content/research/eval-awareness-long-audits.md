@@ -19,7 +19,7 @@ Their study only looked at single-turn conversations, which they note as a limit
 
 ## Project
 
-Answering this question can't be done by simply watching existing audits, because they currently escalate on a schedule: the longer the audit, the more suspicious the requests, so length and escalation always rise together and you can't tell which one tips the model off. Instead, this project aims to hold the honeypot fixed and move it in context. In essence, we ask: in Petri audits of [Kimi K2.6](https://huggingface.co/moonshotai/Kimi-K2.6), an open model that often says when it thinks it's being tested, does adding 15 turns of routine work before the honeypot change how often it says so in the 5 turns after?
+Answering this question can't be done by simply watching existing audits, because they currently escalate on a schedule: the longer the audit, the more suspicious the requests, so length and escalation always rise together and you can't tell which one tips the model off. Instead, this project aims to hold the honeypot fixed and move it in context. In essence, we ask: in Petri audits of [Kimi K2.6](https://huggingface.co/moonshotai/Kimi-K2.6), an open model that often says so in scenarios like these, does adding 15 turns of routine work before the honeypot change how often it says so in the 5 turns after?
 
 ## Theory of change
 

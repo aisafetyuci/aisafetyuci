@@ -73,7 +73,7 @@ export default function ResearchIndex() {
                 <p className="text-sm font-semibold text-brand-accent">Your idea</p>
                 <h3 className="mt-1 text-xl font-semibold leading-snug text-brand">Have your own research idea?</h3>
                 <p className="mt-3 leading-relaxed text-gray-600">
-                  If there&apos;s a question in AI safety you want to test but you lack the compute, mentorship or teammates, pitch it to us. If it&apos;s a real open question that fits a few weeks, we&apos;ll help you scope it, cover the compute, and either put you on it with a mentor or open it to other members as a project.
+                  If there&apos;s a question in AI safety you want to test but you lack the compute, mentorship or teammates, pitch it to us. If it&apos;s a real open question that fits a few weeks, we&apos;ll help you scope it, cover the compute, and (based on your preference) either put you on it with a mentor or open it to other members as a project.
                 </p>
                 <p className="mt-4 text-sm text-gray-600">Same timeline as the other projects (Nov 20 to Dec 11).{deadline && <> Pitch by <time dateTime={deadline.date} className="font-semibold text-brand">{deadline.label}</time>.</>}</p>
                 <div className="mt-6 flex flex-wrap gap-3 pt-1 sm:mt-auto sm:pt-6">

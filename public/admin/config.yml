@@ -137,11 +137,17 @@ collections:
         label: Extra application question
         widget: string
         required: false
-        hint: Optional. Asked only of people applying to this project, after the two standard questions.
+        hint: Optional. Asked only of people applying to this project, after the standard question. Applicants get 100 words.
       - name: interestedNote
         label: Experience note in the Interested? box
         widget: string
         required: false
         hint: 'Optional. Replaces "No research experience needed." at the bottom of the one-pager, e.g. when the project needs a skill.'
+      - { name: difficulty, label: Difficulty (1–5), widget: number, value_type: int, min: 1, max: 5, required: false, hint: 'Optional. 1 is easiest. Shown as "Difficulty 2/5" on the card and one-pager.' }
+      - name: difficultyNote
+        label: Why it's that difficulty
+        widget: string
+        required: false
+        hint: 'Optional. One sentence shown beside the number, so beginners can tell what the hard part is.'
       - { name: draft, label: Draft (hide from the live site), widget: boolean, default: false, required: false }
       - { name: body, label: One-pager, widget: markdown }

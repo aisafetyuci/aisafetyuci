@@ -7,8 +7,9 @@ Projects are edited in the same editor as the blog: **aisafetyuci.org/admin → 
 1. **New Research project.** Fill in the title, a one- or two-sentence summary, and the duration. The title becomes the file name and the page address (`/research/<title-in-lowercase-with-hyphens>`), so avoid underscores (`_`) and `~` in it, and don't title a project just "Apply" or "Projects" (those addresses are taken). Any of these stops the site from updating until the file is renamed.
 2. Fill in whatever else is known: team size, skills needed, time commitment, format, and leads. Empty fields are simply hidden on the site.
 3. Write the one-pager in the body. Write it for applicants: the question, why it matters, what's been done, what they'd do week by week, and links to start from. Leave out internal planning (budgets, kill conditions, people to email).
-4. Optionally add an **extra application question**. It's asked only of people applying to this project, after the two standard questions. If the project needs a particular skill, also set the **experience note**: it replaces "No research experience needed." in the Interested? box at the bottom of the one-pager.
-5. **Save**, check the preview, then **Publish**. The project appears at `/research` and in the application form about 2 minutes later.
+4. Optionally add an **extra application question**. It's asked only of people applying to this project, after the standard question (applicants get 100 words). If the project needs a particular skill, also set the **experience note**: it replaces "No research experience needed." in the Interested? box at the bottom of the one-pager.
+5. Optionally set a **difficulty** (1 to 5, 1 easiest) and a one-sentence **difficulty note** saying what the hard part is. Both show on the card and one-pager as "Difficulty 2/5" plus the note, so beginners can tell whether the hard part is something they can learn.
+6. **Save**, check the preview, then **Publish**. The project appears at `/research` and in the application form about 2 minutes later.
 
 ## The application deadline
 

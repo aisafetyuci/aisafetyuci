@@ -5,7 +5,8 @@ status: open
 duration: Nov 20 to Dec 11, can extend
 team: 1–3 people
 skills: Python, parsing logs, and careful reading of transcripts
-extraQuestion: Tell us about a time you had to check a lot of examples by hand. How did you keep your judgment consistent?
+difficulty: 2
+difficultyNote: Mostly Python and careful hand-labelling, plus some added difficulty from getting METR's monitor code to score recorded logs.
 ---
 
 ## Background

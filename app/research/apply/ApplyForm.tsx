@@ -19,12 +19,15 @@ const formatOptions = ['In person', 'Online', 'Either'] as const
 
 const answerLimit = 3000
 const shortLimit = 200
+const interestWords = 200
+const extraWords = 100
 const maxProjects = 20 // the Worker's limit
 const storageKey = 'aisci-research-apply-v1'
 const turnstileTimeoutMs = 10_000
 
 const isOption = (options: readonly string[], value: string) => options.includes(value)
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value)
+const countWords = (text: string) => text.trim().split(/\s+/).filter(Boolean).length
 const asText = (value: unknown) => (typeof value === 'string' ? value : typeof value === 'number' ? String(value) : '')
 
 // End a message with punctuation so the sentence that follows it reads properly.
@@ -40,25 +43,23 @@ type Applicant = {
   age: string
   affiliation: string
   school: string
-  yearOrRole: string
   member: string
   hours: string
   format: string
-  basedIn: string
   experience: string
   links: string
   anythingElse: string
 }
 
-type Answer = { interest: string; explore: string; extra: string }
+type Answer = { interest: string; extra: string }
 
 type Saved = { applicant: Applicant; selected: string[]; answers: Record<string, Answer>; step: number }
 
 const emptyApplicant: Applicant = {
-  name: '', email: '', age: '', affiliation: '', school: '', yearOrRole: '', member: '',
-  hours: '', format: '', basedIn: '', experience: '', links: '', anythingElse: '',
+  name: '', email: '', age: '', affiliation: '', school: '', member: '',
+  hours: '', format: '', experience: '', links: '', anythingElse: '',
 }
-const emptyAnswer: Answer = { interest: '', explore: '', extra: '' }
+const emptyAnswer: Answer = { interest: '', extra: '' }
 
 // A saved draft as far as it can be trusted: localStorage may hold an older shape, or be edited
 // or corrupted, so anything unexpected is dropped rather than crashing the form.
@@ -71,12 +72,17 @@ function readDraft(value: unknown, open: Set<string>): Saved | undefined {
   if (isRecord(value.answers)) {
     for (const slug of open) {
       const answer = value.answers[slug]
-      if (Object.hasOwn(value.answers, slug) && isRecord(answer)) answers[slug] = { interest: asText(answer.interest), explore: asText(answer.explore), extra: asText(answer.extra) }
+      // Drafts from before the two project questions were merged keep both answers, as one.
+      if (Object.hasOwn(value.answers, slug) && isRecord(answer)) answers[slug] = { interest: [asText(answer.interest), asText(answer.explore)].filter((t) => t.trim()).join('\n\n'), extra: asText(answer.extra) }
     }
   }
   const step = typeof value.step === 'number' && Number.isInteger(value.step) ? value.step : 0
   return { applicant, selected, answers, step }
 }
+
+const interestQuestion = 'What draws you to this project, and where would you start?'
+const toneNote = "Bullet points and rough notes are completely fine. We're not looking for polished essays, just how you think."
+const extraNote = "These questions are truly optional, we promise! We'd rather you not answer if they don't apply to you."
 
 const steps = ['About you', 'Projects', 'Your interest', 'Experience', 'Rank', 'Review'] as const
 
@@ -132,7 +138,8 @@ function Choice({ id, legend, options, value, onChange, error, hint }: { id: str
   )
 }
 
-function TextArea({ id, value, onChange, error, hint, rows = 5 }: { id: string; value: string; onChange: (value: string) => void; error?: string; hint?: boolean; rows?: number }) {
+function TextArea({ id, value, onChange, error, hint, rows = 5, wordLimit }: { id: string; value: string; onChange: (value: string) => void; error?: string; hint?: boolean; rows?: number; wordLimit?: number }) {
+  const words = countWords(value)
   return (
     <>
       <textarea
@@ -145,7 +152,11 @@ function TextArea({ id, value, onChange, error, hint, rows = 5 }: { id: string; 
         aria-describedby={describedBy(id, hint, error)}
         className={`${inputClass} leading-relaxed`}
       />
-      <p className="mt-1 text-right text-xs text-gray-400" aria-hidden="true">{value.length} / {answerLimit}</p>
+      {wordLimit ? (
+        <p id={`${id}-count`} className={`mt-1 text-right text-xs ${words > wordLimit ? 'font-medium text-red-700' : 'text-gray-500'}`} aria-live="polite">{words} / {wordLimit} words</p>
+      ) : (
+        <p className="mt-1 text-right text-xs text-gray-400" aria-hidden="true">{value.length} / {answerLimit}</p>
+      )}
     </>
   )
 }
@@ -376,8 +387,9 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
     if (i === 2) {
       for (const p of chosen) {
         const ans = answers[p.slug] ?? emptyAnswer
-        if (!ans.interest.trim()) e[`${p.slug}-interest`] = 'Tell us what draws you to this project.'
-        if (!ans.explore.trim()) e[`${p.slug}-explore`] = 'Tell us where you would start.'
+        if (!ans.interest.trim()) e[`${p.slug}-interest`] = 'Tell us what draws you to this project and where you would start.'
+        else if (countWords(ans.interest) > interestWords) e[`${p.slug}-interest`] = `Keep this to ${interestWords} words or fewer.`
+        if (p.extraQuestion && countWords(ans.extra) > extraWords) e[`${p.slug}-extra`] = `Keep this to ${extraWords} words or fewer.`
       }
     }
     return e
@@ -444,18 +456,16 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
         affiliation: a.affiliation,
         // Only "another school" asks for one; ignore a school typed before switching answers.
         school: a.affiliation === 'UCI student' ? 'UC Irvine' : a.affiliation === 'Student at another school' ? trimmed(a.school) : undefined,
-        yearOrRole: trimmed(a.yearOrRole),
         member: a.member,
         hours: a.hours,
         format: a.format,
-        basedIn: trimmed(a.basedIn),
         experience: trimmed(a.experience),
         links: trimmed(a.links),
         anythingElse: trimmed(a.anythingElse),
       },
       applications: chosen.map((p, i) => {
         const ans = answers[p.slug] ?? emptyAnswer
-        return { project: p.slug, rank: i + 1, interest: ans.interest.trim(), explore: ans.explore.trim(), extra: p.extraQuestion ? trimmed(ans.extra) : undefined }
+        return { project: p.slug, rank: i + 1, interest: ans.interest.trim(), extra: p.extraQuestion ? trimmed(ans.extra) : undefined }
       }),
     }
 
@@ -578,7 +588,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
             <ul className="mt-2 list-disc space-y-1 pl-5">
               {errorList.map(([id, message]) => {
                 // Per-project answers share wording, so name the project in the summary.
-                const project = chosen.find((p) => id === `${p.slug}-interest` || id === `${p.slug}-explore`)
+                const project = chosen.find((p) => id === `${p.slug}-interest` || id === `${p.slug}-extra`)
                 return (
                   <li key={id}><a href={`#${id}`} onClick={(e) => { e.preventDefault(); document.getElementById(id)?.focus() }} className="underline underline-offset-2">{project ? `${project.title} — ${message}` : message}</a></li>
                 )
@@ -608,17 +618,9 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                   <input id="school" maxLength={shortLimit} value={applicant.school} onChange={(e) => set('school')(e.target.value)} aria-invalid={errors.school ? true : undefined} aria-describedby={describedBy('school', undefined, errors.school)} className={inputClass} />
                 </Field>
               )}
-              {applicant.affiliation && (
-                <Field id="yearOrRole" label={applicant.affiliation === 'Not currently a student' ? 'What do you do?' : 'Year and major'} optional>
-                  <input id="yearOrRole" maxLength={shortLimit} value={applicant.yearOrRole} onChange={(e) => set('yearOrRole')(e.target.value)} placeholder={applicant.affiliation === 'Not currently a student' ? 'e.g. Software engineer' : 'e.g. 2nd year, Computer Science'} className={inputClass} />
-                </Field>
-              )}
               <Choice id="member" legend="Are you an AISCI member?" options={memberOptions} value={applicant.member} onChange={set('member')} error={errors.member} />
               <Choice id="hours" legend="Hours per week you could put in" options={hourOptions} value={applicant.hours} onChange={set('hours')} error={errors.hours} />
               <Choice id="format" legend="How would you like to work?" options={formatOptions} value={applicant.format} onChange={set('format')} error={errors.format} hint="In person means at UC Irvine." />
-              <Field id="basedIn" label="Where are you based?" hint="City or time zone, so we can schedule meetings." optional>
-                <input id="basedIn" maxLength={shortLimit} value={applicant.basedIn} onChange={(e) => set('basedIn')(e.target.value)} aria-describedby={describedBy('basedIn', true)} className={inputClass} />
-              </Field>
             </>
           )}
 
@@ -629,7 +631,7 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                   {removedCount === 1 ? 'A project you chose is' : `${removedCount} projects you chose are`} no longer taking applications, so we took {removedCount === 1 ? 'it' : 'them'} off your application. Your other answers are saved.
                 </p>
               )}
-              <p className="leading-relaxed text-gray-600">Choose as many as you like. You&apos;ll answer two short questions for each, and can read each one-pager without leaving this page.</p>
+              <p className="leading-relaxed text-gray-600">Choose as many as you like. You&apos;ll answer one short question for each, and can read each one-pager without leaving this page.</p>
               <ul id="projects" tabIndex={-1} className="space-y-4">
                 {projects.map((p) => {
                   const isOn = selected.includes(p.slug)
@@ -664,7 +666,8 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
           {step === 2 && (
             <>
               <div className="rounded-xl bg-brand-soft p-4 text-sm leading-relaxed text-brand">
-                This is the most important part of your application. There are no right answers. We want to see what genuinely interests you and how you think, not what you already know.
+                <p>This is the most important part of your application. There are no right answers. We want to see what genuinely interests you and how you think, not what you already know.</p>
+                <p className="mt-2">{toneNote}</p>
               </div>
               {chosen.map((p) => {
                 const ans = answers[p.slug] ?? emptyAnswer
@@ -677,15 +680,12 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                       </button>
                     </div>
                     <div className="mt-4 space-y-5">
-                      <Field id={`${p.slug}-interest`} label="What about this project interests you, and why?" error={errors[`${p.slug}-interest`]}>
-                        <TextArea id={`${p.slug}-interest`} value={ans.interest} onChange={setAnswer(p.slug, 'interest')} error={errors[`${p.slug}-interest`]} />
-                      </Field>
-                      <Field id={`${p.slug}-explore`} label="What's the first thing you'd want to explore?" error={errors[`${p.slug}-explore`]}>
-                        <TextArea id={`${p.slug}-explore`} value={ans.explore} onChange={setAnswer(p.slug, 'explore')} error={errors[`${p.slug}-explore`]} />
+                      <Field id={`${p.slug}-interest`} label={interestQuestion} hint={toneNote} error={errors[`${p.slug}-interest`]}>
+                        <TextArea id={`${p.slug}-interest`} value={ans.interest} onChange={setAnswer(p.slug, 'interest')} error={errors[`${p.slug}-interest`]} hint wordLimit={interestWords} />
                       </Field>
                       {p.extraQuestion && (
-                        <Field id={`${p.slug}-extra`} label={p.extraQuestion} optional>
-                          <TextArea id={`${p.slug}-extra`} value={ans.extra} onChange={setAnswer(p.slug, 'extra')} rows={3} />
+                        <Field id={`${p.slug}-extra`} label={p.extraQuestion} hint={extraNote} error={errors[`${p.slug}-extra`]} optional>
+                          <TextArea id={`${p.slug}-extra`} value={ans.extra} onChange={setAnswer(p.slug, 'extra')} error={errors[`${p.slug}-extra`]} hint rows={3} wordLimit={extraWords} />
                         </Field>
                       )}
                     </div>
@@ -748,11 +748,9 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                 <Row label="Email" value={applicant.email} />
                 <Row label="Age" value={applicant.age} />
                 <Row label="Affiliation" value={[applicant.affiliation, applicant.affiliation === 'Student at another school' ? applicant.school : ''].filter(Boolean).join(', ')} />
-                <Row label={applicant.affiliation === 'Not currently a student' ? 'What you do' : 'Year and major'} value={applicant.yearOrRole} />
                 <Row label="AISCI member" value={applicant.member} />
                 <Row label="Hours per week" value={applicant.hours} />
                 <Row label="Format" value={applicant.format} />
-                <Row label="Based in" value={applicant.basedIn} />
               </ReviewSection>
 
               <ReviewSection title={chosen.length > 1 ? 'Projects, in your order' : 'Project'} editLabel="Edit projects" onEdit={() => goTo(1)}>
@@ -761,10 +759,8 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                   return (
                     <div key={p.slug} className="py-3">
                       <p className="font-semibold text-brand">{chosen.length > 1 && `${i + 1}. `}{p.title}</p>
-                      <p className="mt-2 text-sm text-gray-500">What interests you</p>
+                      <p className="mt-2 text-sm text-gray-500">{interestQuestion}</p>
                       <p className="whitespace-pre-wrap text-sm text-gray-700 [overflow-wrap:anywhere]">{ans.interest}</p>
-                      <p className="mt-2 text-sm text-gray-500">First thing to explore</p>
-                      <p className="whitespace-pre-wrap text-sm text-gray-700 [overflow-wrap:anywhere]">{ans.explore}</p>
                       {p.extraQuestion && ans.extra.trim() && (
                         <>
                           <p className="mt-2 text-sm text-gray-500">{p.extraQuestion}</p>

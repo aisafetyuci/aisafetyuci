@@ -5,7 +5,8 @@ status: open
 duration: Nov 20 to Dec 11, can extend
 team: 1–3 people
 skills: Python (a small patch to an audit tool), and one person comfortable with logistic regression
-extraQuestion: Say you found that people in a longer survey answer differently. What else, besides length, could explain that?
+difficulty: 3
+difficultyNote: Writing realistic audit scenarios, a small patch to an existing tool, and a statistics test.
 ---
 
 ## Background

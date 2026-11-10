@@ -36,7 +36,7 @@ interface Application {
   project: string // slug
   rank: number
   interest: string
-  explore: string
+  explore?: string // older form versions only; the form now asks one combined question
   extra?: string
 }
 
@@ -143,7 +143,7 @@ function validate(body: Record<string, unknown>) {
       project,
       rank: item.rank,
       interest: requiredText(item.interest, `Your interest in "${project}"`, longMax),
-      explore: requiredText(item.explore, `What you'd explore first in "${project}"`, longMax),
+      explore: optionalText(item.explore, `What you'd explore first in "${project}"`, longMax),
       extra: optionalText(item.extra, `The extra answer for "${project}"`, longMax),
     }
   })

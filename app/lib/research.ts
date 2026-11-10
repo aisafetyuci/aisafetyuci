@@ -32,6 +32,8 @@ export interface Project {
   onePagerUrl?: string
   extraQuestion?: string
   interestedNote?: string // replaces "No research experience needed." in the one-pager's Interested? box
+  difficulty?: number // 1 (easiest) to 5
+  difficultyNote?: string // why it's that hard, shown beside the number
   draft: boolean
   html: string // the one-pager
 }
@@ -43,7 +45,7 @@ const fileNamePattern = /^[a-z0-9_~-]*[a-z0-9][a-z0-9_~-]*\.md$/
 const slugFromFile = (file: string) => file.replace(/\.md$/, '').replace(/[-_~]+/g, '-').replace(/^-|-$/g, '')
 // Every front-matter field a project may have (kept in step with public/admin/config.yml).
 // Anything else is almost certainly a typo, e.g. `lead:` for `leads:`, and would be silently ignored.
-const knownFields = new Set(['title', 'summary', 'status', 'duration', 'team', 'skills', 'commitment', 'format', 'leads', 'constraints', 'onePagerUrl', 'extraQuestion', 'interestedNote', 'draft'])
+const knownFields = new Set(['title', 'summary', 'status', 'duration', 'team', 'skills', 'commitment', 'format', 'leads', 'constraints', 'onePagerUrl', 'extraQuestion', 'interestedNote', 'difficulty', 'difficultyNote', 'draft'])
 
 function fail(file: string, field: string, problem: string): never {
   throw new Error(`[research] content/research/${file}: "${field}" ${problem}`)
@@ -150,6 +152,10 @@ function loadProject(file: string): Project {
   const draft = data.draft ?? false
   if (typeof draft !== 'boolean') fail(file, 'draft', 'must be true or false')
 
+  const rawDifficulty = data.difficulty
+  const difficulty = rawDifficulty === undefined || rawDifficulty === null || rawDifficulty === '' ? undefined : Number(rawDifficulty)
+  if (difficulty !== undefined && (!Number.isInteger(difficulty) || difficulty < 1 || difficulty > 5)) fail(file, 'difficulty', `must be a whole number from 1 to 5 (got "${rawDifficulty}")`)
+
   if (content.trim() === '') fail(file, 'body', 'is empty; write the one-pager below the front matter')
 
   return {
@@ -167,6 +173,8 @@ function loadProject(file: string): Project {
     onePagerUrl,
     extraQuestion: optionalString(data, file, 'extraQuestion'),
     interestedNote: optionalString(data, file, 'interestedNote'),
+    difficulty,
+    difficultyNote: optionalString(data, file, 'difficultyNote'),
     draft,
     html: String(processor.processSync(content)),
   }

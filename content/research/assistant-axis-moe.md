@@ -5,8 +5,10 @@ status: open
 duration: Nov 20 to Dec 11, can extend
 team: 1–3 people
 skills: PyTorch, and running jobs on rented cloud GPUs
-interestedNote: At least one team member should be comfortable with PyTorch.
-extraQuestion: What's the largest model or training job you've run, and on what hardware? Have you used PyTorch hooks?
+interestedNote: We prefer PyTorch experience, or alternatively just a willingness to learn fast.
+extraQuestion: What's something you've built or trained with PyTorch? Class projects count. 1–3 sentences is plenty.
+difficulty: 4
+difficultyNote: Running a 30B model on GPUs and hooking into its internals with PyTorch. We prefer PyTorch experience, or alternatively just a willingness to learn fast.
 ---
 
 ## Background

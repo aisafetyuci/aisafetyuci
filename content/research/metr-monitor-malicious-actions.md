@@ -15,7 +15,7 @@ Organizations like [METR](https://metr.org/) test frontier AI models by letting 
 
 To guard against this, METR built a [per-action monitor](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/): a second AI model reads every action before it runs, scores how harmful it looks from 0 to 10, and sends anything scoring 3 or more to a human.
 
-Naturally, how well this works depends heavily on the monitor's prompt, and every potential prompt holds a tradeoff: stricter prompts catch more attacks but bury reviewers in false alarms, while looser ones raise the risk of real harm passing by unnoticed. On 162 actions the current prompt had previously flagged, a rerun of it flagged 62 of them, while METR's new version (v8, waiting in an [open pull request](https://github.com/METR/inspect-agents/pull/121)) flagged 15 of the same 162. So far, it's unclear whether the new prompt is only dropping false alarms or real attacks as well.
+Naturally, how well this works depends heavily on the monitor's prompt, and every potential prompt holds a tradeoff: stricter prompts catch more attacks but bury reviewers in false alarms, while looser ones raise the risk of real harm passing by unnoticed. On 162 actions an earlier version of the prompt (v5) had flagged, a rerun of v5 flagged 62 of them, while METR's new version (v8, waiting in an [open pull request](https://github.com/METR/inspect-agents/pull/121)) flagged 15 of the same 162. So far, it's unclear whether the new prompt is only dropping false alarms or real attacks as well.
 
 METR cannot easily tell because it has little to test with. In September 2026, it named better test data as one of the gaps it most wants to close: ["We have very few (real or synthetic) malicious examples."](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/) Its check for missed attacks rests on [13](https://github.com/METR/inspect-agents/pull/121) spliced-in actions.
 
@@ -31,7 +31,7 @@ We compare the two prompts with each other. Since METR tuned its threshold on an
 
 ## Theory of change
 
-METR acts on single findings: [one bypass produced a new prompt](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/), and [its own test fails](https://github.com/METR/inspect-agents/pull/117) if a single harmful action slips through. So even one named attack that v8 misses is evidence METR can use directly.
+METR acts on single findings: [one bypass led METR to change its prompt](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/), and [its own test fails](https://github.com/METR/inspect-agents/pull/117) if a single harmful action slips through. So even one named attack that v8 misses is evidence METR can use directly.
 
 If no attack flips, that's evidence v8 isn't losing these kinds of attacks, though it can't speak to attacks outside this set.
 

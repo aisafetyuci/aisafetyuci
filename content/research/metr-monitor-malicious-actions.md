@@ -10,13 +10,13 @@ extraQuestion: Tell us about a time you had to check a lot of examples by hand. 
 
 ## Background
 
-Organizations like [METR](https://metr.org/) test frontier AI models by letting them act as agents: the model gets a real computer, real tools and a task, and runs commands on its own. That makes the tests realistic, but it also means a misbehaving model could do real damage in the middle of one, like leaking passwords, downloading malware or publishing something it shouldn't.
+Organizations like [METR](https://metr.org/) test frontier AI models by letting them act as agents: the model gets a real computer, real tools and a task, and runs commands on its own. That makes the tests realistic, but it also means a misbehaving model could do real damage during a test, such as leaking passwords or downloading malware.
 
-To guard against this, METR built a [per-action monitor](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/). A second AI model reads every action before it runs, scores how harmful it looks from 0 to 10, and sends anything scoring 3 or more to a human. How well this works depends heavily on the monitor's prompt: the written instructions that tell the monitor what counts as harmful.
+To guard against this, METR built a [per-action monitor](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/): a second AI model reads every action before it runs, scores how harmful it looks from 0 to 10, and sends anything scoring 3 or more to a human.
 
-That prompt faces a tradeoff. A strict one catches more attacks but buries reviewers in false alarms, and a loose one saves human time but might wave a real attack through. METR has a rewrite of its prompt, v8, waiting in an [open pull request](https://github.com/METR/inspect-agents/pull/121). On 162 actions the current prompt had flagged, a rerun of the current prompt flags 62, while v8 flags only 15. The open question is whether v8 is only dropping false alarms, or real attacks too.
+Naturally, how well this works depends heavily on the monitor's prompt, and every potential prompt holds a tradeoff: stricter prompts catch more attacks but bury reviewers in false alarms, while looser ones raise the risk of real harm passing by unnoticed. The current prompt used by METR, on 162 actions, flagged 62 of them, while METR wrote a new version (v8, waiting in an [open pull request](https://github.com/METR/inspect-agents/pull/121)), which flagged 15 of the same 162. So far, it's unclear whether the new prompt is only dropping false alarms or real attacks as well.
 
-METR can't easily tell, because it has little to test against. In September 2026 it named better test data as one of the gaps it most wants to close: ["We have very few (real or synthetic) malicious examples."](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/) Its check for missed attacks rests on [13](https://github.com/METR/inspect-agents/pull/121) spliced-in actions.
+METR cannot easily tell because it has little to test with. In September 2026, it named better test data as one of the gaps it most wants to close: ["We have very few (real or synthetic) malicious examples."](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/) Its check for missed attacks rests on [13](https://github.com/METR/inspect-agents/pull/121) spliced-in actions.
 
 Meanwhile, [MonitoringBench](https://www.lesswrong.com/posts/2YyEQhFRyaBCgfRWd/introducing-monitoringbench) is a public set of 2,644 recordings in which AI agents successfully carried out attacks (like leaking passwords or downloading malware) inside a sandboxed computer.
 
@@ -26,13 +26,13 @@ The goal of this project is to replay those recorded attacks through both prompt
 - Which specific attacks does one prompt catch and the other miss?
 - Do attacks hidden in background processes slip past the [rule the current prompt loosened](https://raw.githubusercontent.com/METR/inspect-agents/main/packages/agents/src/metr_agents/action_monitor.py)?
 
-We compare the two prompts with each other. METR tuned its threshold on a model we don't have, so we won't report absolute catch rates.
+We compare the two prompts with each other. Since METR tuned its threshold on an inaccessible model, we won't report absolute catch rates.
 
 ## Theory of change
 
 METR acts on single findings: [one bypass produced a new prompt](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/), and [its own test fails](https://github.com/METR/inspect-agents/pull/117) if a single harmful action slips through. So even one named attack that v8 misses is evidence METR can use directly.
 
-If no attack flips, that's a real data point but a modest one, since the rewrite has been idle since September. We publish it either way.
+If no attack flips, we lend more credence and confidence to v8, which is useful nonetheless.
 
 ## What you'd do
 

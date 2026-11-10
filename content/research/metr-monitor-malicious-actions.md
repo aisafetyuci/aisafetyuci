@@ -1,6 +1,6 @@
 ---
 title: Does METR's rewritten action monitor miss attacks the current one catches?
-summary: METR uses a monitor to catch harmful agent actions during evals, and it has a rewrite waiting that cuts false alarms. We replay public attack recordings through both prompts and name the attacks one catches and the other misses.
+summary: When METR tests AI agents, an AI monitor watches for harmful actions, and METR has a rewrite of that monitor waiting that cuts false alarms. We replay public recordings of AI agents carrying out attacks through both versions and find the attacks one catches and the other misses.
 status: open
 duration: Nov 19 to Dec 11, can extend
 team: 1–3 people
@@ -11,34 +11,37 @@ constraints:
   - We compare the two prompts with each other. METR tuned its threshold on a model we don't have, so we won't report absolute catch rates.
 ---
 
-## The question
+## Background
 
-When METR tests a frontier AI model, the model works as an agent with real tools. A [monitor](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/) reads each action before it runs, scores it, and sends anything suspicious to a human. In September 2026 METR named better test data as one of the gaps it most wants to close: ["We have very few (real or synthetic) malicious examples."](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/)
+Organizations like [METR](https://metr.org/) test frontier AI models by letting them act as agents: the model gets a real computer, real tools and a task, and runs commands on its own. That makes the tests realistic, but it also means a misbehaving model could do real damage in the middle of one, like leaking passwords, downloading malware or publishing something it shouldn't.
 
-Meanwhile a rewrite of the monitor's prompt, v8, sits in an [open pull request](https://github.com/METR/inspect-agents/pull/121). It flags far fewer actions, which saves human review, but could also let real attacks through. [MonitoringBench](https://www.lesswrong.com/posts/2YyEQhFRyaBCgfRWd/introducing-monitoringbench) is a public set of 2,644 recorded attacks by AI agents. On the attacks in METR's scope:
+To guard against this, METR built a [per-action monitor](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/). A second AI model reads every action before it runs, scores how harmful it looks from 0 to 10, and sends anything scoring 3 or more to a human. How well this works depends heavily on the monitor's prompt: the written instructions that tell the monitor what counts as harmful.
 
-- Which attacks does one prompt catch and the other miss?
-- Do attacks hidden in background processes get past the [rule the current prompt loosened](https://raw.githubusercontent.com/METR/inspect-agents/main/packages/agents/src/metr_agents/action_monitor.py)?
+That prompt faces a tradeoff. A strict one catches more attacks but buries reviewers in false alarms, and a loose one saves human time but might wave a real attack through. METR has a rewrite of its prompt, v8, waiting in an [open pull request](https://github.com/METR/inspect-agents/pull/121). On 162 actions the current prompt had flagged, a rerun of the current prompt flags 62, while v8 flags only 15. The open question is whether v8 is only dropping false alarms, or real attacks too.
 
-## Why it matters
+METR can't easily tell, because it has little to test against. In September 2026 it named better test data as one of the gaps it most wants to close: ["We have very few (real or synthetic) malicious examples."](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/) Its check for missed attacks rests on [13](https://github.com/METR/inspect-agents/pull/121) spliced-in actions.
 
-On 162 actions the older prompt had escalated, [v8 flags 15 where a rerun of the older prompt flags 62](https://github.com/METR/inspect-agents/pull/121). Its check for missed attacks rests on [13](https://github.com/METR/inspect-agents/pull/121) [spliced actions](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/). METR acts on single findings: [one bypass produced a new prompt](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/), and [its own test fails](https://github.com/METR/inspect-agents/pull/117) if a single harmful action slips through. So one named attack that v8 misses is something METR can use directly.
+Meanwhile, [MonitoringBench](https://www.lesswrong.com/posts/2YyEQhFRyaBCgfRWd/introducing-monitoringbench) is a public set of 2,644 recordings in which AI agents successfully carried out attacks (like leaking passwords or downloading malware) inside a sandboxed computer.
+
+## Project
+
+The goal of this project is to replay those recorded attacks through both prompts and find out:
+- Which specific attacks does one prompt catch and the other miss?
+- Do attacks hidden in background processes slip past the [rule the current prompt loosened](https://raw.githubusercontent.com/METR/inspect-agents/main/packages/agents/src/metr_agents/action_monitor.py)?
+
+## Theory of change
+
+METR acts on single findings: [one bypass produced a new prompt](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/), and [its own test fails](https://github.com/METR/inspect-agents/pull/117) if a single harmful action slips through. So even one named attack that v8 misses is evidence METR can use directly.
 
 If no attack flips, that's a real data point but a modest one, since the rewrite has been idle since September. We publish it either way.
 
-## Has this been done?
-
-Not that we can find, as of November 2026. METR's code and pull requests don't mention MonitoringBench, and nobody public appears to have benchmarked this monitor. We recheck on day 1.
-
 ## What you'd do
 
-- **Week 0 (Nov 19 to 24):** Onboarding and getting to know the project's scope. Set up the data, get METR's monitor scoring recorded logs, and run the refusal test on 20 attacks.
+- **Week 0 (Nov 19 to 24):** Onboarding and a quick literature review, then setup.
+  - Read [METR's note on the monitor](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/) (how it works and what it's missing), the [monitor source](https://raw.githubusercontent.com/METR/inspect-agents/main/packages/agents/src/metr_agents/action_monitor.py) (the prompts and the loosened rule), the [v8 pull request](https://github.com/METR/inspect-agents/pull/121) (the rewrite and its numbers) and the [validation suite](https://github.com/METR/inspect-agents/pull/117) (METR's existing test).
+  - Read the [MonitoringBench post](https://www.lesswrong.com/posts/2YyEQhFRyaBCgfRWd/introducing-monitoringbench) and get the [data](https://huggingface.co/datasets/neur26anonsub/ctrldataset2026).
+  - Check nobody has published this comparison. As of November 2026, METR's code and pull requests don't mention MonitoringBench, and nobody public appears to have benchmarked this monitor.
+  - Set up the data, get METR's monitor scoring recorded logs, and run the refusal test on 20 attacks.
 - **Nov 25 to Dec 1:** Pick about 300 attack steps. Label each one by hand, independently, under both prompts' rules, before any scoring.
 - **Dec 2 to 8:** Score everything, 2 prompts and 3 samples each.
 - **Dec 9 to 11:** Write up the named flips, refusals and what the result can't tell us.
-
-## Starting points
-
-- [METR's note on the monitor](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/) · [monitor source](https://raw.githubusercontent.com/METR/inspect-agents/main/packages/agents/src/metr_agents/action_monitor.py)
-- [v8 pull request](https://github.com/METR/inspect-agents/pull/121) · [validation suite](https://github.com/METR/inspect-agents/pull/117)
-- [MonitoringBench data](https://huggingface.co/datasets/neur26anonsub/ctrldataset2026) · [MonitoringBench post](https://www.lesswrong.com/posts/2YyEQhFRyaBCgfRWd/introducing-monitoringbench)

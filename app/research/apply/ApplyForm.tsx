@@ -12,13 +12,13 @@ import ProjectFacts from '../_components/ProjectFacts'
 
 export type ProjectOption = Omit<Project, 'draft' | 'open'>
 
-const affiliations = ['UCI student', 'Student at another school', 'Not currently a student'] as const
-const memberOptions = ['Yes', 'No', 'Not sure'] as const
-const hourOptions = ['1–3', '3–6', '6–10', '10+'] as const
-const formatOptions = ['In person', 'Online', 'Either'] as const
+export const affiliations = ['UCI student', 'Student at another school', 'Not currently a student'] as const
+export const memberOptions = ['Yes', 'No', 'Not sure'] as const
+export const hourOptions = ['1–3', '3–6', '6–10', '10+'] as const
+export const formatOptions = ['In person', 'Online', 'Either'] as const
 
 const answerLimit = 3000
-const shortLimit = 200
+export const shortLimit = 200
 const interestWords = 200
 const extraWords = 100
 const maxProjects = 20 // the Worker's limit
@@ -27,14 +27,14 @@ const turnstileTimeoutMs = 10_000
 
 const isOption = (options: readonly string[], value: string) => options.includes(value)
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null && !Array.isArray(value)
-const countWords = (text: string) => text.trim().split(/\s+/).filter(Boolean).length
+export const countWords = (text: string) => text.trim().split(/\s+/).filter(Boolean).length
 const asText = (value: unknown) => (typeof value === 'string' ? value : typeof value === 'number' ? String(value) : '')
 
 // End a message with punctuation so the sentence that follows it reads properly.
 const asSentence = (text: string) => (/[.!?]$/.test(text.trim()) ? text.trim() : `${text.trim()}.`)
 
 // Space-separated ids of a field's hint and error, for aria-describedby.
-const describedBy = (id: string, hint?: unknown, error?: string) =>
+export const describedBy = (id: string, hint?: unknown, error?: string) =>
   [hint ? `${id}-hint` : '', error ? `${id}-error` : ''].filter(Boolean).join(' ') || undefined
 
 type Applicant = {
@@ -81,7 +81,7 @@ function readDraft(value: unknown, open: Set<string>): Saved | undefined {
 }
 
 const interestQuestion = 'What draws you to this project, and where would you start?'
-const toneNote = "Bullet points and rough notes are completely fine. We're not looking for polished essays, just how you think."
+export const toneNote = "Bullet points and rough notes are completely fine. We're not looking for polished essays, just how you think."
 const extraNote = "These questions are truly optional, we promise! We'd rather you not answer if they don't apply to you."
 
 const steps = ['About you', 'Projects', 'Your interest', 'Experience', 'Rank', 'Review'] as const
@@ -98,10 +98,10 @@ declare global {
   }
 }
 
-const inputClass =
+export const inputClass =
   'mt-2 block w-full rounded-lg border border-brand-border bg-white px-3 py-2.5 text-brand placeholder:text-gray-400 focus:border-brand-accent'
 
-function Field({ id, label, hint, error, optional, children }: { id: string; label: string; hint?: ReactNode; error?: string; optional?: boolean; children: ReactNode }) {
+export function Field({ id, label, hint, error, optional, children }: { id: string; label: string; hint?: ReactNode; error?: string; optional?: boolean; children: ReactNode }) {
   return (
     <div>
       <label htmlFor={id} className="block font-medium text-brand">
@@ -115,7 +115,7 @@ function Field({ id, label, hint, error, optional, children }: { id: string; lab
   )
 }
 
-function Choice({ id, legend, options, value, onChange, error, hint }: { id: string; legend: string; options: readonly string[]; value: string; onChange: (value: string) => void; error?: string; hint?: string }) {
+export function Choice({ id, legend, options, value, onChange, error, hint }: { id: string; legend: string; options: readonly string[]; value: string; onChange: (value: string) => void; error?: string; hint?: string }) {
   return (
     <fieldset id={id} tabIndex={-1} aria-describedby={describedBy(id, hint, error)}>
       <legend className="font-medium text-brand">{legend}</legend>
@@ -138,7 +138,7 @@ function Choice({ id, legend, options, value, onChange, error, hint }: { id: str
   )
 }
 
-function TextArea({ id, value, onChange, error, hint, rows = 5, wordLimit }: { id: string; value: string; onChange: (value: string) => void; error?: string; hint?: boolean; rows?: number; wordLimit?: number }) {
+export function TextArea({ id, value, onChange, error, hint, rows = 5, wordLimit }: { id: string; value: string; onChange: (value: string) => void; error?: string; hint?: boolean; rows?: number; wordLimit?: number }) {
   const words = countWords(value)
   return (
     <>
@@ -660,6 +660,9 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
                 })}
               </ul>
               {errors.projects && <p className="text-sm font-medium text-red-700">{errors.projects}</p>}
+              <p className="text-sm text-gray-600">
+                Have your own research idea? <Link href="/research/propose" className="font-semibold text-brand underline decoration-brand/30 underline-offset-4 hover:decoration-brand">Pitch it instead</Link>.
+              </p>
             </>
           )}
 

@@ -120,9 +120,9 @@ function loadProject(file: string): Project {
   if (!fileNamePattern.test(file)) {
     throw new Error(`[research] content/research/${file}: file name must be lowercase words joined by hyphens, ending in .md`)
   }
-  // These names are taken by /research/apply and /research/projects.json.
+  // These names are taken by /research/apply, /research/propose and /research/projects.json.
   const slug = slugFromFile(file)
-  if (slug === 'apply' || slug === 'projects') {
+  if (slug === 'apply' || slug === 'propose' || slug === 'projects') {
     throw new Error(`[research] content/research/${file}: this file name is reserved; rename the project`)
   }
   let parsed: matter.GrayMatterFile<string>

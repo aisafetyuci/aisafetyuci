@@ -40,6 +40,20 @@ interface Application {
   extra?: string
 }
 
+// A pitch for a project of the applicant's own (/research/propose). Saved as an Applications row
+// under the "Your own idea" project, with the whole pitch in Interest, so it needs no extra tables.
+interface Proposal {
+  question: string
+  why: string
+  prior: string
+  plan: string
+  needs: string[]
+  compute?: string
+  team: string
+  done?: string
+  origin?: string
+}
+
 interface AirtableRecord {
   id: string
   fields: Record<string, unknown>
@@ -56,6 +70,9 @@ const maxBodyBytes = 1_000_000
 const shortMax = 200
 const longMax = 3000
 const maxApplications = 20
+const proposalProject = { slug: 'own-idea', title: 'Your own idea (proposal)' }
+const needOptions = ['Compute or API credits', 'A mentor', 'Teammates', 'Help scoping the question', 'Something else']
+const teamOptions = ["I'd rather work alone", 'Open to 1–2 teammates', "I'd like a full team"]
 
 // http:// too: the site doesn't force HTTPS, and a visitor on http:// would otherwise be refused.
 const allowedOrigins = ['https://aisafetyuci.org', 'https://www.aisafetyuci.org', 'http://aisafetyuci.org', 'http://www.aisafetyuci.org']
@@ -131,6 +148,8 @@ function validate(body: Record<string, unknown>) {
     anythingElse: optionalText(a.anythingElse, 'Anything else', longMax),
   }
 
+  if (body.kind === 'proposal') return { turnstileToken, applicant, applications: [], proposal: validateProposal(body.proposal) }
+
   const list = body.applications
   if (!Array.isArray(list) || list.length < 1) bad('Please choose at least one project.')
   if (list.length > maxApplications) bad(`You can apply to at most ${maxApplications} projects.`)
@@ -157,7 +176,42 @@ function validate(body: Record<string, unknown>) {
     bad('Please rank your projects 1, 2, 3, … with no gaps or ties.')
   }
 
-  return { turnstileToken, applicant, applications }
+  return { turnstileToken, applicant, applications, proposal: undefined }
+}
+
+function validateProposal(p: unknown): Proposal {
+  if (!isObject(p)) bad('Your idea is missing. Please reload the page and try again.')
+  const needs = p.needs
+  if (!Array.isArray(needs) || needs.some((need) => typeof need !== 'string' || !needOptions.includes(need))) bad('Please choose what you need from the list.')
+  if (needs.length === 0) bad('Please choose at least one thing you need from us.')
+  return {
+    question: requiredText(p.question, 'Your question', longMax),
+    why: requiredText(p.why, 'Why it matters', longMax),
+    prior: requiredText(p.prior, "What's already been done", longMax),
+    plan: requiredText(p.plan, 'Your plan', longMax),
+    needs: [...new Set(needs as string[])],
+    compute: optionalText(p.compute, 'The compute estimate', shortMax),
+    team: choice(p.team, 'teammates', teamOptions),
+    done: optionalText(p.done, 'What you have already done', longMax),
+    origin: optionalText(p.origin, 'How you came up with it', longMax),
+  }
+}
+
+// The whole pitch as one readable block for the Interest cell.
+function proposalText(p: Proposal) {
+  return [
+    ['Question', p.question],
+    ['Why it matters', p.why],
+    ["What's already been done", p.prior],
+    ['Plan for 3 weeks, and what result would count as an answer', p.plan],
+    ['Needs', [p.needs.join(', '), p.compute && `Compute estimate: ${p.compute}`].filter(Boolean).join('\n')],
+    ['Teammates', p.team],
+    ['Already done on it', p.done],
+    ['How they came up with it', p.origin],
+  ]
+    .filter(([, value]) => value)
+    .map(([label, value]) => `## ${label}\n${value}`)
+    .join('\n\n')
 }
 
 // ---- Outside services ------------------------------------------------------------------
@@ -427,9 +481,9 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext) {
   }
 
   // Validate before Turnstile so a typo doesn't burn the applicant's single-use token.
-  const { turnstileToken, applicant, applications } = validate(body)
+  const { turnstileToken, applicant, applications, proposal } = validate(body)
   try {
-    await save(request, env, ctx, turnstileToken, applicant, applications)
+    await save(request, env, ctx, turnstileToken, applicant, applications, proposal)
   } catch (error) {
     // The Airtable and Turnstile log lines above don't know whose application it was.
     if (!(error instanceof Rejection) || error.status >= 500) {
@@ -444,7 +498,7 @@ async function handle(request: Request, env: Env, ctx: ExecutionContext) {
 // Cleared whenever saving the Applicants or Applications rows fails, in case a cached row was deleted from the base.
 const projectIdCache = new Map<string, string>()
 
-async function save(request: Request, env: Env, ctx: ExecutionContext, turnstileToken: string, applicant: Applicant, applications: Application[]) {
+async function save(request: Request, env: Env, ctx: ExecutionContext, turnstileToken: string, applicant: Applicant, applications: Application[], proposal?: Proposal) {
   const tokenHost = await verifyTurnstile(turnstileToken, request.headers.get('CF-Connecting-IP'), env)
 
   // The bot check must have been solved on the page that sent the form, so a token from one
@@ -460,12 +514,13 @@ async function save(request: Request, env: Env, ctx: ExecutionContext, turnstile
   // with the slug itself; once main serves projects.json that fallback is effectively unused.
   // Remove it after merging. Its Projects IDs aren't cached, so a slug-titled row can't be
   // handed to a later production applicant by this Worker instance.
-  const projects = await openProjects(env)
+  // A proposal isn't for a listed project, so it skips the open-projects check.
+  const projects = proposal ? { open: new Map([[proposalProject.slug, proposalProject.title]]), source: null } : await openProjects(env)
   let open: Map<string, string>
   if (projects.open) {
     open = projects.open
   } else if (previewOrigin.test(origin)) {
-    open = new Map(applications.filter((app) => /^[a-z0-9]+(-[a-z0-9]+)*$/.test(app.project)).map((app) => [app.project, app.project]))
+    open = new Map((proposal ? [] : applications).filter((app) => /^[a-z0-9]+(-[a-z0-9]+)*$/.test(app.project)).map((app) => [app.project, app.project]))
   } else {
     throw new Rejection(502, `We couldn't load the list of open projects. ${tryAgain}`)
   }
@@ -477,7 +532,7 @@ async function save(request: Request, env: Env, ctx: ExecutionContext, turnstile
   const pacing = pace(rateLimitDelays, requestBudgetMs)
 
   // Projects: reuse existing rows by slug, create any the base hasn't seen yet.
-  const slugs = applications.map((app) => app.project)
+  const slugs = proposal ? [proposalProject.slug] : applications.map((app) => app.project)
   const projectIds = new Map<string, string>()
   for (const slug of slugs) {
     const id = projectIdCache.get(slug)
@@ -530,7 +585,25 @@ async function save(request: Request, env: Env, ctx: ExecutionContext, turnstile
       saved.Applicants,
     )
 
-    await createRecords(
+    if (proposal) {
+      await createRecords(
+        env,
+        'Applications',
+        [
+          {
+            Summary: `${applicant.name} → own idea: ${proposal.question.replace(/\s+/g, ' ').slice(0, 80)}`,
+            Applicant: [applicantId],
+            Project: [projectIds.get(proposalProject.slug)],
+            Rank: 1,
+            Interest: proposalText(proposal),
+            'Review status': 'New',
+            'Submission ID': submissionId,
+          },
+        ],
+        pacing,
+        saved.Applications,
+      )
+    } else await createRecords(
       env,
       'Applications',
       applications.map((app) => ({

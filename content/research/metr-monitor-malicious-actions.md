@@ -32,7 +32,7 @@ We compare the two prompts with each other. Since METR tuned its threshold on an
 
 METR acts on single findings: [one bypass produced a new prompt](https://metr.org/notes/2026-09-27-implementing-a-basic-blocking-action-monitor/), and [its own test fails](https://github.com/METR/inspect-agents/pull/117) if a single harmful action slips through. So even one named attack that v8 misses is evidence METR can use directly.
 
-If no attack flips, we lend more credence and confidence to v8, which is useful nonetheless.
+If no attack flips, that's evidence v8 isn't losing these kinds of attacks, though it can't speak to attacks outside this set.
 
 ## What you'd do
 

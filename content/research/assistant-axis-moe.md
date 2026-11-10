@@ -5,7 +5,7 @@ status: open
 duration: Nov 19 to Dec 11, can extend
 team: 1–3 people
 skills: PyTorch, and running jobs on rented cloud GPUs
-interestedNote: This project needs basic familiarity with PyTorch, but if you're passionate about it, you can pick that up in Week 0.
+interestedNote: At least one team member should be comfortable with PyTorch.
 extraQuestion: What's the largest model or training job you've run, and on what hardware? Have you used PyTorch hooks?
 ---
 
@@ -27,7 +27,7 @@ The goal of this project is to test whether the axis and the cap carry over:
 
 ## Theory of change
 
-This sets how far the paper's claim reaches. If the axis is missing or capping fails, the claim stays with dense models, but if it holds, the claim becomes much more significant. Furthermore, no lab is publicly known to deploy capping yet, so this work benefits researchers, authors, and the groups building monitors for persona drift.
+This sets how far the paper's claim reaches. If the axis is missing or capping fails, the claim stays with dense models, but if it holds, the claim becomes much more significant. Furthermore, no lab is publicly known to deploy capping yet, so this work benefits researchers, the paper's authors, and the groups building monitors for persona drift.
 
 ## What you'd do
 

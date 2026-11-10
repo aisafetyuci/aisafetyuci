@@ -138,5 +138,10 @@ collections:
         widget: string
         required: false
         hint: Optional. Asked only of people applying to this project, after the two standard questions.
+      - name: interestedNote
+        label: Experience note in the Interested? box
+        widget: string
+        required: false
+        hint: 'Optional. Replaces "No research experience needed." at the bottom of the one-pager, e.g. when the project needs a skill.'
       - { name: draft, label: Draft (hide from the live site), widget: boolean, default: false, required: false }
       - { name: body, label: One-pager, widget: markdown }

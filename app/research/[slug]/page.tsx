@@ -96,7 +96,7 @@ export default async function ProjectPage({ params }: Props) {
             <div className="mt-12 surface-card p-6 sm:p-8">
               <h2 className="text-xl font-semibold text-brand">Interested?</h2>
               <p className="mt-2 leading-relaxed text-gray-600">
-                No research experience needed. Tell us what draws you to this project and where you&apos;d start.
+                {project.interestedNote ?? 'No research experience needed.'}{' '}Tell us what draws you to this project and where you&apos;d start.
                 {deadline && <> Apply by <time dateTime={deadline.date} className="font-semibold text-brand">{deadline.label}</time>.</>}
               </p>
               <Link href={`/research/apply?project=${project.slug}`} className="button-primary mt-5 w-full sm:w-auto">

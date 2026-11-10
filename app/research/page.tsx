@@ -86,7 +86,7 @@ export default function ResearchIndex() {
             <li><h3 className="font-semibold text-brand">Small teams, short projects</h3><p className="mt-1">Teams of 1–3 work from Nov 19 to Dec 11, with a weekly check-in plus updates throughout the week. A strong result can be extended.</p></li>
             <li><h3 className="font-semibold text-brand">A blog post at the end</h3><p className="mt-1">Each project ends in a post reviewed by our directors. Null results get published too.</p></li>
             <li><h3 className="font-semibold text-brand">The club covers costs</h3><p className="mt-1">API credits and GPU time come from the club. You never pay out of pocket.</p></li>
-            <li><h3 className="font-semibold text-brand">No experience needed</h3><p className="mt-1">We select on interest and how you think about the problem, not your resume.</p></li>
+            <li><h3 className="font-semibold text-brand">No experience needed</h3><p className="mt-1">We select on interest and how you think about the problem, not your resume. Each project lists the skills it uses.</p></li>
           </ul>
         </section>
 

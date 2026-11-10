@@ -24,7 +24,7 @@ Audit builders are [trying to make audits realistic](https://www.lesswrong.com/p
 
 ## Has this been done?
 
-Not with the position controlled, as of Nov 1. Two papers ([ShutdownMod](https://arxiv.org/abs/2610.35486) and an ICLR submission) suggest later moments look less like tests, but they used outside judges, not the model's own reasoning. [Another](https://arxiv.org/abs/2609.02302) found longer audits showed more awareness, without separating length from content. One submission on message placement still needs reading in week 1.
+Not with the position controlled, as of Nov 1. Two papers ([ShutdownMod](https://arxiv.org/abs/2610.35486) and [an ICLR submission](https://openreview.net/forum?id=Z9PwmPQpT7)) suggest later moments look less like tests, but they used outside judges, not the model's own reasoning. [Another](https://arxiv.org/abs/2609.02302) found longer audits showed more awareness, without separating length from content. [One submission on message placement](https://openreview.net/forum?id=Bg4ICS8b39) still needs reading in week 1.
 
 ## What you'd do
 

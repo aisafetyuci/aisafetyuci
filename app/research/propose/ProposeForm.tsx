@@ -335,7 +335,7 @@ export default function ProposeForm() {
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-brand-border pt-6">
           <Link href="/research" className="button-secondary"><span aria-hidden="true">←</span> Back to projects</Link>
           <button type="button" onClick={submit} disabled={status === 'submitting'} className="button-primary disabled:opacity-60">
-            {status === 'submitting' ? 'Sending…' : 'Send my idea'}
+            {status === 'submitting' ? 'Sending…' : 'Submit idea'}
           </button>
         </div>
       </section>

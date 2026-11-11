@@ -180,7 +180,8 @@ export default function ProposeForm() {
         prior: f.prior.trim(),
         plan: f.plan.trim(),
         needs: needOptions.filter((n) => f.needs.includes(n)),
-        compute: trimmed(f.compute),
+        // The estimate field is hidden unless compute is ticked; ignore one typed before unticking.
+        compute: f.needs.includes('Compute or API credits') ? trimmed(f.compute) : undefined,
         team: f.team,
         done: trimmed(f.done),
       },

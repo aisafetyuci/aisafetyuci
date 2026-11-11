@@ -206,7 +206,7 @@ function proposalText(p: Proposal) {
     ['Plan for 3 weeks, and what result would count as an answer', p.plan],
     ['Needs', [p.needs.join(', '), p.compute && `Compute estimate: ${p.compute}`].filter(Boolean).join('\n')],
     ['Teammates', p.team],
-    ['Already done on it', p.done],
+    ['Already done on it, or how they came up with it', p.done],
     ['How they came up with it', p.origin],
   ]
     .filter(([, value]) => value)
@@ -559,11 +559,9 @@ async function save(request: Request, env: Env, ctx: ExecutionContext, turnstile
           Age: applicant.age,
           Affiliation: applicant.affiliation,
           School: applicant.school,
-          'Year or role': applicant.yearOrRole,
           'AISCI member': applicant.member,
           'Hours per week': applicant.hours,
           Format: applicant.format,
-          'Based in': applicant.basedIn,
           Experience: applicant.experience,
           Links: applicant.links,
           'Anything else': applicant.anythingElse,
@@ -601,8 +599,8 @@ async function save(request: Request, env: Env, ctx: ExecutionContext, turnstile
         Applicant: [applicantId],
         Project: [projectIds.get(app.project)],
         Rank: app.rank,
-        Interest: app.interest,
-        'First to explore': app.explore,
+        // Older form versions sent a second answer; fold it in rather than write a retired column.
+        Interest: app.explore ? `${app.interest}\n\n${app.explore}` : app.interest,
         'Extra answer': app.extra,
         'Review status': 'New',
         'Submission ID': submissionId,

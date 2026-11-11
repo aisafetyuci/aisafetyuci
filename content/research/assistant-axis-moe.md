@@ -1,5 +1,5 @@
 ---
-title: The Assistant Axis in mixture-of-experts and thinking models
+title: Does capping the Assistant Axis still stop jailbreaks in mixture-of-experts and thinking models?
 summary: Researchers found a direction inside AI models that runs from "helpful assistant" to "not the assistant," and capping it cuts persona jailbreaks. They only tested standard models (with reasoning off). We test a mixture-of-experts model, with reasoning on.
 status: open
 duration: Nov 20 to Dec 11, can extend

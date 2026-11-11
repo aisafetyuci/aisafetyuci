@@ -368,7 +368,7 @@ export const weeks: Week[] = [
         title: 'Frontier Models are Capable of In-Context Scheming',
         author: 'Apollo Research',
         year: 2024,
-        url: 'https://www.apolloresearch.ai/research/frontier-models-are-capable-of-in-context-scheming/',
+        url: 'https://www.apolloresearch.ai/science/frontier-models-are-capable-of-incontext-scheming',
         type: 'article',
       },
       {
@@ -804,7 +804,7 @@ export const weeks: Week[] = [
         title: 'Four Places Where You Can Put LLM Monitoring',
         author: 'Shlegeris (Redwood)',
         year: 2025,
-        url: 'https://blog.redwoodresearch.org/p/four-places-where-you-can-put-llm-monitoring',
+        url: 'https://blog.redwoodresearch.org/p/four-places-where-you-can-put-llm',
         type: 'blog',
       },
       {

@@ -10,6 +10,7 @@ import remarkRehype from 'remark-rehype'
 import rehypeSlug from 'rehype-slug'
 import rehypeExternalLinks from 'rehype-external-links'
 import rehypeStringify from 'rehype-stringify'
+import { dropUnsafeHrefs } from './safeLinks'
 
 export const siteUrl = 'https://aisafetyuci.org'
 
@@ -51,7 +52,10 @@ export interface Post {
 
 const postsDir = path.join(process.cwd(), 'content', 'blog')
 const publicDir = path.join(process.cwd(), 'public')
-const fileNamePattern = /^[a-z0-9]+(-[a-z0-9]+)*\.md$/
+// The CMS keeps _ and ~ from titles in file names; accept runs of - _ ~ anywhere and tidy them into
+// single hyphens in the slug, rather than failing the whole site build.
+const fileNamePattern = /^[a-z0-9_~-]*[a-z0-9][a-z0-9_~-]*\.md$/
+const slugFromFile = (file: string) => file.replace(/\.md$/, '').replace(/[-_~]+/g, '-').replace(/^-|-$/g, '')
 const datePattern = /^\d{4}-\d{2}-\d{2}$/
 
 function fail(file: string, field: string, problem: string): never {
@@ -121,6 +125,7 @@ const processor = unified()
   .use(remarkParse)
   .use(remarkGfm)
   .use(remarkRehype)
+  .use(dropUnsafeHrefs)
   .use(rehypeSlug)
   .use(rehypeExternalLinks, {
     target: '_blank',
@@ -135,6 +140,10 @@ function readingTimeOf(html: string) {
 }
 
 function loadPost(file: string): Post {
+  // /blog/category/ is taken by the category pages.
+  if (fileNamePattern.test(file) && slugFromFile(file) === 'category') {
+    throw new Error(`[blog] content/blog/${file}: this file name is reserved; rename the post`)
+  }
   if (!fileNamePattern.test(file)) {
     throw new Error(`[blog] content/blog/${file}: file name must be lowercase words joined by hyphens, ending in .md (e.g. "my-first-post.md")`)
   }
@@ -149,10 +158,12 @@ function loadPost(file: string): Post {
 
   const rawAuthors = data.authors
   if (!Array.isArray(rawAuthors) || rawAuthors.length === 0) fail(file, 'authors', 'is required and must be a list of names')
-  const authors = rawAuthors.map((author) => {
+  // Blank rows ('' or a bare `-`, which YAML reads as null) are skipped.
+  const authors = rawAuthors.filter((author) => author !== null && author !== undefined && !(typeof author === 'string' && author.trim() === '')).map((author) => {
     if (typeof author !== 'string' || author.trim() === '') fail(file, 'authors', 'must only contain names (non-empty text)')
     return author.trim()
   })
+  if (authors.length === 0) fail(file, 'authors', 'is required and must be a list of names')
 
   const rawCategory = requireString(data, file, 'category')
   const category = categories.find((c) => c === rawCategory)
@@ -164,7 +175,8 @@ function loadPost(file: string): Post {
   const coverAlt = optionalString(data, file, 'coverAlt')
   if (cover) {
     if (!cover.startsWith('/') || !publicFileExists(cover)) fail(file, 'cover', `points to "${cover}", which does not exist under public/`)
-    if (!coverAlt) fail(file, 'coverAlt', 'is required when a cover image is set (describe the image)')
+    // The CMS can't require this only when a cover is set, and a failed build would stop every deploy.
+    if (!coverAlt) console.warn(`[blog] content/blog/${file}: no coverAlt; using the post title as the cover's description`)
   }
 
   const featured = optionalBoolean(data, file, 'featured')
@@ -179,7 +191,7 @@ function loadPost(file: string): Post {
   const html = String(processor.processSync(content))
 
   return {
-    slug: file.replace(/\.md$/, ''),
+    slug: slugFromFile(file),
     title,
     date,
     updated,
@@ -187,7 +199,7 @@ function loadPost(file: string): Post {
     authors,
     category,
     cover,
-    coverAlt,
+    coverAlt: cover ? coverAlt ?? title : coverAlt,
     featured,
     draft,
     html,
@@ -198,12 +210,21 @@ function loadPost(file: string): Post {
 let cache: Post[] | undefined
 
 // All published posts, newest first. Drafts appear only in `npm run dev`.
+// foo_bar.md and foo-bar.md would both become /blog/foo-bar.
+function assertUniqueSlugs(posts: Post[]) {
+  const seen = new Set<string>()
+  for (const { slug } of posts) {
+    if (seen.has(slug)) throw new Error(`[blog] two files in content/blog/ both become /blog/${slug}; rename one`)
+    seen.add(slug)
+  }
+  return posts
+}
+
 export function getAllPosts(): Post[] {
   const isDev = process.env.NODE_ENV === 'development'
   if (cache && !isDev) return cache
   const files = fs.existsSync(postsDir) ? fs.readdirSync(postsDir).filter((file) => !file.startsWith('.')) : []
-  const posts = files
-    .map(loadPost)
+  const posts = assertUniqueSlugs(files.map(loadPost))
     .filter((post) => isDev || !post.draft)
     .sort((a, b) => (a.date === b.date ? a.slug.localeCompare(b.slug) : b.date.localeCompare(a.date)))
   if (!isDev) cache = posts

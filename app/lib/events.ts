@@ -135,11 +135,14 @@ async function load(): Promise<Parsed> {
   const events: ClubEvent[] = []
   const usedIds = new Set<string>()
 
-  for (const components of byUid.values()) {
+  // With no plain event for a UID (being invited to single occurrences of someone else's series),
+  // each edited occurrence stands alone: ical.js throws if one is related to another.
+  const groups = [...byUid.values()].flatMap((components) => (components.some((c) => !c.hasProperty('recurrence-id')) ? [components] : components.map((c) => [c])))
+  for (const components of groups) {
     const master = components.find((c) => !c.hasProperty('recurrence-id')) ?? components[0]
     if (String(master.getFirstPropertyValue('status') ?? '').toUpperCase() === 'CANCELLED') continue
     const event = new ICAL.Event(master)
-    for (const exception of components) if (exception !== master) event.relateException(exception)
+    for (const exception of components) if (exception !== master && exception.hasProperty('recurrence-id')) event.relateException(exception)
 
     const title = (event.summary ?? '').trim() || 'Untitled event'
     const description = parseDescription(event.description ?? '')

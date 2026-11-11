@@ -1,0 +1,29 @@
+// Cloudflare Worker that receives research-project applications from /research and files
+// them in Airtable. The site itself is a static export, so this is the only place the
+// Airtable token lives. Deploy from this folder: `npx wrangler deploy` (see README.md).
+//
+// Secrets (not in this file; set once with `npx wrangler secret put <NAME>`):
+//   AIRTABLE_TOKEN   - Airtable personal access token, scoped to the applications base
+//   TURNSTILE_SECRET - secret key of the Turnstile widget on the application form
+{
+  "name": "aisci-research-apply",
+  "main": "src/index.ts",
+  // Served at https://aisci-research-apply.aisafetyatuci.workers.dev (the form's endpoint);
+  // no per-version preview URLs needed.
+  "workers_dev": true,
+  "preview_urls": false,
+  "compatibility_date": "2026-09-01",
+  // Keeps console logs in the dashboard (Workers & Pages → aisci-research-apply → Logs),
+  // so failed applications can be found after the fact, not only with `wrangler tail`.
+  "observability": { "enabled": true },
+  // The site Worker (repo-root wrangler.jsonc), used to read /research/projects.json:
+  // Cloudflare may refuse a plain fetch between two of the account's Workers.
+  "services": [{ "binding": "SITE", "service": "aisafetyuci" }],
+  "vars": {
+    // The "AISCI Research" Airtable base (the ID is in the base's URL).
+    "AIRTABLE_BASE_ID": "appfUAuZPmRRCXks8",
+    // Where the open-projects list is read from: ${SITE_URL}/research/projects.json
+    // (through the SITE binding first, then this public URL)
+    "SITE_URL": "https://aisafetyuci.org"
+  }
+}

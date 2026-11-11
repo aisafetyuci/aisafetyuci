@@ -4,6 +4,8 @@ import Faqs from './Faqs';
 import { Metadata } from 'next'
 import { programsByKey, statusBadgeClasses, type Program } from '../data/programs'
 import { links, meeting, memberMeeting } from '../data/links'
+import { upcomingResearchDeadline } from '../data/research'
+import { isResearchRoundOpen } from '../lib/research'
 
 function StatusBadge({ status }: { status: Program['status'] }) {
   const badge = statusBadgeClasses[status.tone]
@@ -30,6 +32,7 @@ const pageDescription = 'Explore our Intro Fellowship and Membership programs. J
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
+  alternates: { canonical: '/get-involved' },
   openGraph: {
     title: `${pageTitle} | AI Safety Collective at Irvine`,
     description: pageDescription,
@@ -91,6 +94,9 @@ const membershipBenefits = [
 export default function GetInvolved() {
   const intro = programsByKey.intro
   const membership = programsByKey.membership
+  const researchOpen = isResearchRoundOpen()
+  const researchDeadline = upcomingResearchDeadline()
+  const contributeStep = researchOpen ? 4 : 3
   return (
     <main className="min-h-screen bg-brand-wash">
       <h1 className="sr-only">Get Involved</h1>
@@ -210,10 +216,32 @@ export default function GetInvolved() {
               </section>
             </li>
 
+            {researchOpen && (
+              <li className="relative sm:pl-20">
+                <StepMarker number={3} />
+                <section id="research" aria-labelledby="research-heading" className="overflow-hidden rounded-2xl border border-brand-border bg-white scroll-mt-24">
+                  <div className="p-5 sm:p-8 lg:p-10">
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <div>
+                        <h2 id="research-heading" className="text-2xl font-bold tracking-tight text-brand sm:text-3xl"><span aria-hidden="true" className="mr-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-brand-soft text-brand align-middle text-sm sm:hidden">3</span>Research Projects</h2>
+                      </div>
+                      <StatusBadge status={{ label: 'Open for applications', tone: 'open' }} />
+                    </div>
+                    <p className="mt-4 text-gray-600">Small teams of students working on open questions in technical AI safety. No research experience needed: we care most about your interest and how you think about the problem.</p>
+                    <div className="mt-7 flex flex-wrap items-center gap-3">
+                      <Link href="/research/apply" className="button-primary w-full sm:w-auto">Apply to projects <span aria-hidden="true">→</span></Link>
+                      <Link href="/research" className="button-secondary w-full sm:w-auto">See the projects</Link>
+                      {researchDeadline && <p className="text-sm text-gray-600 sm:ml-2">Apply by <time dateTime={researchDeadline.date} className="font-semibold text-brand">{researchDeadline.label}</time></p>}
+                    </div>
+                  </div>
+                </section>
+              </li>
+            )}
+
             <li className="relative sm:pl-20">
-              <StepMarker number={3} last />
+              <StepMarker number={contributeStep} last />
               <section id="contribute" aria-labelledby="contribute-heading" className="rounded-2xl bg-brand p-5 text-white scroll-mt-24 sm:p-8 lg:p-10">
-                <h2 id="contribute-heading" className="text-2xl font-bold tracking-tight sm:text-3xl"><span aria-hidden="true" className="mr-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-white align-middle text-sm sm:hidden">3</span>Help AI go well</h2>
+                <h2 id="contribute-heading" className="text-2xl font-bold tracking-tight sm:text-3xl"><span aria-hidden="true" className="mr-2 inline-flex h-8 w-8 items-center justify-center rounded-full bg-white/15 text-white align-middle text-sm sm:hidden">{contributeStep}</span>Help AI go well</h2>
                 <p className="mt-5 max-w-3xl leading-relaxed text-white/80">
                   Put your skills toward understanding and reducing risks from advanced AI.
                 </p>
@@ -221,6 +249,7 @@ export default function GetInvolved() {
                   <div className="border-t border-white/20 pt-4">
                     <h3 className="font-semibold">Research</h3>
                     <p className="mt-2 text-sm leading-relaxed text-white/75">Build technical skills through projects to understand, evaluate, and control AI systems.</p>
+                    <Link href="/research" className="mt-3 inline-block text-sm font-medium text-white underline decoration-white/40 underline-offset-4 hover:decoration-white">See open research projects <span aria-hidden="true">→</span></Link>
                   </div>
                   <div className="border-t border-white/20 pt-4">
                     <h3 className="font-semibold">Policy &amp; governance</h3>

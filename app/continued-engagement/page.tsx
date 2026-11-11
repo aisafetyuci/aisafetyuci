@@ -8,6 +8,7 @@ const pageDescription =
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
+  alternates: { canonical: '/continued-engagement' },
   openGraph: {
     title: `${pageTitle} | AI Safety Collective at Irvine`,
     description: pageDescription,
@@ -83,8 +84,8 @@ const fellowships = [
   { name: 'MATS', track: 'Both', url: 'https://www.matsprogram.org/', note: 'Selective, paid, ~12-week residential program. You are matched with a senior mentor and ship a real project.' },
   { name: 'ERA Fellowship', track: 'Both', url: 'https://erafellowship.org/', note: '8 weeks of fully-funded summer research on technical safety, governance, or technical AI governance.' },
   { name: 'Astra Fellowship', track: 'Both', url: 'https://www.constellation.org/programs/astra-fellowship', note: 'Fully funded, 3-6 month, in-person program at Constellation in Berkeley.' },
-  { name: 'CBAI Summer Research Fellowship', track: 'Technical', url: 'https://www.cbai.ai/summer-research-fellowship-26', note: 'Summer technical research fellowship run by the Cambridge Boston Alignment Initiative.' },
-  { name: 'UChicago XLab Fellowship', track: 'Both', url: 'https://xrisk.uchicago.edu/fellowship/', note: '10-week, in-person summer program for undergrad and grad students working on existential risk.' },
+  { name: 'CBAI Summer Research Fellowship', track: 'Technical', url: 'https://www.cbai.ai/ais-research-fellowship', note: 'Summer technical research fellowship run by the Cambridge Boston Alignment Initiative.' },
+  { name: 'UChicago XLab Fellowship', track: 'Both', url: 'https://xrisk.uchicago.edu/fellowship.html', note: '10-week, in-person summer program for undergrad and grad students working on existential risk.' },
   { name: 'PIBBSS Fellowship', track: 'Technical', url: 'https://pibbss.ai/fellowship/', note: '3-month interdisciplinary fellowship for researchers studying complex and intelligent behavior.' },
   { name: 'GovAI Fellowships', track: 'Policy', url: 'https://www.governance.ai/opportunities', note: 'Summer and winter programs to help researchers move into AI governance full-time.' },
   { name: 'IAPS Fellowship', track: 'Policy', url: 'https://www.iaps.ai/fellowship', note: 'Fully funded, 3-month program for professionals from varied backgrounds.' },

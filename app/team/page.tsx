@@ -10,6 +10,7 @@ const pageDescription = "Meet the people behind AISCI — the students, research
 export const metadata: Metadata = {
   title: pageTitle,
   description: pageDescription,
+  alternates: { canonical: '/team' },
   openGraph: {
     title: `${pageTitle} | AI Safety Collective at Irvine`,
     description: pageDescription,

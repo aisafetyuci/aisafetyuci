@@ -40,5 +40,5 @@ This sets how far the paper's claim reaches. If the axis is missing or capping f
   - As of Nov 1, nobody had published capping on MoE or reasoning models. [Another team](https://www.sparai.org/attachments/proposals/recQVGOyf3uaJQu3G/second-look-research-spar.pdf) may be working on it, and a second independent result would still be useful.
   - The paper's jailbreak set isn't public, so build and freeze our own by day 5. Our numbers won't compare directly with the paper's. Reproduce a small published axis on free Colab to prove the pipeline.
 - **Nov 25 to Dec 4:** Rent a GPU. Generate role-play across 275 characters, with thinking on and off, and compute separate axes for reasoning and answers.
-- **Dec 5 to 11:** Check whether the axis exists, and write up that result.
+- **Dec 5 to 11:** Check whether the axis exists, and write up that result, as a blog post on our site with everyone on the team listed as an author.
 - **After Dec 11, if extended:** Write the cap, tune it on one half of the jailbreak set, and test it on the other half against a capability check. This is the part most likely to run into January, so tell us in your application if you can extend.

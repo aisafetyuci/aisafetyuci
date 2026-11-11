@@ -34,4 +34,4 @@ Audit builders are [trying to make audits more realistic](https://www.lesswrong.
   - Read [one submission on message placement](https://openreview.net/forum?id=Bg4ICS8b39), which we haven't read yet.
   - Patch and pin Petri. Write short and long versions of 21 audit scenarios. Pilot 14 audits.
 - **Nov 25 to Dec 4:** Run 84 audits. Then 1 to 2 team members hand-label the 5 turns after each reveal (about 500 in total) without knowing which version of the audit each came from.
-- **Dec 5 to 11:** Run the one pre-registered test, and write up the result.
+- **Dec 5 to 11:** Run the one pre-registered test, and write up the result, as a blog post on our site with everyone on the team listed as an author.

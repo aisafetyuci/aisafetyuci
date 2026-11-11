@@ -45,4 +45,4 @@ If no attack flips, that's evidence v8 isn't losing these kinds of attacks, thou
   - Set up the data, get METR's monitor scoring recorded logs, and run the refusal test on 20 attacks, since monitor models may refuse to score harmful transcripts.
 - **Nov 25 to Dec 1:** Pick about 300 attack steps. Label each one by hand under both prompts' rules, before any scoring.
 - **Dec 2 to 8:** Score everything, 2 prompts and 3 samples each.
-- **Dec 9 to 11:** Write up the named flips, refusals and what the result can't tell us.
+- **Dec 9 to 11:** Write up the named flips, refusals and what the result can't tell us, as a blog post on our site with everyone on the team listed as an author.

@@ -3,11 +3,12 @@ import type { Project } from '../../lib/research'
 // The at-a-glance facts for a project, shared by the cards, the one-pager page and the form.
 // Facts a project hasn't set yet (e.g. no lead chosen) are left out.
 export default function ProjectFacts({ project, compact = false }: { project: Pick<Project, 'duration' | 'team' | 'commitment' | 'format' | 'skills' | 'leads' | 'difficulty' | 'difficultyNote'>; compact?: boolean }) {
+  // Short facts pair up two to a row (Duration | Team, Skills | Time); Difficulty takes a full row.
   const facts = [
     { label: 'Duration', value: project.duration },
     { label: 'Team', value: project.team },
     { label: 'Format', value: project.format },
-    { label: 'Skills', value: project.skills, wide: true },
+    { label: 'Skills', value: project.skills },
     { label: 'Time', value: project.commitment },
     { label: 'Difficulty', value: project.difficulty && `${project.difficulty}/5`, note: project.difficultyNote, wide: true },
     { label: project.leads.length > 1 ? 'Leads' : 'Lead', value: project.leads.join(', ') || undefined },

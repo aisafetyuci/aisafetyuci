@@ -225,7 +225,7 @@ export default function ProposeForm() {
       <div className="mx-auto max-w-3xl surface-card p-8 text-center sm:p-10">
         <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-semibold text-brand focus:outline-none">Idea received</h2>
         <p className="mx-auto mt-3 max-w-xl leading-relaxed text-gray-600">
-          Thanks, {form.name.trim().split(/\s+/)[0]}. We&apos;ll read it closely and email you at <span className="font-medium text-brand">{form.email.trim()}</span>, usually within a week of the deadline.
+          Thanks, {form.name.trim().split(/\s+/)[0]}. We&apos;ll read it closely and email you at <span className="font-medium text-brand">{form.email.trim()}</span>, usually within a couple of weeks.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">
           <Link href="/research" className="button-secondary">Back to projects</Link>

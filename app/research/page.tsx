@@ -75,7 +75,7 @@ export default function ResearchIndex() {
                 <p className="mt-3 leading-relaxed text-gray-600">
                   If there&apos;s a question in AI safety you want to test but you lack the compute, mentorship or teammates, pitch it to us. If it&apos;s a real open question that fits a few weeks, we&apos;ll help you scope it, cover the compute, and (based on your preference) either put you on it with a mentor or open it to other members as a project.
                 </p>
-                <p className="mt-4 text-sm text-gray-600">Same timeline as the other projects (Nov 20 to Dec 11).{deadline && <> Pitch by <time dateTime={deadline.date} className="font-semibold text-brand">{deadline.label}</time>.</>}</p>
+                <p className="mt-4 text-sm text-gray-600">Rolling: pitch anytime.{deadline && <> We review the first round on <time dateTime={deadline.date} className="font-semibold text-brand">{deadline.label}</time>, then ideas as they come in.</>}</p>
                 <div className="mt-6 flex flex-wrap gap-3 pt-1 sm:mt-auto sm:pt-6">
                   <Link href="/research/propose" className="button-primary w-full sm:w-auto">Pitch your idea <span aria-hidden="true">→</span></Link>
                 </div>
@@ -87,6 +87,9 @@ export default function ResearchIndex() {
             <h2 className="text-2xl font-semibold text-brand">No projects are open right now</h2>
             <p className="mx-auto mt-3 max-w-xl leading-relaxed text-gray-600">
               New projects open each quarter. Join the <Link href="/discord" className="font-medium text-brand underline underline-offset-4">Discord</Link> to hear when they do.
+            </p>
+            <p className="mx-auto mt-3 max-w-xl leading-relaxed text-gray-600">
+              Have your own research idea? <Link href="/research/propose" className="font-medium text-brand underline underline-offset-4">Pitch it anytime</Link>.
             </p>
           </div>
         )}

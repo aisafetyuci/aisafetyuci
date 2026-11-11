@@ -509,21 +509,11 @@ async function save(request: Request, env: Env, ctx: ExecutionContext, turnstile
     throw new Rejection(403, "We couldn't confirm you're not a bot. Please reload the page and try again.")
   }
 
-  // Previews are checked against the live site's list too. Only if that list can't be loaded
-  // (before the research pages reach main) does a preview accept any well-formed slug, titled
-  // with the slug itself; once main serves projects.json that fallback is effectively unused.
-  // Remove it after merging. Its Projects IDs aren't cached, so a slug-titled row can't be
-  // handed to a later production applicant by this Worker instance.
-  // A proposal isn't for a listed project, so it skips the open-projects check.
+  // Previews are checked against the live site's list too. A proposal isn't for a listed
+  // project, so it skips the open-projects check.
   const projects = proposal ? { open: new Map([[proposalProject.slug, proposalProject.title]]), source: null } : await openProjects(env)
-  let open: Map<string, string>
-  if (projects.open) {
-    open = projects.open
-  } else if (previewOrigin.test(origin)) {
-    open = new Map((proposal ? [] : applications).filter((app) => /^[a-z0-9]+(-[a-z0-9]+)*$/.test(app.project)).map((app) => [app.project, app.project]))
-  } else {
-    throw new Rejection(502, `We couldn't load the list of open projects. ${tryAgain}`)
-  }
+  if (!projects.open) throw new Rejection(502, `We couldn't load the list of open projects. ${tryAgain}`)
+  const open = projects.open
   for (const app of applications) {
     if (!open.has(app.project)) bad(`The project "${app.project}" is no longer accepting applications. Please remove it and submit again.`)
   }
@@ -548,7 +538,7 @@ async function save(request: Request, env: Env, ctx: ExecutionContext, turnstile
     const missing = unknown.filter((slug) => !projectIds.has(slug))
     const createdIds = await createRecords(env, 'Projects', missing.map((slug) => ({ Slug: slug, Title: open.get(slug) })), pacing)
     missing.forEach((slug, i) => projectIds.set(slug, createdIds[i]))
-    if (projects.open) for (const slug of unknown) projectIdCache.set(slug, projectIds.get(slug)!)
+    for (const slug of unknown) projectIdCache.set(slug, projectIds.get(slug)!)
   }
 
   // Applicants: always a new row, flagged when the email has applied before so reviewers can merge by hand.

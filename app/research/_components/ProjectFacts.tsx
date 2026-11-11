@@ -6,9 +6,9 @@ export default function ProjectFacts({ project, compact = false }: { project: Pi
   const facts = [
     { label: 'Duration', value: project.duration },
     { label: 'Team', value: project.team },
-    { label: 'Commitment', value: project.commitment },
     { label: 'Format', value: project.format },
     { label: 'Skills', value: project.skills, wide: true },
+    { label: 'Time', value: project.commitment },
     { label: 'Difficulty', value: project.difficulty && `${project.difficulty}/5`, note: project.difficultyNote, wide: true },
     { label: project.leads.length > 1 ? 'Leads' : 'Lead', value: project.leads.join(', ') || undefined },
   ].filter((fact) => fact.value)

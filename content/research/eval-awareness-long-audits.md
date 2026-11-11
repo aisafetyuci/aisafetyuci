@@ -5,6 +5,7 @@ status: open
 duration: Nov 20 to Dec 11, can extend
 team: 1–3 people
 skills: Python (a small patch to an audit tool), and one person comfortable with logistic regression
+commitment: 4–7 hrs/week
 difficulty: 3
 difficultyNote: Writing realistic audit scenarios, a small patch to an existing tool, and a statistics test.
 ---

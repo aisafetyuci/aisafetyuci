@@ -97,7 +97,7 @@ export default function ResearchIndex() {
         <section aria-labelledby="how-heading" className="mt-14 surface-card p-6 sm:p-8">
           <h2 id="how-heading" className="text-2xl font-semibold text-brand">How it works</h2>
           <ul className="mt-5 grid gap-5 text-sm leading-relaxed text-gray-600 sm:grid-cols-2 lg:grid-cols-4">
-            <li><h3 className="font-semibold text-brand">Small teams, short projects</h3><p className="mt-1">Teams of 1–3 work from Nov 20 to Dec 11, with a weekly check-in plus updates throughout the week. A strong result can be extended.</p></li>
+            <li><h3 className="font-semibold text-brand">Small teams, short projects</h3><p className="mt-1">Teams of 1–3 work from Nov 20 to Dec 11. Someone from our board acts as your mentor, with a weekly check-in (alongside your teammates, if you have any) plus updates throughout the week. A strong result can be extended.</p></li>
             <li><h3 className="font-semibold text-brand">A blog post at the end</h3><p className="mt-1">Each project ends in a post reviewed by our directors, with everyone on the team listed as an author. Null results get published too.</p></li>
             <li><h3 className="font-semibold text-brand">The club covers costs</h3><p className="mt-1">API credits and GPU time come from the club. You never pay out of pocket.</p></li>
             <li><h3 className="font-semibold text-brand">No experience needed</h3><p className="mt-1">We select on interest and how you think about the problem, not your resume. Each project lists the skills it uses.</p></li>

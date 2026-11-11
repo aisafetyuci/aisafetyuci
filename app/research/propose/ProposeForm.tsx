@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 import { researchApply } from '../../data/links'
 import EmailLink from '../../components/EmailLink'
+import ReportProblemLink from '../../components/ReportProblemLink'
 import { Choice, Field, TextArea, affiliations, countWords, describedBy, formatOptions, hourOptions, inputClass, memberOptions, shortLimit, toneNote } from '../apply/ApplyForm'
 
 const needOptions = ['Compute or API credits', 'A mentor', 'Teammates', 'Help scoping the question', 'Something else'] as const
@@ -31,6 +32,12 @@ const ideaQuestions: { key: TextKey; label: string; hint?: string; words: number
   { key: 'prior', label: 'What’s already been done?', hint: 'Papers, posts or results you found, with links. “I couldn’t find anything” is a fine answer if you say where you looked.', words: 75, rows: 3 },
   { key: 'plan', label: 'What would you do in 3 weeks, and what result would count as an answer?', words: 100, rows: 4 },
 ]
+
+// Long-answer errors share wording, so the error summary names the question.
+const summaryLabels: Record<string, string> = {
+  ...Object.fromEntries(ideaQuestions.map((q) => [q.key, q.label])),
+  done: 'Anything you\'ve already done on it',
+}
 
 // window.turnstile is typed in ../apply/ApplyForm.tsx.
 
@@ -116,12 +123,30 @@ export default function ProposeForm() {
     }
   }, [status === 'done']) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const set = (key: TextKey) => (value: string) => setForm((f) => ({ ...f, [key]: value }))
-  const toggleNeed = (need: string) => setForm((f) => ({ ...f, needs: f.needs.includes(need) ? f.needs.filter((n) => n !== need) : [...f.needs, need] }))
+  const clearError = (id: string) => setErrors((e) => {
+    if (!(id in e)) return e
+    const { [id]: _cleared, ...rest } = e
+    return rest
+  })
+  const set = (key: TextKey) => (value: string) => {
+    setForm((f) => ({ ...f, [key]: value }))
+    clearError(key)
+  }
+  const toggleNeed = (need: string) => {
+    setForm((f) => ({ ...f, needs: f.needs.includes(need) ? f.needs.filter((n) => n !== need) : [...f.needs, need] }))
+    clearError('needs')
+  }
 
   function validate() {
     const e: Record<string, string> = {}
     const f = form
+    for (const q of ideaQuestions) {
+      if (!f[q.key].trim()) e[q.key] = 'Please answer this one.'
+      else if (countWords(f[q.key]) > q.words) e[q.key] = `Keep this to ${q.words} words or fewer.`
+    }
+    if (f.needs.length === 0) e.needs = 'Choose at least one thing you need from us.'
+    if (!(teamOptions as readonly string[]).includes(f.team)) e.team = 'Say whether you want teammates.'
+    if (countWords(f.done) > 75) e.done = 'Keep this to 75 words or fewer.'
     if (!f.name.trim()) e.name = 'Enter your name.'
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email.trim())) e.email = 'Enter an email address we can reach you at.'
     const age = Number(f.age)
@@ -131,13 +156,6 @@ export default function ProposeForm() {
     if (!(memberOptions as readonly string[]).includes(f.member)) e.member = "Say whether you're an AISCI member."
     if (!(hourOptions as readonly string[]).includes(f.hours)) e.hours = 'Choose how many hours per week you could put in.'
     if (!(formatOptions as readonly string[]).includes(f.format)) e.format = "Choose how you'd like to work."
-    for (const q of ideaQuestions) {
-      if (!f[q.key].trim()) e[q.key] = 'Please answer this one.'
-      else if (countWords(f[q.key]) > q.words) e[q.key] = `Keep this to ${q.words} words or fewer.`
-    }
-    if (f.needs.length === 0) e.needs = 'Choose at least one thing you need from us.'
-    if (!(teamOptions as readonly string[]).includes(f.team)) e.team = 'Say whether you want teammates.'
-    if (countWords(f.done) > 75) e.done = 'Keep this to 75 words or fewer.'
     return e
   }
 
@@ -245,7 +263,7 @@ export default function ProposeForm() {
           <p className="font-semibold">Please fix {errorList.length === 1 ? 'this' : 'these'} before sending:</p>
           <ul className="mt-2 list-disc space-y-1 pl-5">
             {errorList.map(([id, message]) => (
-              <li key={id}><a href={`#${id}`} onClick={(ev) => { ev.preventDefault(); document.getElementById(id)?.focus() }} className="underline underline-offset-2">{ideaQuestions.find((q) => q.key === id)?.label.concat(' — ') ?? ''}{message}</a></li>
+              <li key={id}><a href={`#${id}`} onClick={(ev) => { ev.preventDefault(); document.getElementById(id)?.focus() }} className="underline underline-offset-2">{summaryLabels[id] ? `${summaryLabels[id]} — ` : ''}{message}</a></li>
             ))}
           </ul>
         </div>
@@ -340,6 +358,7 @@ export default function ProposeForm() {
           </button>
         </div>
       </section>
+      <ReportProblemLink />
     </div>
   )
 }

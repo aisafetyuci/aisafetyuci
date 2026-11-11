@@ -9,6 +9,7 @@ import { researchApply } from '../../data/links'
 import EmailLink from '../../components/EmailLink'
 import type { Project } from '../../lib/research'
 import ProjectFacts from '../_components/ProjectFacts'
+import ReportProblemLink from '../../components/ReportProblemLink'
 
 export type ProjectOption = Omit<Project, 'draft' | 'open'>
 
@@ -341,11 +342,23 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
     if (step === 4 && chosen.length < 2) setStep(5)
   }, [step, chosen.length])
 
-  const set = (field: keyof Applicant) => (value: string) => setApplicant((a) => ({ ...a, [field]: value }))
-  const setAnswer = (slug: string, field: keyof Answer) => (value: string) =>
+  // An error goes away as soon as its field is changed; the rest wait for the next Continue.
+  const clearError = (id: string) => setErrors((e) => {
+    if (!(id in e)) return e
+    const { [id]: _cleared, ...rest } = e
+    return rest
+  })
+  const set = (field: keyof Applicant) => (value: string) => {
+    setApplicant((a) => ({ ...a, [field]: value }))
+    clearError(field)
+  }
+  const setAnswer = (slug: string, field: keyof Answer) => (value: string) => {
     setAnswers((all) => ({ ...all, [slug]: { ...emptyAnswer, ...all[slug], [field]: value } }))
+    clearError(`${slug}-${field}`)
+  }
 
   function toggle(slug: string) {
+    clearError('projects')
     setSelected((list) => (list.includes(slug) ? list.filter((s) => s !== slug) : [...list, slug]))
   }
 
@@ -834,6 +847,8 @@ export default function ApplyForm({ projects }: { projects: ProjectOption[] }) {
           )}
         </div>
       </div>
+
+      <ReportProblemLink />
 
       {/* One-pager side panel */}
       <dialog

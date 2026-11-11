@@ -64,8 +64,8 @@ export default function ResearchIndex() {
                   <p className="mt-3 leading-relaxed text-gray-600">{project.summary}</p>
                   <div className="mt-5"><ProjectFacts project={project} compact /></div>
                   <div className="mt-6 flex flex-wrap gap-3 pt-1 sm:mt-auto sm:pt-6">
-                    <Link href={`/research/${project.slug}`} className="button-secondary w-full sm:w-auto">Read the one-pager</Link>
-                    <Link href={`/research/apply?project=${project.slug}`} className="button-primary w-full sm:w-auto">Apply <span aria-hidden="true">→</span></Link>
+                    <Link href={`/research/${project.slug}`} className="button-secondary w-full sm:w-auto" aria-label={`Read the one-pager: ${project.title}`}>Read the one-pager</Link>
+                    <Link href={`/research/apply?project=${project.slug}`} className="button-primary w-full sm:w-auto" aria-label={`Apply to: ${project.title}`}>Apply <span aria-hidden="true">→</span></Link>
                   </div>
                 </li>
               ))}
